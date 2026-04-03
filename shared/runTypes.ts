@@ -31,6 +31,7 @@ export type CaseResult = {
   httpStatus?: number;
   responseBodyPreview?: string;
   errorMessage?: string;
+  expectedResult?: string;
 };
 
 export type RunSummary = {

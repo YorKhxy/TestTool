@@ -5,7 +5,6 @@ import { apiJson, safeParseJsonAny } from '@/utils/http';
 
 type CaseOverride = {
   requiresAuth?: boolean;
-  enableVariableReplace?: boolean;
   headersText: string;
   queryText: string;
   bodyText: string;
@@ -72,6 +71,7 @@ type SettingsState = {
   timeoutMs: number;
   concurrency: number;
   continueOnFail: boolean;
+  enableVariableReplace: boolean;
   authEmail: string;
   authPassword: string;
   mfaCode: string;
@@ -82,6 +82,7 @@ type SettingsDto = {
   timeoutMs: number;
   concurrency: number;
   continueOnFail: boolean;
+  enableVariableReplace: boolean;
   auth?: { email: string; password: string; mfaCode?: string };
 };
 
@@ -128,11 +129,12 @@ function normalizeSettings(s: SettingsState): SettingsState {
 }
 
 function buildRunConfig(s: SettingsState): RunConfig {
-  const cfg: RunConfig = {
+  const cfg: RunConfig & { enableVariableReplace?: boolean } = {
     baseUrl: s.baseUrl.replace(/`/g, '').trim(),
     timeoutMs: s.timeoutMs,
     concurrency: s.concurrency,
     continueOnFail: s.continueOnFail,
+    enableVariableReplace: s.enableVariableReplace,
   };
   if (s.authEmail && s.authPassword) {
     cfg.auth = {
@@ -150,17 +152,25 @@ function interpolateVariables(text: string, email: string, password: string): st
     .replace(/\{\{\s*auth\.password\s*\}\}/g, password);
 }
 
+function applyVariables(text: string, enableVariableReplace: boolean, email: string, password: string): string {
+  if (!enableVariableReplace) return text;
+  return interpolateVariables(text, email, password);
+}
+
 function buildCaseRequests(cases: TestCase[], overrides: Record<string, CaseOverride>, settings: SettingsState) {
   const out: CaseRequest[] = [];
   const email = settings.authEmail || '';
   const password = settings.authPassword || '';
+  const enableReplace = settings.enableVariableReplace;
   for (const c of cases) {
     const o = overrides[c.id];
-    const headers = parseHeadersText(o?.headersText ?? c.headersRaw ?? '{}');
-    const query = parseQueryText(o?.queryText ?? c.queryRaw ?? '{}');
+    const headersRaw = applyVariables(o?.headersText ?? c.headersRaw ?? '{}', enableReplace, email, password);
+    const queryRaw = applyVariables(o?.queryText ?? c.queryRaw ?? '{}', enableReplace, email, password);
+    const headers = parseHeadersText(headersRaw);
+    const query = parseQueryText(queryRaw);
     const rawBodyText = o?.bodyText ?? c.bodyRaw ?? '';
     const parsedBodyText = parseBodyText(rawBodyText);
-    const bodyText = o?.enableVariableReplace ? interpolateVariables(parsedBodyText, email, password) : parsedBodyText;
+    const bodyText = applyVariables(parsedBodyText, enableReplace, email, password);
     const body = safeParseJsonAny(bodyText);
     if ('error' in body) throw new Error(`${c.id} body：${body.error}`);
 
@@ -185,6 +195,7 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
     timeoutMs: 15000,
     concurrency: 1,
     continueOnFail: true,
+    enableVariableReplace: false,
     authEmail: '',
     authPassword: '',
     mfaCode: '',
@@ -204,6 +215,7 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
           timeoutMs: r.data.timeoutMs || s.settings.timeoutMs,
           concurrency: r.data.concurrency || s.settings.concurrency,
           continueOnFail: typeof r.data.continueOnFail === 'boolean' ? r.data.continueOnFail : s.settings.continueOnFail,
+          enableVariableReplace: typeof r.data.enableVariableReplace === 'boolean' ? r.data.enableVariableReplace : s.settings.enableVariableReplace,
           authEmail: (r.data.auth?.email || s.settings.authEmail || '').replace(/`/g, '').trim(),
           authPassword: (r.data.auth?.password || s.settings.authPassword || '').replace(/`/g, '').trim(),
           mfaCode: r.data.auth?.mfaCode || s.settings.mfaCode,

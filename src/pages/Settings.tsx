@@ -23,11 +23,12 @@ export default function Settings() {
       </div>
 
       <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-4">
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
           <Field label="Base URL" value={local.baseUrl} onChange={(v) => setLocal((s) => ({ ...s, baseUrl: v }))} placeholder="http://127.0.0.1:8999" />
           <Field label="超时（ms）" value={String(local.timeoutMs)} onChange={(v) => setLocal((s) => ({ ...s, timeoutMs: Number(v || 0) }))} placeholder="15000" />
           <Field label="并发（1~10）" value={String(local.concurrency)} onChange={(v) => setLocal((s) => ({ ...s, concurrency: Number(v || 1) }))} placeholder="1" />
-          <Toggle label="失败继续" checked={local.continueOnFail} onChange={(checked) => setLocal((s) => ({ ...s, continueOnFail: checked }))} />
+          <Toggle label="失败继续" description="失败用例出现时是否停止队列" checked={local.continueOnFail} onChange={(checked) => setLocal((s) => ({ ...s, continueOnFail: checked }))} />
+          <Toggle label="启用变量替换" description="将用例中的 {{auth.email}} 和 {{auth.password}} 替换为设置中的管理员邮箱和密码" checked={local.enableVariableReplace} onChange={(checked) => setLocal((s) => ({ ...s, enableVariableReplace: checked }))} />
           <Field label="管理员邮箱" value={local.authEmail} onChange={(v) => setLocal((s) => ({ ...s, authEmail: v }))} placeholder="admin@admin.com" />
           <Field label="管理员密码" value={local.authPassword} onChange={(v) => setLocal((s) => ({ ...s, authPassword: v }))} placeholder="admin123" />
           <Field label="MFA Code（可选）" value={local.mfaCode} onChange={(v) => setLocal((s) => ({ ...s, mfaCode: v }))} placeholder="" />
@@ -75,12 +76,12 @@ function Field({
   );
 }
 
-function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
+function Toggle({ label, description, checked, onChange }: { label: string; description?: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
     <label className="flex items-end justify-between gap-3 rounded-lg border border-zinc-800 bg-zinc-950/20 px-3 py-2">
       <div>
         <div className="text-xs font-medium text-zinc-300">{label}</div>
-        <div className="mt-1 text-xs text-zinc-500">失败用例出现时是否停止队列</div>
+        {description ? <div className="mt-1 text-xs text-zinc-500">{description}</div> : null}
       </div>
       <button
         type="button"

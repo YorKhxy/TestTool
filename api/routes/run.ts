@@ -88,6 +88,67 @@ async function login(baseUrl: string, auth: NonNullable<RunConfig['auth']>, time
   throw new Error(`登录响应未包含 token：${safePreview(text)}`);
 }
 
+function parseExpectedResult(expected: string | undefined): { expectedStatus: number | null; expectedContent: string[] } {
+  const result = { expectedStatus: null as number | null, expectedContent: [] as string[] };
+  if (!expected) return result;
+
+  const httpMatch = expected.match(/HTTP\s*(\d{3})/i);
+  if (httpMatch) {
+    result.expectedStatus = parseInt(httpMatch[1], 10);
+  }
+
+  const semicolonParts = expected.split(';');
+  for (const part of semicolonParts) {
+    const trimmed = part.trim();
+    if (trimmed.toLowerCase().startsWith('http')) continue;
+
+    const contentMatch = trimmed.match(/响应体[包含含有]"?([^"]+)"?/);
+    if (contentMatch) {
+      const content = contentMatch[1].trim();
+      const items = content.split(/[，,]/).map(s => s.trim()).filter(s => s);
+      result.expectedContent.push(...items);
+    } else if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
+      result.expectedContent.push(trimmed.slice(1, -1));
+    } else if (trimmed && !trimmed.startsWith('HTTP')) {
+      result.expectedContent.push(trimmed);
+    }
+  }
+
+  return result;
+}
+
+function checkResponseMatchesExpected(responseJson: unknown, expected: ReturnType<typeof parseExpectedResult>): boolean {
+  if (expected.expectedStatus === null && expected.expectedContent.length === 0) {
+    return true;
+  }
+
+  for (const content of expected.expectedContent) {
+    const normalizedContent = content.replace(/[{}]/g, '').trim();
+
+    if (normalizedContent.includes(':')) {
+      const [key, ...valueParts] = normalizedContent.split(':');
+      const keyTrimmed = key.trim();
+      const valueTrimmed = valueParts.join(':').trim();
+
+      if (!isRecord(responseJson)) return false;
+      const actualValue = (responseJson as Record<string, unknown>)[keyTrimmed];
+      if (actualValue === undefined) return false;
+
+      const actualStr = String(actualValue);
+      if (!actualStr.includes(valueTrimmed) && actualStr !== valueTrimmed) {
+        return false;
+      }
+    } else {
+      const responseStr = JSON.stringify(responseJson);
+      if (!responseStr.includes(normalizedContent)) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
 function shouldPassByBody(responseJson: unknown): boolean | null {
   if (!isRecord(responseJson)) return null;
   if (!('code' in responseJson)) return null;
@@ -139,9 +200,34 @@ async function runOneCase(c: CaseRequest, config: RunConfig, token: string | nul
       try {
         const json = JSON.parse(text);
         const byBody = shouldPassByBody(json);
-        if (byBody !== null) status = byBody ? 'passed' : 'failed';
+        if (byBody !== null) {
+          status = byBody ? 'passed' : 'failed';
+        } else if (c.expectedResult) {
+          const expected = parseExpectedResult(c.expectedResult);
+          if (expected.expectedStatus !== null && res.status !== expected.expectedStatus) {
+            status = 'failed';
+          } else if (expected.expectedContent.length > 0) {
+            const contentMatches = checkResponseMatchesExpected(json, expected);
+            status = contentMatches ? 'passed' : 'failed';
+          }
+        }
       } catch {
         void 0;
+      }
+    } else {
+      if (c.expectedResult) {
+        const expected = parseExpectedResult(c.expectedResult);
+        if (expected.expectedStatus === res.status) {
+          status = 'passed';
+        } else if (expected.expectedStatus === null && expected.expectedContent.length > 0) {
+          try {
+            const json = JSON.parse(text);
+            const contentMatches = checkResponseMatchesExpected(json, expected);
+            status = contentMatches ? 'passed' : 'failed';
+          } catch {
+            status = 'failed';
+          }
+        }
       }
     }
 
@@ -153,6 +239,7 @@ async function runOneCase(c: CaseRequest, config: RunConfig, token: string | nul
       durationMs,
       httpStatus: res.status,
       responseBodyPreview: safePreview(text),
+      expectedResult: c.expectedResult,
     };
   } catch (e: unknown) {
     const finishedAt = nowIso();
@@ -164,6 +251,7 @@ async function runOneCase(c: CaseRequest, config: RunConfig, token: string | nul
       finishedAt,
       durationMs,
       errorMessage: e instanceof Error ? e.message : 'Unknown error',
+      expectedResult: c.expectedResult,
     };
   }
 }

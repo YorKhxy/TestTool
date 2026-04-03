@@ -11,8 +11,8 @@ export default function CaseDetailPanel({
   report,
 }: {
   testCase: TestCase | null;
-  override: { requiresAuth?: boolean; enableVariableReplace?: boolean; headersText: string; queryText: string; bodyText: string } | null;
-  onChange: (patch: Partial<{ requiresAuth?: boolean; enableVariableReplace?: boolean; headersText: string; queryText: string; bodyText: string }>) => void;
+  override: { requiresAuth?: boolean; headersText: string; queryText: string; bodyText: string } | null;
+  onChange: (patch: Partial<{ requiresAuth?: boolean; headersText: string; queryText: string; bodyText: string }>) => void;
   report: RunReport | null;
 }) {
   if (!testCase) {
@@ -46,16 +46,14 @@ export default function CaseDetailPanel({
             />
             需要认证
           </label>
-          <label className="inline-flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={o?.enableVariableReplace ?? false}
-              onChange={(e) => onChange({ enableVariableReplace: e.target.checked })}
-            />
-            启用变量替换
-          </label>
           <span className="text-zinc-600">优先级 {testCase.priority || '-'}</span>
         </div>
+        {testCase.expectedResult ? (
+          <div className="mx-4 mt-3 rounded-lg border border-zinc-700/50 bg-zinc-800/20 p-3">
+            <div className="text-xs font-medium text-zinc-300">预期结果</div>
+            <div className="mt-1 text-xs text-zinc-400 whitespace-pre-wrap">{testCase.expectedResult}</div>
+          </div>
+        ) : null}
       </div>
 
       <div className="grid gap-3 p-4">
