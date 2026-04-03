@@ -1,0 +1,49 @@
+{
+  "summary": {
+    "runId": "run_1775124831171_9c52c323",
+    "startedAt": "2026-04-02T10:13:51.171Z",
+    "finishedAt": "2026-04-02T10:13:51.179Z",
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0,
+    "canceled": 0,
+    "durationMs": 8
+  },
+  "config": {
+    "baseUrl": "http://192.168.1.36:8999",
+    "timeoutMs": 15000,
+    "concurrency": 1,
+    "continueOnFail": true,
+    "auth": {
+      "email": "admin@admin.com",
+      "password": "admin123"
+    }
+  },
+  "cases": [
+    {
+      "id": "TC-AUTH-001",
+      "title": "正常登录-邮箱密码正确",
+      "method": "POST",
+      "path": "/hashrate/admin/auth/v1/login/password",
+      "priority": "P0",
+      "group": "4.1 认证模块测试用例",
+      "requiresAuth": false,
+      "headersRaw": "Content-Type: application/json",
+      "bodyRaw": "`{\"email\": \"admin@example.com\", \"password\": \"Admin@123\"}`",
+      "headers": {},
+      "query": {}
+    }
+  ],
+  "results": [
+    {
+      "caseId": "TC-AUTH-001",
+      "status": "failed",
+      "startedAt": "2026-04-02T10:13:51.171Z",
+      "finishedAt": "2026-04-02T10:13:51.179Z",
+      "durationMs": 8,
+      "httpStatus": 400,
+      "responseBodyPreview": "field \"email\" is not set\n"
+    }
+  ]
+}

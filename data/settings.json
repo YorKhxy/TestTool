@@ -1,0 +1,10 @@
+{
+  "baseUrl": "http://192.168.1.36:8999",
+  "timeoutMs": 15000,
+  "concurrency": 1,
+  "continueOnFail": true,
+  "auth": {
+    "email": "admin@admin.com",
+    "password": "admin123"
+  }
+}

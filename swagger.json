@@ -1,0 +1,3882 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "海外算力服务",
+    "description": "海外算力服务",
+    "version": "0.0.1"
+  },
+  "host": "192.168.1.36:8999",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/hashrate/admin/account/v1/admins/roles/get": {
+      "get": {
+        "summary": "查询管理员角色",
+        "operationId": "GetAdminRoles",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetAdminRolesResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin/account"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/admins/roles/set": {
+      "post": {
+        "summary": "设置管理员角色",
+        "operationId": "SetAdminRoles",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SetAdminRolesReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/mfa/disable": {
+      "post": {
+        "summary": "关闭MFA",
+        "operationId": "DisableMFA",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DisableMFAReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/mfa/enable": {
+      "post": {
+        "summary": "开启MFA",
+        "operationId": "EnableMFA",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EnableMFAReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/mfa/generate": {
+      "get": {
+        "summary": "生成MFA密钥",
+        "operationId": "GenerateMFA",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GenerateMFAResp"
+            }
+          }
+        },
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/perms/init": {
+      "post": {
+        "summary": "全量新增权限",
+        "operationId": "InitPermissions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PermissionList"
+            }
+          }
+        ],
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/perms/list": {
+      "get": {
+        "summary": "权限列表",
+        "operationId": "ListPerms",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/PermissionList"
+            }
+          }
+        },
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/perms/me": {
+      "get": {
+        "summary": "获取当前管理员权限（树形）",
+        "operationId": "GetMyPerms",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/PermissionList"
+            }
+          }
+        },
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/roles/create": {
+      "post": {
+        "summary": "创建角色",
+        "operationId": "CreateRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateRoleReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/roles/delete": {
+      "post": {
+        "summary": "删除角色",
+        "operationId": "DeleteRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteRoleReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/roles/list": {
+      "get": {
+        "summary": "角色列表",
+        "operationId": "ListRoles",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/RoleListResp"
+            }
+          }
+        },
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/roles/perms/tree": {
+      "get": {
+        "summary": "获取角色权限树（含选中）",
+        "operationId": "GetRolePermTree",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/RolePermTreeResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "role_id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin/account"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/roles/update": {
+      "post": {
+        "summary": "更新角色",
+        "operationId": "UpdateRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateRoleReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/users": {
+      "get": {
+        "summary": "管理员列表",
+        "operationId": "ListAdminUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/AdminUserListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "email",
+            "description": " 邮箱（筛选）",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": " 分页页码，从1开始",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "size",
+            "description": " 分页大小，默认20",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin/account"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/users/create": {
+      "post": {
+        "summary": "新增管理员",
+        "operationId": "CreateAdminUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateAdminUserReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/users/disable": {
+      "post": {
+        "summary": "禁用管理员",
+        "operationId": "DisableAdminUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DisableAdminUserReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/users/enable": {
+      "post": {
+        "summary": "启用管理员",
+        "operationId": "EnableAdminUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EnableAdminUserReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/users/me": {
+      "get": {
+        "summary": "获取当前管理员信息",
+        "operationId": "GetMe",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/AdminUserItem"
+            }
+          }
+        },
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/account/v1/users/password/change": {
+      "post": {
+        "summary": "修改管理员密码",
+        "operationId": "ChangeAdminPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ChangeAdminPasswordReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/account"
+        ]
+      }
+    },
+    "/hashrate/admin/announcement/v1/create": {
+      "post": {
+        "summary": "新增公告",
+        "operationId": "CreateAnnouncement",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateAnnouncementReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/announcement"
+        ]
+      }
+    },
+    "/hashrate/admin/announcement/v1/delete": {
+      "post": {
+        "summary": "删除公告",
+        "operationId": "DeleteAnnouncement",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteAnnouncementReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/announcement"
+        ]
+      }
+    },
+    "/hashrate/admin/announcement/v1/list": {
+      "get": {
+        "summary": "公告列表",
+        "operationId": "ListAnnouncement",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ListAnnouncementResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "description": " 页码",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "size",
+            "description": " 页大小",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin/announcement"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/hashrate/admin/announcement/v1/status/update": {
+      "post": {
+        "summary": "修改公告开关状态",
+        "operationId": "UpdateAnnouncementStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateAnnouncementStatusReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/announcement"
+        ]
+      }
+    },
+    "/hashrate/admin/announcement/v1/update": {
+      "post": {
+        "summary": "修改公告",
+        "operationId": "UpdateAnnouncement",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateAnnouncementReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/announcement"
+        ]
+      }
+    },
+    "/hashrate/admin/auth/v1/login/password": {
+      "post": {
+        "summary": "账号密码登录",
+        "operationId": "VerifyLoginPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/VerifyLoginCodeResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifyLoginPasswordReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/auth"
+        ]
+      }
+    },
+    "/hashrate/admin/v1/asset/release/list": {
+      "get": {
+        "summary": "用户Usdt和Point发放记录列表",
+        "operationId": "ListAssetReleaseRecords",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/AssetReleaseListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "user_id",
+            "description": " 用户UID（筛选）",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "wallet_address",
+            "description": " 钱包地址（筛选）",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": " 分页页码，从1开始",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "size",
+            "description": " 分页大小，默认20",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "coin",
+            "description": " 币种筛选: Usdt, Point",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "admin/hashrate"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/hashrate/admin/v1/coin/value/audit/apply": {
+      "post": {
+        "summary": "申请修改算力币值",
+        "operationId": "ApplyCoinValueAudit",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ApplyCoinValueAuditReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/hashrate"
+        ]
+      }
+    },
+    "/hashrate/admin/v1/coin/value/audit/approve": {
+      "post": {
+        "summary": "审核算力币值修改",
+        "operationId": "ApproveCoinValueAudit",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ApproveCoinValueAuditReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/hashrate"
+        ]
+      }
+    },
+    "/hashrate/admin/v1/coin/value/audit/list": {
+      "get": {
+        "summary": "算力币值审核记录列表",
+        "operationId": "ListCoinValueAudit",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ListCoinValueAuditResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "coin",
+            "description": " 币种",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "description": " 状态: -1全部, 0待审核, 1通过, 2拒绝, 3撤销",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "description": " 页码",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "size",
+            "description": " 页大小",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin/hashrate"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/hashrate/admin/v1/coin/value/audit/revoke": {
+      "post": {
+        "summary": "撤销算力币值修改申请",
+        "operationId": "RevokeCoinValueAudit",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RevokeCoinValueAuditReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/hashrate"
+        ]
+      }
+    },
+    "/hashrate/admin/v1/coin/value/delete": {
+      "post": {
+        "summary": "算力币值-删除",
+        "operationId": "DeleteCoinValue",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteCoinValueReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/hashrate"
+        ]
+      }
+    },
+    "/hashrate/admin/v1/coin/value/list": {
+      "get": {
+        "summary": "算力币值-列表",
+        "operationId": "ListCoinValue",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CoinValueListResp"
+            }
+          }
+        },
+        "tags": [
+          "admin/hashrate"
+        ]
+      }
+    },
+    "/hashrate/admin/v1/coin/value/upsert": {
+      "post": {
+        "summary": "算力币值-新增或保存",
+        "operationId": "UpsertCoinValue",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpsertCoinValueReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/hashrate"
+        ]
+      }
+    },
+    "/hashrate/admin/v1/lock/setting/get": {
+      "get": {
+        "summary": "查询锁仓设置",
+        "operationId": "GetLockSetting",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/LockSettingListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "coin",
+            "description": " 币种（可选，空返回全部）",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "admin/hashrate"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/hashrate/admin/v1/lock/setting/set": {
+      "post": {
+        "summary": "锁仓设置",
+        "operationId": "SetLockSetting",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SetLockSettingReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/hashrate"
+        ]
+      }
+    },
+    "/hashrate/admin/v1/power/unitprice/grade/delete": {
+      "post": {
+        "summary": "删除算力单价档位",
+        "operationId": "DeletePowerUnitPriceGrade",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeletePowerUnitPriceGradeReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/hashrate"
+        ]
+      }
+    },
+    "/hashrate/admin/v1/power/unitprice/grade/list": {
+      "get": {
+        "summary": "查询算力单价档位列表",
+        "operationId": "ListPowerUnitPriceGrade",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/PowerUnitPriceGradeListResp"
+            }
+          }
+        },
+        "tags": [
+          "admin/hashrate"
+        ]
+      }
+    },
+    "/hashrate/admin/v1/power/unitprice/grade/upsert": {
+      "post": {
+        "summary": "新增或保存算力单价档位",
+        "operationId": "UpsertPowerUnitPriceGrade",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpsertPowerUnitPriceGradeReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/hashrate"
+        ]
+      }
+    },
+    "/hashrate/admin/v1/recharge/release/list": {
+      "get": {
+        "summary": "算力发放记录列表",
+        "operationId": "ListRechargeReleaseRecords",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/RechargeReleaseListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "user_id",
+            "description": " 用户UID（筛选）",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "wallet_address",
+            "description": " 钱包地址（筛选）",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": " 分页页码，从1开始",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "size",
+            "description": " 分页大小，默认20",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "coin",
+            "description": " 币种筛选: Coupon, Hashrate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "admin/hashrate"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/hashrate/client/announcement/v1/list": {
+      "get": {
+        "summary": "获取所有公告",
+        "operationId": "ClientListAnnouncement",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ListAnnouncementResp"
+            }
+          }
+        },
+        "tags": [
+          "client/announcement"
+        ]
+      }
+    },
+    "/hashrate/front/config/v1/config": {
+      "get": {
+        "summary": "客户端配置聚合：币值、单价、手续费、锁仓设置",
+        "operationId": "GetClientConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetClientConfigResp"
+            }
+          }
+        },
+        "tags": [
+          "client/config"
+        ]
+      }
+    },
+    "/hashrate/invite/admin/v1/details": {
+      "get": {
+        "summary": "邀请人详情列表",
+        "operationId": "ListInviteDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/InviteDetailResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "inviter_id",
+            "description": " 邀请人UID（可选，空返回无邀请人）",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": " 分页页码，从1开始",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "size",
+            "description": " 分页大小，默认20",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin/invite"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/hashrate/order/admin/v1/orders": {
+      "get": {
+        "summary": "订单列表",
+        "operationId": "ListHashrateOrders",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/OrderListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "user_id",
+            "description": " 用户ID（为空返回最新订单）",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": " 页码，从1开始",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "size",
+            "description": " 每页数量，默认20",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin/order"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/hashrate/stats/admin/v1/dashboard": {
+      "get": {
+        "summary": "平台仪表盘统计",
+        "operationId": "GetDashboard",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DashboardResp"
+            }
+          }
+        },
+        "tags": [
+          "admin/stats"
+        ]
+      }
+    },
+    "/hashrate/user/admin/v1/deduct/hashrate": {
+      "post": {
+        "summary": "扣除算力",
+        "operationId": "DeductHashrate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AdminDeductReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/user"
+        ]
+      }
+    },
+    "/hashrate/user/admin/v1/income/detail": {
+      "get": {
+        "summary": "收益详情",
+        "operationId": "GetIncomeDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/IncomeDetailResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "user_id",
+            "description": " 用户UID",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "admin/user"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/hashrate/user/admin/v1/list": {
+      "get": {
+        "summary": "用户列表",
+        "operationId": "ListUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UserListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "key",
+            "description": " 搜索关键字（UID或钱包地址）",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": " 分页页码，从1开始",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "size",
+            "description": " 分页大小，默认20",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin/user"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/hashrate/user/admin/v1/recharge/coupon": {
+      "post": {
+        "summary": "用户发放点券",
+        "operationId": "RechargeCoupon",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AdminRechargeCouponReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/user"
+        ]
+      }
+    },
+    "/hashrate/user/admin/v1/recharge/hashrate": {
+      "post": {
+        "summary": "为用户发放算力",
+        "operationId": "RechargeHashrate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/AdminRechargeResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AdminRechargeReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/user"
+        ]
+      }
+    },
+    "/hashrate/user/admin/v1/recharge/hashrate/any": {
+      "post": {
+        "summary": "用户充值任意算力",
+        "operationId": "RechargeHashrateAny",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AdminRechargeAnyReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/user"
+        ]
+      }
+    },
+    "/hashrate/user/admin/v1/release/history": {
+      "get": {
+        "summary": "每日发放记录",
+        "operationId": "ListReleaseHistory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ReleaseHistoryResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "user_id",
+            "description": " 用户UID",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": " 分页页码，从1开始",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "size",
+            "description": " 分页大小，默认20",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin/user"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/hashrate/user/admin/v1/status/update": {
+      "post": {
+        "summary": "算力收益开关",
+        "operationId": "UpdateUserStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AdminUpdateUserStatusReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/user"
+        ]
+      }
+    },
+    "/hashrate/withdraw/admin/v1/apply/agree": {
+      "post": {
+        "summary": "同意提现",
+        "operationId": "AgreeApplyWithdraw",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ApplyWithdrawOpReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/withdraw"
+        ]
+      }
+    },
+    "/hashrate/withdraw/admin/v1/apply/freeze": {
+      "post": {
+        "summary": "冻结提现",
+        "operationId": "FreezeApplyWithdraw",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ApplyWithdrawOpReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/withdraw"
+        ]
+      }
+    },
+    "/hashrate/withdraw/admin/v1/apply/list": {
+      "get": {
+        "summary": "提现申请列表",
+        "operationId": "ListApplyWithdrawOrders",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ApplyWithdrawListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "uid",
+            "description": " 用户UID",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "coin",
+            "description": " 币种筛选：ALL/ETH/LTC/DOGE/CYS/RWA",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "description": " 状态筛选：-1(全部)/0(审核中)/1(已完成)/2(已拒绝)",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "start_date",
+            "description": " 开始日期(YYYY-MM-DD)",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "end_date",
+            "description": " 结束日期(YYYY-MM-DD)",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": " 分页页码，从1开始",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "size",
+            "description": " 分页大小，默认20",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin/withdraw"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/hashrate/withdraw/admin/v1/apply/unfreeze": {
+      "post": {
+        "summary": "解冻提现",
+        "operationId": "UnfreezeApplyWithdraw",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ApplyWithdrawOpReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/withdraw"
+        ]
+      }
+    },
+    "/hashrate/withdraw/admin/v1/config/list": {
+      "get": {
+        "summary": "查询提现配置列表",
+        "operationId": "ListWithdrawConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WithdrawConfigListResp"
+            }
+          }
+        },
+        "tags": [
+          "admin/withdraw"
+        ]
+      }
+    },
+    "/hashrate/withdraw/admin/v1/config/set": {
+      "post": {
+        "summary": "设置币种提现配置",
+        "operationId": "SetWithdrawConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SetWithdrawConfigReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin/withdraw"
+        ]
+      }
+    },
+    "/ping": {
+      "get": {
+        "operationId": "ping",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "tags": [
+          "hashrate-api"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "AdminDeductReq": {
+      "type": "object",
+      "properties": {
+        "walletAddress": {
+          "type": "string",
+          "description": " 钱包地址"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 扣除算力数量"
+        }
+      },
+      "title": "AdminDeductReq",
+      "required": [
+        "walletAddress",
+        "amount"
+      ]
+    },
+    "AdminRechargeAnyReq": {
+      "type": "object",
+      "properties": {
+        "walletAddress": {
+          "type": "string",
+          "description": " 用户address"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 发放算力数量"
+        },
+        "desc": {
+          "type": "string",
+          "description": " 描述"
+        }
+      },
+      "title": "AdminRechargeAnyReq",
+      "required": [
+        "walletAddress",
+        "amount",
+        "desc"
+      ]
+    },
+    "AdminRechargeCouponReq": {
+      "type": "object",
+      "properties": {
+        "walletAddress": {
+          "type": "string",
+          "description": " 用户address"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 发放点券数量"
+        },
+        "desc": {
+          "type": "string",
+          "description": " 描述"
+        }
+      },
+      "title": "AdminRechargeCouponReq",
+      "required": [
+        "walletAddress",
+        "amount"
+      ]
+    },
+    "AdminRechargeReq": {
+      "type": "object",
+      "properties": {
+        "walletAddress": {
+          "type": "string",
+          "description": " 钱包地址"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 发放算力数量"
+        }
+      },
+      "title": "AdminRechargeReq",
+      "required": [
+        "walletAddress",
+        "amount"
+      ]
+    },
+    "AdminRechargeResp": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " 是否成功"
+        }
+      },
+      "title": "AdminRechargeResp",
+      "required": [
+        "success"
+      ]
+    },
+    "AdminUpdateUserStatusReq": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": " 用户UID"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 收益状态 0:正常 1:冻结"
+        }
+      },
+      "title": "AdminUpdateUserStatusReq",
+      "required": [
+        "userId",
+        "status"
+      ]
+    },
+    "AdminUserItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "email": {
+          "type": "string",
+          "description": " 邮箱"
+        },
+        "name": {
+          "type": "string",
+          "description": " 昵称/姓名"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 状态（0禁用/1启用）"
+        },
+        "mfa_enabled": {
+          "type": "integer",
+          "format": "int64",
+          "description": " MFA开启状态: 1开启 0关闭"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RoleItem"
+          },
+          "description": " 角色列表"
+        }
+      },
+      "title": "AdminUserItem",
+      "required": [
+        "id",
+        "email",
+        "name",
+        "status",
+        "mfa_enabled",
+        "roles"
+      ]
+    },
+    "AdminUserListReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": " 邮箱（筛选）"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 分页页码，从1开始"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 分页大小，默认20"
+        }
+      },
+      "title": "AdminUserListReq"
+    },
+    "AdminUserListResp": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 总记录数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AdminUserItem"
+          },
+          "description": " 列表数据"
+        }
+      },
+      "title": "AdminUserListResp",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "AnnouncementItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " ID"
+        },
+        "title": {
+          "type": "string",
+          "description": " 标题"
+        },
+        "content": {
+          "type": "string",
+          "description": " 内容"
+        },
+        "is_open": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 开关状态: 1开启 0关闭"
+        },
+        "create_at": {
+          "type": "string",
+          "description": " 创建时间"
+        },
+        "update_at": {
+          "type": "string",
+          "description": " 更新时间"
+        }
+      },
+      "title": "AnnouncementItem",
+      "required": [
+        "id",
+        "title",
+        "content",
+        "is_open",
+        "create_at",
+        "update_at"
+      ]
+    },
+    "ApplyCoinValueAuditReq": {
+      "type": "object",
+      "properties": {
+        "coin": {
+          "type": "string",
+          "description": " 币种"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "description": " 新币值"
+        }
+      },
+      "title": "ApplyCoinValueAuditReq",
+      "required": [
+        "coin",
+        "amount"
+      ]
+    },
+    "ApplyWithdrawItem": {
+      "type": "object",
+      "properties": {
+        "submit_time": {
+          "type": "string",
+          "description": " 提交时间（YYYY-MM-DD HH:mm:ss）"
+        },
+        "order_id": {
+          "type": "string",
+          "description": " 订单号"
+        },
+        "user_id": {
+          "type": "string",
+          "description": " 用户UID"
+        },
+        "address": {
+          "type": "string",
+          "description": " 钱包地址"
+        },
+        "coin": {
+          "type": "string",
+          "description": " 币种"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "description": " 提现金额（保留8位小数）"
+        },
+        "fee": {
+          "type": "number",
+          "format": "double",
+          "description": " 手续费（保留8位小数）"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 状态：0审核中/1已完成/2已拒绝"
+        }
+      },
+      "title": "ApplyWithdrawItem",
+      "required": [
+        "submit_time",
+        "order_id",
+        "user_id",
+        "address",
+        "coin",
+        "amount",
+        "fee",
+        "status"
+      ]
+    },
+    "ApplyWithdrawListReq": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": " 用户UID"
+        },
+        "coin": {
+          "type": "string",
+          "description": " 币种筛选：ALL/ETH/LTC/DOGE/CYS/RWA"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 状态筛选：-1(全部)/0(审核中)/1(已完成)/2(已拒绝)"
+        },
+        "start_date": {
+          "type": "string",
+          "description": " 开始日期(YYYY-MM-DD)"
+        },
+        "end_date": {
+          "type": "string",
+          "description": " 结束日期(YYYY-MM-DD)"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 分页页码，从1开始"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 分页大小，默认20"
+        }
+      },
+      "title": "ApplyWithdrawListReq"
+    },
+    "ApplyWithdrawListResp": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 总记录数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApplyWithdrawItem"
+          },
+          "description": " 列表数据"
+        }
+      },
+      "title": "ApplyWithdrawListResp",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "ApplyWithdrawOpReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": " 申请记录ID"
+        }
+      },
+      "title": "ApplyWithdrawOpReq",
+      "required": [
+        "id"
+      ]
+    },
+    "ApproveCoinValueAuditReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 审核记录ID"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 1:通过, 2:拒绝"
+        },
+        "remark": {
+          "type": "string",
+          "description": " 审核备注"
+        }
+      },
+      "title": "ApproveCoinValueAuditReq",
+      "required": [
+        "id",
+        "status"
+      ]
+    },
+    "AssetReleaseListReq": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": " 用户UID（筛选）"
+        },
+        "wallet_address": {
+          "type": "string",
+          "description": " 钱包地址（筛选）"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 分页页码，从1开始"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 分页大小，默认20"
+        },
+        "coin": {
+          "type": "string",
+          "description": " 币种筛选: Usdt, Point"
+        }
+      },
+      "title": "AssetReleaseListReq"
+    },
+    "AssetReleaseListResp": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 总记录数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AssetReleaseRecordItem"
+          },
+          "description": " 列表数据"
+        }
+      },
+      "title": "AssetReleaseListResp",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "AssetReleaseRecordItem": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": " 用户UID"
+        },
+        "wallet_address": {
+          "type": "string",
+          "description": " 钱包地址"
+        },
+        "coin": {
+          "type": "string",
+          "description": " 币种"
+        },
+        "release_time": {
+          "type": "string",
+          "description": " 发放时间（YYYY-MM-DD HH:mm:ss）"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "description": " 发放数量"
+        },
+        "base": {
+          "type": "number",
+          "format": "double",
+          "description": " 基础值"
+        },
+        "current": {
+          "type": "number",
+          "format": "double",
+          "description": " 当前值"
+        },
+        "source": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 来源"
+        },
+        "template_id": {
+          "type": "string",
+          "description": " 模板ID"
+        },
+        "operator": {
+          "type": "string",
+          "description": " 操作人"
+        }
+      },
+      "title": "AssetReleaseRecordItem",
+      "required": [
+        "user_id",
+        "wallet_address",
+        "coin",
+        "release_time",
+        "amount",
+        "base",
+        "current",
+        "source",
+        "template_id",
+        "operator"
+      ]
+    },
+    "ChangeAdminPasswordReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": " 邮箱"
+        },
+        "old_password": {
+          "type": "string",
+          "description": " 旧密码"
+        },
+        "new_password": {
+          "type": "string",
+          "description": " 新密码"
+        }
+      },
+      "title": "ChangeAdminPasswordReq",
+      "required": [
+        "email",
+        "old_password",
+        "new_password"
+      ]
+    },
+    "CoinStat": {
+      "type": "object",
+      "properties": {
+        "coin": {
+          "type": "string",
+          "description": " 币种"
+        },
+        "issued": {
+          "type": "number",
+          "format": "double",
+          "description": " 累计发放（d_coin_history.state=1）"
+        },
+        "extracted": {
+          "type": "number",
+          "format": "double",
+          "description": " d_apply_withdraw_order.status=1 的已完成提取"
+        },
+        "pending": {
+          "type": "number",
+          "format": "double",
+          "description": " d_apply_withdraw_order.status=0 的审核中"
+        },
+        "stock": {
+          "type": "number",
+          "format": "double",
+          "description": " g_user_hashrate 中各币存量"
+        }
+      },
+      "title": "CoinStat",
+      "required": [
+        "coin",
+        "issued",
+        "extracted",
+        "pending",
+        "stock"
+      ]
+    },
+    "CoinValueAuditItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " ID"
+        },
+        "coin": {
+          "type": "string",
+          "description": " 币种"
+        },
+        "origin_amount": {
+          "type": "number",
+          "format": "double",
+          "description": " 原始值"
+        },
+        "new_amount": {
+          "type": "number",
+          "format": "double",
+          "description": " 申请值"
+        },
+        "applicant": {
+          "type": "string",
+          "description": " 申请人"
+        },
+        "auditor": {
+          "type": "string",
+          "description": " 审核人"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 状态"
+        },
+        "remark": {
+          "type": "string",
+          "description": " 备注"
+        },
+        "create_at": {
+          "type": "string",
+          "description": " 申请时间"
+        },
+        "update_at": {
+          "type": "string",
+          "description": " 审核时间"
+        }
+      },
+      "title": "CoinValueAuditItem",
+      "required": [
+        "id",
+        "coin",
+        "origin_amount",
+        "new_amount",
+        "applicant",
+        "auditor",
+        "status",
+        "remark",
+        "create_at",
+        "update_at"
+      ]
+    },
+    "CoinValueItem": {
+      "type": "object",
+      "properties": {
+        "seq": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 序号"
+        },
+        "coin": {
+          "type": "string",
+          "description": " 币种"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "description": " 币值"
+        }
+      },
+      "title": "CoinValueItem",
+      "required": [
+        "seq",
+        "coin",
+        "amount"
+      ]
+    },
+    "CoinValueListResp": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 总记录数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CoinValueItem"
+          },
+          "description": " 列表数据"
+        }
+      },
+      "title": "CoinValueListResp",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "CreateAdminUserReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": " 邮箱"
+        },
+        "name": {
+          "type": "string",
+          "description": " 昵称/姓名"
+        },
+        "password": {
+          "type": "string",
+          "description": " 密码明文，将以摘要存储"
+        },
+        "role_ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "description": " 关联角色ID列表"
+        }
+      },
+      "title": "CreateAdminUserReq",
+      "required": [
+        "email",
+        "name",
+        "password"
+      ]
+    },
+    "CreateAnnouncementReq": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": " 标题"
+        },
+        "content": {
+          "type": "string",
+          "description": " 内容"
+        },
+        "is_open": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 开关状态: 1开启 0关闭"
+        }
+      },
+      "title": "CreateAnnouncementReq",
+      "required": [
+        "title",
+        "content",
+        "is_open"
+      ]
+    },
+    "CreateRoleReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "perms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "CreateRoleReq",
+      "required": [
+        "name",
+        "perms"
+      ]
+    },
+    "DashboardResp": {
+      "type": "object",
+      "properties": {
+        "usdt_income": {
+          "type": "number",
+          "format": "double",
+          "description": " USDT收入（g_user_hashrate.usdt 总和）"
+        },
+        "total_hashrate": {
+          "type": "number",
+          "format": "double",
+          "description": " 当前总算力（g_user_hashrate.hashrate 总和）"
+        },
+        "coins": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CoinStat"
+          }
+        }
+      },
+      "title": "DashboardResp",
+      "required": [
+        "usdt_income",
+        "total_hashrate",
+        "coins"
+      ]
+    },
+    "DeleteAnnouncementReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 公告ID"
+        }
+      },
+      "title": "DeleteAnnouncementReq",
+      "required": [
+        "id"
+      ]
+    },
+    "DeleteCoinValueReq": {
+      "type": "object",
+      "properties": {
+        "coin": {
+          "type": "string",
+          "description": " 币种"
+        }
+      },
+      "title": "DeleteCoinValueReq",
+      "required": [
+        "coin"
+      ]
+    },
+    "DeletePowerUnitPriceGradeReq": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 等级"
+        }
+      },
+      "title": "DeletePowerUnitPriceGradeReq",
+      "required": [
+        "level"
+      ]
+    },
+    "DeleteRoleReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "DeleteRoleReq",
+      "required": [
+        "id"
+      ]
+    },
+    "DisableAdminUserReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        }
+      },
+      "title": "DisableAdminUserReq",
+      "required": [
+        "id"
+      ]
+    },
+    "DisableMFAReq": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": " MFA验证码"
+        }
+      },
+      "title": "DisableMFAReq",
+      "required": [
+        "code"
+      ]
+    },
+    "EnableAdminUserReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        }
+      },
+      "title": "EnableAdminUserReq",
+      "required": [
+        "id"
+      ]
+    },
+    "EnableMFAReq": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": " MFA验证码"
+        }
+      },
+      "title": "EnableMFAReq",
+      "required": [
+        "code"
+      ]
+    },
+    "GenerateMFAResp": {
+      "type": "object",
+      "properties": {
+        "secret": {
+          "type": "string",
+          "description": " 密钥"
+        },
+        "qrcode": {
+          "type": "string",
+          "description": " 二维码URL (base64)"
+        },
+        "url": {
+          "type": "string",
+          "description": " otpauth: URL"
+        }
+      },
+      "title": "GenerateMFAResp",
+      "required": [
+        "secret",
+        "qrcode",
+        "url"
+      ]
+    },
+    "GetAdminRolesReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetAdminRolesReq",
+      "required": [
+        "admin_id"
+      ]
+    },
+    "GetAdminRolesResp": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "role_ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RoleItem"
+          }
+        }
+      },
+      "title": "GetAdminRolesResp",
+      "required": [
+        "admin_id",
+        "role_ids",
+        "roles"
+      ]
+    },
+    "GetClientConfigResp": {
+      "type": "object",
+      "properties": {
+        "coin_values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CoinValueItem"
+          },
+          "description": " 币值列表"
+        },
+        "unit_price_grades": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PowerUnitPriceGradeItem"
+          },
+          "description": " 算力单价档位"
+        },
+        "lock_settings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LockSettingItem"
+          },
+          "description": " 锁仓设置列表"
+        },
+        "withdraw_configs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/WithdrawConfigItem"
+          },
+          "description": " 提现配置列表"
+        }
+      },
+      "title": "GetClientConfigResp",
+      "required": [
+        "coin_values",
+        "unit_price_grades",
+        "lock_settings",
+        "withdraw_configs"
+      ]
+    },
+    "GetLockSettingReq": {
+      "type": "object",
+      "properties": {
+        "coin": {
+          "type": "string",
+          "description": " 币种（可选，空返回全部）"
+        }
+      },
+      "title": "GetLockSettingReq"
+    },
+    "IncomeCoinItem": {
+      "type": "object",
+      "properties": {
+        "coin": {
+          "type": "string",
+          "description": " 币种：ETH/DOGE/LTC/RWA/CSY"
+        },
+        "total_income": {
+          "type": "number",
+          "format": "double",
+          "description": " 累计收益（d_coin_history.state=1）"
+        },
+        "available_income": {
+          "type": "number",
+          "format": "double",
+          "description": " 可用收益（g_user_hashrate）"
+        },
+        "freeze_income": {
+          "type": "number",
+          "format": "double",
+          "description": " CSY待解冻（g_user_hashrate.cys_freeze）"
+        }
+      },
+      "title": "IncomeCoinItem",
+      "required": [
+        "coin",
+        "total_income",
+        "available_income"
+      ]
+    },
+    "IncomeDetailReq": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": " 用户UID"
+        }
+      },
+      "title": "IncomeDetailReq",
+      "required": [
+        "user_id"
+      ]
+    },
+    "IncomeDetailResp": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IncomeCoinItem"
+          },
+          "description": " 收益明细列表"
+        }
+      },
+      "title": "IncomeDetailResp",
+      "required": [
+        "list"
+      ]
+    },
+    "InviteDetailItem": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": " 被邀请人UID"
+        },
+        "level": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 等级"
+        },
+        "total_usdt": {
+          "type": "number",
+          "format": "double",
+          "description": " 累计消耗USDT"
+        },
+        "reg_date": {
+          "type": "string",
+          "description": " 注册日期（YYYY-MM-DD）"
+        }
+      },
+      "title": "InviteDetailItem",
+      "required": [
+        "user_id",
+        "level",
+        "total_usdt",
+        "reg_date"
+      ]
+    },
+    "InviteDetailReq": {
+      "type": "object",
+      "properties": {
+        "inviter_id": {
+          "type": "string",
+          "description": " 邀请人UID（可选，空返回无邀请人）"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 分页页码，从1开始"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 分页大小，默认20"
+        }
+      },
+      "title": "InviteDetailReq"
+    },
+    "InviteDetailResp": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 总记录数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InviteDetailItem"
+          },
+          "description": " 列表数据"
+        }
+      },
+      "title": "InviteDetailResp",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "ListAnnouncementReq": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 页码"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 页大小"
+        }
+      },
+      "title": "ListAnnouncementReq"
+    },
+    "ListAnnouncementResp": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 总数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnnouncementItem"
+          },
+          "description": " 列表"
+        }
+      },
+      "title": "ListAnnouncementResp",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "ListCoinValueAuditReq": {
+      "type": "object",
+      "properties": {
+        "coin": {
+          "type": "string",
+          "description": " 币种"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 状态: -1全部, 0待审核, 1通过, 2拒绝, 3撤销"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 页码"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 页大小"
+        }
+      },
+      "title": "ListCoinValueAuditReq"
+    },
+    "ListCoinValueAuditResp": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 总数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CoinValueAuditItem"
+          },
+          "description": " 列表"
+        }
+      },
+      "title": "ListCoinValueAuditResp",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "LockSettingItem": {
+      "type": "object",
+      "properties": {
+        "coin": {
+          "type": "string",
+          "description": " 币种"
+        },
+        "days": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 锁仓天数"
+        },
+        "lock_ratio": {
+          "type": "number",
+          "format": "double",
+          "description": " 锁仓比例"
+        }
+      },
+      "title": "LockSettingItem",
+      "required": [
+        "coin",
+        "days",
+        "lock_ratio"
+      ]
+    },
+    "LockSettingListResp": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LockSettingItem"
+          },
+          "description": " 锁仓设置列表"
+        }
+      },
+      "title": "LockSettingListResp",
+      "required": [
+        "list"
+      ]
+    },
+    "OrderItem": {
+      "type": "object",
+      "properties": {
+        "order_time": {
+          "type": "string",
+          "description": " 下单时间（YYYY-MM-DD HH:mm:ss）"
+        },
+        "usdt": {
+          "type": "number",
+          "format": "double",
+          "description": " 订单USDT金额"
+        },
+        "hashrate": {
+          "type": "number",
+          "format": "double",
+          "description": " 订单购买算力"
+        },
+        "order_id": {
+          "type": "string",
+          "description": " 订单号"
+        }
+      },
+      "title": "OrderItem",
+      "required": [
+        "order_time",
+        "usdt",
+        "hashrate",
+        "order_id"
+      ]
+    },
+    "OrderListReq": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": " 用户ID（为空返回最新订单）"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 页码，从1开始"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 每页数量，默认20"
+        }
+      },
+      "title": "OrderListReq"
+    },
+    "OrderListResp": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 总记录数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrderItem"
+          },
+          "description": " 列表数据"
+        }
+      },
+      "title": "OrderListResp",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "Permission": {
+      "type": "object",
+      "properties": {
+        "icon": {
+          "type": "string",
+          "description": " icon图标"
+        },
+        "key": {
+          "type": "string",
+          "description": " 路径"
+        },
+        "title": {
+          "type": "string",
+          "description": " 标题"
+        },
+        "menuType": {
+          "type": "string",
+          "description": " 菜单类型"
+        },
+        "perms": {
+          "type": "string",
+          "description": " 权限标识"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Permission"
+          }
+        }
+      },
+      "title": "Permission",
+      "required": [
+        "key",
+        "title"
+      ]
+    },
+    "PermissionCheck": {
+      "type": "object",
+      "properties": {
+        "icon": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "menuType": {
+          "type": "string"
+        },
+        "perms": {
+          "type": "string"
+        },
+        "check": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PermissionCheck"
+          }
+        }
+      },
+      "title": "PermissionCheck",
+      "required": [
+        "key",
+        "title",
+        "check"
+      ]
+    },
+    "PermissionList": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Permission"
+          }
+        }
+      },
+      "title": "PermissionList",
+      "required": [
+        "list"
+      ]
+    },
+    "PowerUnitPriceGradeItem": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 等级"
+        },
+        "usdt_amount": {
+          "type": "number",
+          "format": "double",
+          "description": " USDT金额"
+        },
+        "power_amount": {
+          "type": "number",
+          "format": "double",
+          "description": " 算力数量"
+        }
+      },
+      "title": "PowerUnitPriceGradeItem",
+      "required": [
+        "level",
+        "usdt_amount",
+        "power_amount"
+      ]
+    },
+    "PowerUnitPriceGradeListResp": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 总记录数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PowerUnitPriceGradeItem"
+          },
+          "description": " 列表数据"
+        }
+      },
+      "title": "PowerUnitPriceGradeListResp",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "RechargeReleaseListReq": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": " 用户UID（筛选）"
+        },
+        "wallet_address": {
+          "type": "string",
+          "description": " 钱包地址（筛选）"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 分页页码，从1开始"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 分页大小，默认20"
+        },
+        "coin": {
+          "type": "string",
+          "description": " 币种筛选: Coupon, Hashrate"
+        }
+      },
+      "title": "RechargeReleaseListReq"
+    },
+    "RechargeReleaseListResp": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 总记录数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RechargeReleaseRecordItem"
+          },
+          "description": " 列表数据"
+        }
+      },
+      "title": "RechargeReleaseListResp",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "RechargeReleaseRecordItem": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": " 用户UID"
+        },
+        "wallet_address": {
+          "type": "string",
+          "description": " 钱包地址"
+        },
+        "release_time": {
+          "type": "string",
+          "description": " 发放时间（YYYY-MM-DD HH:mm:ss）"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "description": " 发放数量"
+        },
+        "base": {
+          "type": "number",
+          "format": "double",
+          "description": " 基础算力"
+        },
+        "current": {
+          "type": "number",
+          "format": "double",
+          "description": " 当前算力"
+        },
+        "source": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 来源：7=充值，8=扣减"
+        },
+        "template_id": {
+          "type": "string",
+          "description": " 模板ID"
+        },
+        "operator": {
+          "type": "string",
+          "description": " 操作人"
+        }
+      },
+      "title": "RechargeReleaseRecordItem",
+      "required": [
+        "user_id",
+        "wallet_address",
+        "release_time",
+        "amount",
+        "base",
+        "current",
+        "source",
+        "template_id",
+        "operator"
+      ]
+    },
+    "ReleaseHistoryItem": {
+      "type": "object",
+      "properties": {
+        "release_time": {
+          "type": "string",
+          "description": " 发放日期（YYYY-MM-DD）"
+        },
+        "hashrate": {
+          "type": "number",
+          "format": "double",
+          "description": " 当日发放算力"
+        },
+        "eth": {
+          "type": "number",
+          "format": "double",
+          "description": " 当日发放ETH"
+        },
+        "doge": {
+          "type": "number",
+          "format": "double",
+          "description": " 当日发放DOGE"
+        },
+        "ltc": {
+          "type": "number",
+          "format": "double",
+          "description": " 当日发放LTC"
+        },
+        "rwa": {
+          "type": "number",
+          "format": "double",
+          "description": " 当日发放RWA"
+        },
+        "csy": {
+          "type": "number",
+          "format": "double",
+          "description": " 当日发放CSY"
+        }
+      },
+      "title": "ReleaseHistoryItem",
+      "required": [
+        "release_time",
+        "hashrate",
+        "eth",
+        "doge",
+        "ltc",
+        "rwa",
+        "csy"
+      ]
+    },
+    "ReleaseHistoryReq": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": " 用户UID"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 分页页码，从1开始"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 分页大小，默认20"
+        }
+      },
+      "title": "ReleaseHistoryReq",
+      "required": [
+        "user_id"
+      ]
+    },
+    "ReleaseHistoryResp": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 总记录数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ReleaseHistoryItem"
+          },
+          "description": " 列表数据"
+        }
+      },
+      "title": "ReleaseHistoryResp",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "RevokeCoinValueAuditReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 审核记录ID"
+        }
+      },
+      "title": "RevokeCoinValueAuditReq",
+      "required": [
+        "id"
+      ]
+    },
+    "RoleItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "perms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "RoleItem",
+      "required": [
+        "id",
+        "name",
+        "perms"
+      ]
+    },
+    "RoleListResp": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RoleItem"
+          }
+        }
+      },
+      "title": "RoleListResp",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "RolePermTreeReq": {
+      "type": "object",
+      "properties": {
+        "role_id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "RolePermTreeReq"
+    },
+    "RolePermTreeResp": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PermissionCheck"
+          }
+        }
+      },
+      "title": "RolePermTreeResp",
+      "required": [
+        "list"
+      ]
+    },
+    "SetAdminRolesReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "role_ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "title": "SetAdminRolesReq",
+      "required": [
+        "admin_id",
+        "role_ids"
+      ]
+    },
+    "SetLockSettingReq": {
+      "type": "object",
+      "properties": {
+        "coin": {
+          "type": "string",
+          "description": " 币种"
+        },
+        "days": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 锁仓天数"
+        },
+        "lock_ratio": {
+          "type": "number",
+          "format": "double",
+          "description": " 锁仓比例（0-1）"
+        }
+      },
+      "title": "SetLockSettingReq",
+      "required": [
+        "coin",
+        "days",
+        "lock_ratio"
+      ]
+    },
+    "SetWithdrawConfigReq": {
+      "type": "object",
+      "properties": {
+        "coin": {
+          "type": "string",
+          "description": " 币种"
+        },
+        "fee_amount": {
+          "type": "number",
+          "format": "double",
+          "description": " 提现手续费金额（按笔收）"
+        },
+        "min_amount": {
+          "type": "number",
+          "format": "double",
+          "description": " 最低提现额度"
+        }
+      },
+      "title": "SetWithdrawConfigReq",
+      "required": [
+        "coin",
+        "fee_amount",
+        "min_amount"
+      ]
+    },
+    "SetWithdrawFeeReq": {
+      "type": "object",
+      "properties": {
+        "coin": {
+          "type": "string",
+          "description": " 币种"
+        },
+        "fee_rate": {
+          "type": "number",
+          "format": "double",
+          "description": " 提现手续费金额（按笔收）"
+        }
+      },
+      "title": "SetWithdrawFeeReq",
+      "required": [
+        "coin",
+        "fee_rate"
+      ]
+    },
+    "UpdateAnnouncementReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 公告ID"
+        },
+        "title": {
+          "type": "string",
+          "description": " 标题"
+        },
+        "content": {
+          "type": "string",
+          "description": " 内容"
+        },
+        "is_open": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 开关状态: 1开启 0关闭"
+        }
+      },
+      "title": "UpdateAnnouncementReq",
+      "required": [
+        "id",
+        "title",
+        "content",
+        "is_open"
+      ]
+    },
+    "UpdateAnnouncementStatusReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 公告ID"
+        },
+        "is_open": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 开关状态: 1开启 0关闭"
+        }
+      },
+      "title": "UpdateAnnouncementStatusReq",
+      "required": [
+        "id",
+        "is_open"
+      ]
+    },
+    "UpdateRoleReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "perms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "UpdateRoleReq",
+      "required": [
+        "id",
+        "name",
+        "perms"
+      ]
+    },
+    "UpsertCoinValueReq": {
+      "type": "object",
+      "properties": {
+        "coin": {
+          "type": "string",
+          "description": " 币种：ETH/DOGE/LTC/RWA/CSY"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "description": " 币值（单价）"
+        }
+      },
+      "title": "UpsertCoinValueReq",
+      "required": [
+        "coin",
+        "amount"
+      ]
+    },
+    "UpsertPowerUnitPriceGradeReq": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 等级（可选，留空表示新增）"
+        },
+        "usdt_amount": {
+          "type": "number",
+          "format": "double",
+          "description": " USDT金额"
+        },
+        "power_amount": {
+          "type": "number",
+          "format": "double",
+          "description": " 算力数量"
+        }
+      },
+      "title": "UpsertPowerUnitPriceGradeReq",
+      "required": [
+        "usdt_amount",
+        "power_amount"
+      ]
+    },
+    "UserListItem": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": " 用户UID"
+        },
+        "level": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 等级"
+        },
+        "hashrate": {
+          "type": "number",
+          "format": "double",
+          "description": " 拥有算力"
+        },
+        "order_count": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 订单数量"
+        },
+        "inviter_id": {
+          "type": "string",
+          "description": " 邀请人UID"
+        },
+        "invite_count": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 邀请人数"
+        },
+        "wallet_address": {
+          "type": "string",
+          "description": " 钱包地址"
+        },
+        "income": {
+          "type": "number",
+          "format": "double",
+          "description": " 收益（合计）"
+        },
+        "income_status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 收益状态 0:正常 1:冻结"
+        },
+        "reg_date": {
+          "type": "string",
+          "description": " 注册时间（YYYY-MM-DD）"
+        },
+        "usdt": {
+          "type": "number",
+          "format": "double",
+          "description": " USDT"
+        },
+        "usdt_total": {
+          "type": "number",
+          "format": "double",
+          "description": " 购买算力所用USDT总量"
+        },
+        "coupon": {
+          "type": "number",
+          "format": "double",
+          "description": " 点券"
+        },
+        "point": {
+          "type": "number",
+          "format": "double",
+          "description": " 点卡"
+        }
+      },
+      "title": "UserListItem",
+      "required": [
+        "user_id",
+        "level",
+        "hashrate",
+        "order_count",
+        "inviter_id",
+        "invite_count",
+        "wallet_address",
+        "income",
+        "income_status",
+        "reg_date",
+        "usdt",
+        "usdt_total",
+        "coupon",
+        "point"
+      ]
+    },
+    "UserListReq": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": " 搜索关键字（UID或钱包地址）"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 分页页码，从1开始"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 分页大小，默认20"
+        }
+      },
+      "title": "UserListReq"
+    },
+    "UserListResp": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 总记录数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserListItem"
+          },
+          "description": " 列表数据"
+        }
+      },
+      "title": "UserListResp",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "VerifyLoginCodeResp": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": " JWT令牌"
+        }
+      },
+      "title": "VerifyLoginCodeResp",
+      "required": [
+        "token"
+      ]
+    },
+    "VerifyLoginPasswordReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": " 登录邮箱"
+        },
+        "password": {
+          "type": "string",
+          "description": " 登录密码"
+        },
+        "mfa_code": {
+          "type": "string",
+          "description": " MFA验证码"
+        }
+      },
+      "title": "VerifyLoginPasswordReq",
+      "required": [
+        "email",
+        "password"
+      ]
+    },
+    "WithdrawConfigItem": {
+      "type": "object",
+      "properties": {
+        "seq": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 序号"
+        },
+        "coin": {
+          "type": "string",
+          "description": " 币种"
+        },
+        "fee_amount": {
+          "type": "number",
+          "format": "double",
+          "description": " 提现手续费金额（按笔收）"
+        },
+        "min_amount": {
+          "type": "number",
+          "format": "double",
+          "description": " 最低提现额度"
+        }
+      },
+      "title": "WithdrawConfigItem",
+      "required": [
+        "seq",
+        "coin",
+        "fee_amount",
+        "min_amount"
+      ]
+    },
+    "WithdrawConfigListResp": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 总记录数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/WithdrawConfigItem"
+          },
+          "description": " 列表数据"
+        }
+      },
+      "title": "WithdrawConfigListResp",
+      "required": [
+        "total",
+        "list"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

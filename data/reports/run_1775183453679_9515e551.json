@@ -1,0 +1,50 @@
+{
+  "summary": {
+    "runId": "run_1775183453679_9515e551",
+    "startedAt": "2026-04-03T02:30:53.679Z",
+    "finishedAt": "2026-04-03T02:30:53.712Z",
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0,
+    "canceled": 0,
+    "durationMs": 33
+  },
+  "config": {
+    "baseUrl": "http://192.168.1.36:8999",
+    "timeoutMs": 15000,
+    "concurrency": 1,
+    "continueOnFail": true
+  },
+  "cases": [
+    {
+      "id": "TC-AUTH-001",
+      "title": "正常登录-邮箱密码正确",
+      "method": "POST",
+      "path": "/hashrate/admin/auth/v1/login/password",
+      "group": "4.1 认证模块测试用例",
+      "requiresAuth": false,
+      "headersRaw": "Content-Type: application/json",
+      "bodyRaw": "`{\"email\": \"{{auth.email}}\", \"password\": \"{{auth.password}}\"}`",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "query": {},
+      "body": {
+        "email": "{{auth.email}}",
+        "password": "{{auth.password}}"
+      }
+    }
+  ],
+  "results": [
+    {
+      "caseId": "TC-AUTH-001",
+      "status": "failed",
+      "startedAt": "2026-04-03T02:30:53.679Z",
+      "finishedAt": "2026-04-03T02:30:53.712Z",
+      "durationMs": 33,
+      "httpStatus": 200,
+      "responseBodyPreview": "{\"code\":1008,\"message\":\"未找到\",\"detail\":\"管理员不存在\",\"data\":null}"
+    }
+  ]
+}

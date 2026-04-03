@@ -1,0 +1,27 @@
+已把“带界面的用例执行工具”做成可本地运行的 Web GUI（React + Express），支持导入本地 Markdown、解析用例列表、单条/批量执行 HTTP，并把执行报告保存到本地文件。
+怎么用
+启动：在 g:\apitester 运行 npm run dev
+打开界面：http://localhost:5173/
+工作台（/）：
+点“导入Markdown”，选择你的 Test_Plan_v1.0.md（会解析出 105 条用例，并自动识别 Base URL、管理员账号）
+勾选多条后点“批量执行”，或在行内点“运行”执行单条
+右侧面板可为当前用例填写 headers/query/body（JSON）与“需要认证”开关
+运行设置（/settings）：
+配置 Base URL / 超时 / 并发 / 失败是否继续 / 管理员账号密码
+设置会保存到本机 g:\apitester\data\settings.json
+执行报告（/reports）：
+查看历史执行记录与详情
+报告文件保存到 g:\apitester\data\reports\{runId}.json
+已实现的后端能力
+解析：POST /api/testplan/parse（从 Markdown 抽取 Base URL、管理员账号、用例表格）
+执行：POST /api/runs（按配置执行选中用例，自动登录拿 JWT 并带 Authorization: Bearer ...）
+报告：GET /api/reports、GET /api/reports/:runId（读取本地落盘报告）
+设置：GET/PUT /api/settings
+关键代码位置（便于你继续扩展）
+Markdown 解析器与类型：testPlan.ts、runTypes.ts
+后端执行与落盘：run.ts、reports.ts
+前端工作台与交互：Home.tsx、useRunnerStore.ts
+自检已通过
+npm run test（新增了解析器单测）
+npm run check
+npm run lint
