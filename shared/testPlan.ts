@@ -11,6 +11,7 @@ export type TestCase = {
   headersRaw?: string;
   queryRaw?: string;
   bodyRaw?: string;
+  expectedResult?: string;
 };
 
 export type DocMeta = {
@@ -172,6 +173,7 @@ export function parseTestPlanMarkdown(markdown: string): ParsedTestPlan {
       const headersIdx = headers.findIndex((x) => x.includes('headers'));
       const queryIdx = headers.findIndex((x) => x.includes('query') || x.includes('params'));
       const bodyIdx = headers.findIndex((x) => x.includes('body') || x.includes('request'));
+      const expectedIdx = headers.findIndex((x) => x.includes('预期结果') || x.includes('expected'));
 
       if (idIdx < 0 || titleIdx < 0 || methodIdx < 0 || pathIdx < 0) {
         warnings.push(`发现疑似用例表，但列不完整：第 ${i + 1} 行`);
@@ -188,6 +190,7 @@ export function parseTestPlanMarkdown(markdown: string): ParsedTestPlan {
         const headersRaw = headersIdx >= 0 ? (r[headersIdx] ?? '').trim() : undefined;
         const queryRaw = queryIdx >= 0 ? (r[queryIdx] ?? '').trim() : undefined;
         const bodyRaw = bodyIdx >= 0 ? (r[bodyIdx] ?? '').trim() : undefined;
+        const expectedResult = expectedIdx >= 0 ? (r[expectedIdx] ?? '').trim() : undefined;
 
         if (!id || !method || !path) continue;
         cases.push({
@@ -201,6 +204,7 @@ export function parseTestPlanMarkdown(markdown: string): ParsedTestPlan {
           headersRaw: headersRaw && headersRaw !== '-' ? headersRaw : undefined,
           queryRaw: queryRaw && queryRaw !== '-' ? queryRaw : undefined,
           bodyRaw: bodyRaw && bodyRaw !== '-' ? bodyRaw : undefined,
+          expectedResult: expectedResult && expectedResult !== '-' ? expectedResult : undefined,
         });
       }
 

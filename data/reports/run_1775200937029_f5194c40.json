@@ -1,14 +1,14 @@
 {
   "summary": {
-    "runId": "run_1775184565749_fb22db71",
-    "startedAt": "2026-04-03T02:49:25.749Z",
-    "finishedAt": "2026-04-03T02:49:25.754Z",
+    "runId": "run_1775200937029_f5194c40",
+    "startedAt": "2026-04-03T07:22:17.029Z",
+    "finishedAt": "2026-04-03T07:22:17.040Z",
     "total": 1,
     "passed": 1,
     "failed": 0,
     "skipped": 0,
     "canceled": 0,
-    "durationMs": 5
+    "durationMs": 11
   },
   "config": {
     "baseUrl": "http://192.168.1.36:8999",
@@ -26,10 +26,12 @@
       "title": "正常登录-邮箱密码正确",
       "method": "POST",
       "path": "/hashrate/admin/auth/v1/login/password",
+      "priority": "P0",
       "group": "4.1 认证模块测试用例",
       "requiresAuth": false,
       "headersRaw": "Content-Type: application/json",
       "bodyRaw": "`{\"email\": \"{{auth.email}}\", \"password\": \"{{auth.password}}\"}`",
+      "expectedResult": "HTTP 200; 响应体 `{\"token\": \"eyJ...\"}`; token为有效JWT格式，长度>100字符",
       "headers": {
         "Content-Type": "application/json"
       },
@@ -44,11 +46,12 @@
     {
       "caseId": "TC-AUTH-001",
       "status": "passed",
-      "startedAt": "2026-04-03T02:49:25.749Z",
-      "finishedAt": "2026-04-03T02:49:25.753Z",
-      "durationMs": 4,
+      "startedAt": "2026-04-03T07:22:17.029Z",
+      "finishedAt": "2026-04-03T07:22:17.040Z",
+      "durationMs": 11,
       "httpStatus": 200,
-      "responseBodyPreview": "{\"code\":0,\"message\":\"SUCCESS\",\"data\":{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJ1c2VyX2lkIjoxLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsImV4cCI6MTc3NTI3MDk2M30.i1Uuj-6wOC4qWQ3a84ko0FNiqLKb-NWMuW3f3Jg_IyE\"}}"
+      "responseBodyPreview": "{\"code\":0,\"message\":\"SUCCESS\",\"data\":{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJ1c2VyX2lkIjoxLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsImV4cCI6MTc3NTI4NzMzNH0.rhWFlbjhfgnrSwAI_p9PhJtcnugJ9wS0g_Wvc6c66Zs\"}}",
+      "expectedResult": "HTTP 200; 响应体 `{\"token\": \"eyJ...\"}`; token为有效JWT格式，长度>100字符"
     }
   ]
 }

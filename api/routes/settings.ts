@@ -10,6 +10,7 @@ type SavedSettings = {
   timeoutMs: number;
   concurrency: number;
   continueOnFail: boolean;
+  enableVariableReplace: boolean;
   auth?: { email: string; password: string; mfaCode?: string };
 };
 
@@ -30,6 +31,7 @@ function normalizeSettings(input: Partial<RunConfig> | null | undefined): SavedS
   const timeoutMs = typeof input?.timeoutMs === 'number' && Number.isFinite(input.timeoutMs) ? input.timeoutMs : 15000;
   const concurrency = typeof input?.concurrency === 'number' && Number.isFinite(input.concurrency) ? input.concurrency : 1;
   const continueOnFail = typeof input?.continueOnFail === 'boolean' ? input.continueOnFail : true;
+  const enableVariableReplace = typeof (input as Record<string, unknown>)?.enableVariableReplace === 'boolean' ? (input as Record<string, unknown>)?.enableVariableReplace as boolean : false;
   const auth = input?.auth;
 
   const normalized: SavedSettings = {
@@ -37,6 +39,7 @@ function normalizeSettings(input: Partial<RunConfig> | null | undefined): SavedS
     timeoutMs: Math.max(1000, Math.floor(timeoutMs)),
     concurrency: Math.max(1, Math.min(10, Math.floor(concurrency))),
     continueOnFail,
+    enableVariableReplace,
   };
 
   if (auth && typeof auth.email === 'string' && typeof auth.password === 'string') {
