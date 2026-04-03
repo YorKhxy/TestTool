@@ -129,15 +129,15 @@ function normalizeSettings(s: SettingsState): SettingsState {
 
 function buildRunConfig(s: SettingsState): RunConfig {
   const cfg: RunConfig = {
-    baseUrl: s.baseUrl.trim(),
+    baseUrl: s.baseUrl.replace(/`/g, '').trim(),
     timeoutMs: s.timeoutMs,
     concurrency: s.concurrency,
     continueOnFail: s.continueOnFail,
   };
   if (s.authEmail && s.authPassword) {
     cfg.auth = {
-      email: s.authEmail,
-      password: s.authPassword,
+      email: s.authEmail.replace(/`/g, '').trim(),
+      password: s.authPassword.replace(/`/g, '').trim(),
       mfaCode: s.mfaCode || undefined,
     };
   }

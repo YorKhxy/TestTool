@@ -1,0 +1,54 @@
+{
+  "summary": {
+    "runId": "run_1775185976712_6f4c2e4e",
+    "startedAt": "2026-04-03T03:12:56.712Z",
+    "finishedAt": "2026-04-03T03:12:56.717Z",
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "canceled": 0,
+    "durationMs": 5
+  },
+  "config": {
+    "baseUrl": "http://192.168.1.36:8999",
+    "timeoutMs": 15000,
+    "concurrency": 1,
+    "continueOnFail": true,
+    "auth": {
+      "email": "admin@admin.com",
+      "password": "admin123"
+    }
+  },
+  "cases": [
+    {
+      "id": "TC-AUTH-001",
+      "title": "正常登录-邮箱密码正确",
+      "method": "POST",
+      "path": "/hashrate/admin/auth/v1/login/password",
+      "group": "4.1 认证模块测试用例",
+      "requiresAuth": false,
+      "headersRaw": "Content-Type: application/json",
+      "bodyRaw": "`{\"email\": \"{{auth.email}}\", \"password\": \"{{auth.password}}\"}`",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "query": {},
+      "body": {
+        "email": "admin@admin.com",
+        "password": "admin123"
+      }
+    }
+  ],
+  "results": [
+    {
+      "caseId": "TC-AUTH-001",
+      "status": "passed",
+      "startedAt": "2026-04-03T03:12:56.712Z",
+      "finishedAt": "2026-04-03T03:12:56.717Z",
+      "durationMs": 5,
+      "httpStatus": 200,
+      "responseBodyPreview": "{\"code\":0,\"message\":\"SUCCESS\",\"data\":{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJ1c2VyX2lkIjoxLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsImV4cCI6MTc3NTI3MjM3NH0.qyJP63gZHtZri9sTIspJojk4FFx0jZqZCdfoohYr0Z0\"}}"
+    }
+  ]
+}
