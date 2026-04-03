@@ -67,8 +67,8 @@ export default function CaseTable({
               </th>
               <th className="w-32 px-2 py-2">用例ID</th>
               <th className="px-2 py-2">描述</th>
-              <th className="w-24 px-2 py-2">方法</th>
-              <th className="w-72 px-2 py-2">路径</th>
+              <th className="w-20 px-2 py-2">方法</th>
+              <th className="px-2 py-2">路径</th>
               <th className="w-20 px-2 py-2">状态</th>
               <th className="w-20 px-2 py-2">操作</th>
             </tr>
@@ -92,12 +92,14 @@ export default function CaseTable({
                   </td>
                   <td className="px-2 py-2 font-mono text-xs text-zinc-200">{c.id}</td>
                   <td className="px-2 py-2 text-zinc-200">
-                    <div className="truncate">{c.title || '-'}</div>
-                    <div className="truncate text-xs text-zinc-500">{c.group || '-'}</div>
+                    <div className="break-words text-xs">{c.title || '-'}</div>
+                    <div className="break-words text-xs text-zinc-500">{c.group || '-'}</div>
                   </td>
-                  <td className="px-2 py-2 font-mono text-xs text-zinc-300">{c.method}</td>
+                  <td className="px-2 py-2">
+                    <span className="rounded bg-zinc-700 px-1.5 py-0.5 font-mono text-xs text-zinc-200">{c.method}</span>
+                  </td>
                   <td className="px-2 py-2 font-mono text-xs text-zinc-400">
-                    <div className="truncate">{c.path}</div>
+                    <div className="break-all">{c.path}</div>
                   </td>
                   <td className="px-2 py-2">{status ? <StatusBadge status={status} /> : <span className="text-xs text-zinc-500">-</span>}</td>
                   <td className="px-2 py-2" onClick={(e) => e.stopPropagation()}>
