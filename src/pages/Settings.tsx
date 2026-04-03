@@ -17,12 +17,12 @@ export default function Settings() {
 
   return (
     <div className="grid gap-4">
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-4">
+      <div className="rounded-xl border-2 border-zinc-600 bg-zinc-900 p-4">
         <div className="text-sm font-semibold text-zinc-100">运行设置</div>
         <div className="mt-1 text-xs text-zinc-400">配置 Base URL、超时、并发与登录凭证（仅保存在本机 data/settings.json）</div>
       </div>
 
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-4">
+      <div className="rounded-xl border-2 border-zinc-600 bg-zinc-900 p-4">
         <div className="grid gap-4 md:grid-cols-2">
           <Field label="Base URL" value={local.baseUrl} onChange={(v) => setLocal((s) => ({ ...s, baseUrl: v }))} placeholder="http://127.0.0.1:8999" />
           <Field label="超时（ms）" value={String(local.timeoutMs)} onChange={(v) => setLocal((s) => ({ ...s, timeoutMs: Number(v || 0) }))} placeholder="15000" />
@@ -66,7 +66,7 @@ function Field({
     <label className="grid gap-1">
       <div className="text-xs font-medium text-zinc-300">{label}</div>
       <input
-        className="w-full rounded-lg border border-zinc-800 bg-zinc-950/40 px-3 py-2 text-sm text-zinc-100 outline-none placeholder:text-zinc-600 focus:border-zinc-700"
+        className="w-full rounded-lg border border-zinc-600 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-zinc-500"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
@@ -77,7 +77,7 @@ function Field({
 
 function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
-    <label className="flex items-end justify-between gap-3 rounded-lg border border-zinc-800 bg-zinc-950/20 px-3 py-2">
+    <label className="flex items-end justify-between gap-3 rounded-lg border border-zinc-600 bg-zinc-800/40 px-3 py-2">
       <div>
         <div className="text-xs font-medium text-zinc-300">{label}</div>
         <div className="mt-1 text-xs text-zinc-500">失败用例出现时是否停止队列</div>
@@ -85,8 +85,8 @@ function Toggle({ label, checked, onChange }: { label: string; checked: boolean;
       <button
         type="button"
         className={cn(
-          'h-6 w-11 rounded-full border border-zinc-700 p-0.5 transition',
-          checked ? 'bg-emerald-500/30' : 'bg-zinc-900/40',
+          'h-6 w-11 rounded-full border border-zinc-600 p-0.5 transition',
+          checked ? 'bg-emerald-500/30' : 'bg-zinc-700',
         )}
         onClick={() => onChange(!checked)}
       >
