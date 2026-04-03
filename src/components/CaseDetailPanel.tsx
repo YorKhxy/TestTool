@@ -17,7 +17,7 @@ export default function CaseDetailPanel({
 }) {
   if (!testCase) {
     return (
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-4 text-sm text-zinc-400">
+      <div className="rounded-xl border-2 border-zinc-600 bg-zinc-900 p-4 text-sm text-zinc-400">
         选择一条用例查看详情
       </div>
     );
@@ -27,8 +27,8 @@ export default function CaseDetailPanel({
   const o = override;
 
   return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-900/30">
-      <div className="border-b border-zinc-800 px-4 py-3">
+    <div className="flex h-full flex-col rounded-xl border-2 border-zinc-600 bg-zinc-900">
+      <div className="shrink-0 border-b border-zinc-600 px-4 py-3 bg-zinc-800/50">
         <div className="flex items-start justify-between gap-3">
           <div>
             <div className="font-mono text-xs text-zinc-400">{testCase.id}</div>
@@ -56,31 +56,33 @@ export default function CaseDetailPanel({
         ) : null}
       </div>
 
-      <div className="grid gap-3 p-4">
-        <Field label="headers（JSON对象）" value={o?.headersText ?? '{}'} onChange={(v) => onChange({ headersText: v })} rows={4} />
-        <Field label="query（JSON对象）" value={o?.queryText ?? '{}'} onChange={(v) => onChange({ queryText: v })} rows={3} />
-        <Field label="body（JSON，POST/PUT 用）" value={o?.bodyText ?? ''} onChange={(v) => onChange({ bodyText: v })} rows={6} />
+      <div className="flex-1 overflow-auto p-4">
+        <div className="grid gap-3">
+          <Field label="headers（JSON对象）" value={o?.headersText ?? '{}'} onChange={(v) => onChange({ headersText: v })} rows={4} />
+          <Field label="query（JSON对象）" value={o?.queryText ?? '{}'} onChange={(v) => onChange({ queryText: v })} rows={3} />
+          <Field label="body（JSON，POST/PUT 用）" value={o?.bodyText ?? ''} onChange={(v) => onChange({ bodyText: v })} rows={6} />
 
-        <div className={cn('rounded-lg border border-zinc-800 bg-zinc-950/40 p-3', !r && 'opacity-60')}>
-          <div className="flex items-center justify-between">
-            <div className="text-xs font-medium text-zinc-300">最近一次输出</div>
-            {r && report?.summary.runId && (
-              <button
-                className="inline-flex items-center gap-1 rounded border border-zinc-700 bg-zinc-800/40 px-2 py-1 text-xs text-zinc-300 transition hover:bg-zinc-700/60"
-                onClick={() => window.open(`/api/export/${report.summary.runId}?caseId=${testCase.id}`, '_blank')}
-              >
-                <Download className="h-3 w-3" />
-                导出
-              </button>
-            )}
-          </div>
-          <div className="mt-2 grid gap-2 text-xs text-zinc-400">
-            <div>HTTP：{r?.httpStatus ?? '-'}</div>
-            <div>耗时：{r?.durationMs ?? '-'} ms</div>
-            {r?.errorMessage ? <div className="text-rose-300">错误：{r.errorMessage}</div> : null}
-            <pre className="max-h-56 overflow-auto whitespace-pre-wrap rounded-md border border-zinc-800 bg-zinc-950/60 p-2 font-mono text-[11px] text-zinc-200">
-              {r?.responseBodyPreview ?? ''}
-            </pre>
+          <div className={cn('rounded-lg border border-zinc-800 bg-zinc-950/40 p-3', !r && 'opacity-60')}>
+            <div className="flex items-center justify-between">
+              <div className="text-xs font-medium text-zinc-300">最近一次输出</div>
+              {r && report?.summary.runId && (
+                <button
+                  className="inline-flex items-center gap-1 rounded border border-zinc-700 bg-zinc-800/40 px-2 py-1 text-xs text-zinc-300 transition hover:bg-zinc-700/60"
+                  onClick={() => window.open(`/api/export/${report.summary.runId}?caseId=${testCase.id}`, '_blank')}
+                >
+                  <Download className="h-3 w-3" />
+                  导出
+                </button>
+              )}
+            </div>
+            <div className="mt-2 grid gap-2 text-xs text-zinc-400">
+              <div>HTTP：{r?.httpStatus ?? '-'}</div>
+              <div>耗时：{r?.durationMs ?? '-'} ms</div>
+              {r?.errorMessage ? <div className="text-rose-300">错误：{r.errorMessage}</div> : null}
+              <pre className="max-h-56 overflow-auto whitespace-pre-wrap rounded-md border border-zinc-800 bg-zinc-950/60 p-2 font-mono text-[11px] text-zinc-200">
+                {r?.responseBodyPreview ?? ''}
+              </pre>
+            </div>
           </div>
         </div>
       </div>

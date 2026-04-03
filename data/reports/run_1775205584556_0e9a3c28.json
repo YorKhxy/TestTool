@@ -1,0 +1,54 @@
+{
+  "summary": {
+    "runId": "run_1775205584556_0e9a3c28",
+    "startedAt": "2026-04-03T08:39:44.556Z",
+    "finishedAt": "2026-04-03T08:39:44.558Z",
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0,
+    "canceled": 0,
+    "durationMs": 2
+  },
+  "config": {
+    "baseUrl": "http://192.168.1.36:8999",
+    "timeoutMs": 15000,
+    "concurrency": 1,
+    "continueOnFail": true,
+    "auth": {
+      "email": "admin@admin.com",
+      "password": "admin123"
+    }
+  },
+  "cases": [
+    {
+      "id": "TC-AUTH-004",
+      "title": "登录失败-邮箱为空",
+      "method": "POST",
+      "path": "/hashrate/admin/auth/v1/login/password",
+      "group": "4.1 认证模块测试用例",
+      "requiresAuth": false,
+      "headersRaw": "Content-Type: application/json",
+      "bodyRaw": "`{\"email\": \"\", \"password\": \"admin123\"}`",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "query": {},
+      "body": {
+        "email": "",
+        "password": "admin123"
+      }
+    }
+  ],
+  "results": [
+    {
+      "caseId": "TC-AUTH-004",
+      "status": "failed",
+      "startedAt": "2026-04-03T08:39:44.556Z",
+      "finishedAt": "2026-04-03T08:39:44.558Z",
+      "durationMs": 2,
+      "httpStatus": 200,
+      "responseBodyPreview": "{\"code\":1000,\"message\":\"失败\",\"detail\":\"邮箱或密码不能为空\",\"data\":null}"
+    }
+  ]
+}
