@@ -1,0 +1,46 @@
+{
+  "summary": {
+    "runId": "run_1775198348231_4cfaa096",
+    "startedAt": "2026-04-03T06:39:08.231Z",
+    "finishedAt": "2026-04-03T06:39:08.239Z",
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "canceled": 0,
+    "durationMs": 8
+  },
+  "config": {
+    "baseUrl": "http://192.168.1.36:8999",
+    "timeoutMs": 15000,
+    "concurrency": 1,
+    "continueOnFail": true,
+    "auth": {
+      "email": "admin@admin.com",
+      "password": "admin123"
+    }
+  },
+  "cases": [
+    {
+      "id": "TC-CLIENT-002",
+      "title": "获取客户端配�?",
+      "method": "GET",
+      "path": "/hashrate/front/config/v1/config",
+      "group": "4.10 客户端模块测试用�?",
+      "requiresAuth": false,
+      "headers": {},
+      "query": {}
+    }
+  ],
+  "results": [
+    {
+      "caseId": "TC-CLIENT-002",
+      "status": "passed",
+      "startedAt": "2026-04-03T06:39:08.231Z",
+      "finishedAt": "2026-04-03T06:39:08.239Z",
+      "durationMs": 8,
+      "httpStatus": 200,
+      "responseBodyPreview": "{\"code\":0,\"message\":\"SUCCESS\",\"data\":{\"coin_values\":[{\"seq\":1,\"coin\":\"ETH\",\"amount\":1e-16},{\"seq\":2,\"coin\":\"DOGE\",\"amount\":1e-10},{\"seq\":3,\"coin\":\"LTC\",\"amount\":3e-10},{\"seq\":4,\"coin\":\"CYS\",\"amount\":66666},{\"seq\":5,\"coin\":\"RWA\",\"amount\":972.75}],\"unit_price_grades\":[{\"level\":1,\"usdt_amount\":100,\"power_amount\":1000},{\"level\":2,\"usdt_amount\":500,\"power_amount\":5111},{\"level\":3,\"usdt_amount\":1000,\"power_amount\":15555},{\"level\":4,\"usdt_amount\":5000,\"power_amount\":58888}],\"lock_settings\":[{\"coin\":\"CYS\",\"days\":180,\"lock_ratio\":0.7}],\"withdraw_configs\":[{\"seq\":1,\"coin\":\"USDT\",\"fee_amount\":1,\"min_amount\":10.0000000002},{\"seq\":2,\"coin\":\"ETH\",\"fee_amount\":1e-8,\"min_amount\":2e-8},{\"seq\":3,\"coin\":\"DOGE\",\"fee_amount\":1,\"min_amount\":10.1},{\"seq\":4,\"coin\":\"LTC\",\"fee_amount\":1,\"min_amount\":15},{\"seq\":5,\"coin\":\"CYS\",\"fee_amount\":0,\"min_amount\":0},{\"seq\":6,\"coin\":\"RWA\",\"fee_amount\":1,\"min_amount\":2}]}}"
+    }
+  ]
+}

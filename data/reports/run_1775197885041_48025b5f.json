@@ -1,0 +1,135 @@
+{
+  "summary": {
+    "runId": "run_1775197885041_48025b5f",
+    "startedAt": "2026-04-03T06:31:25.041Z",
+    "finishedAt": "2026-04-03T06:31:25.064Z",
+    "total": 4,
+    "passed": 1,
+    "failed": 3,
+    "skipped": 0,
+    "canceled": 0,
+    "durationMs": 23
+  },
+  "config": {
+    "baseUrl": "http://192.168.1.36:8999",
+    "timeoutMs": 15000,
+    "concurrency": 1,
+    "continueOnFail": true,
+    "auth": {
+      "email": "admin@admin.com",
+      "password": "admin123"
+    }
+  },
+  "cases": [
+    {
+      "id": "TC-AUTH-001",
+      "title": "正常登录-邮箱密码正确",
+      "method": "POST",
+      "path": "/hashrate/admin/auth/v1/login/password",
+      "group": "4.1 认证模块测试用例",
+      "requiresAuth": false,
+      "headersRaw": "Content-Type: application/json",
+      "bodyRaw": "`{\"email\": \"{{auth.email}}\", \"password\": \"{{auth.password}}\"}`",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "query": {},
+      "body": {
+        "email": "admin@admin.com",
+        "password": "admin123"
+      }
+    },
+    {
+      "id": "TC-AUTH-002",
+      "title": "登录失败-密码错误",
+      "method": "POST",
+      "path": "/hashrate/admin/auth/v1/login/password",
+      "group": "4.1 认证模块测试用例",
+      "requiresAuth": false,
+      "headersRaw": "Content-Type: application/json",
+      "bodyRaw": "`{\"email\": \"{{auth.email}}\", \"password\": \"WrongPassword123\"}`",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "query": {},
+      "body": {
+        "email": "{{auth.email}}",
+        "password": "WrongPassword123"
+      }
+    },
+    {
+      "id": "TC-AUTH-003",
+      "title": "登录失败-用户不存�?",
+      "method": "POST",
+      "path": "/hashrate/admin/auth/v1/login/password",
+      "group": "4.1 认证模块测试用例",
+      "requiresAuth": false,
+      "headersRaw": "Content-Type: application/json",
+      "bodyRaw": "`{\"email\": \"nonexistent@example.com\", \"password\": \"AnyPassword123\"}`",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "query": {},
+      "body": {
+        "email": "nonexistent@example.com",
+        "password": "AnyPassword123"
+      }
+    },
+    {
+      "id": "TC-AUTH-004",
+      "title": "登录失败-邮箱为空",
+      "method": "POST",
+      "path": "/hashrate/admin/auth/v1/login/password",
+      "group": "4.1 认证模块测试用例",
+      "requiresAuth": false,
+      "headersRaw": "Content-Type: application/json",
+      "bodyRaw": "`{\"email\": \"\", \"password\": \"admin123\"}`",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "query": {},
+      "body": {
+        "email": "",
+        "password": "admin123"
+      }
+    }
+  ],
+  "results": [
+    {
+      "caseId": "TC-AUTH-001",
+      "status": "passed",
+      "startedAt": "2026-04-03T06:31:25.041Z",
+      "finishedAt": "2026-04-03T06:31:25.054Z",
+      "durationMs": 13,
+      "httpStatus": 200,
+      "responseBodyPreview": "{\"code\":0,\"message\":\"SUCCESS\",\"data\":{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJ1c2VyX2lkIjoxLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsImV4cCI6MTc3NTI4NDI4Mn0.FTj3bNzpGToXGB_UOxJV-Ds8S11bdxxyMRt9ock99R0\"}}"
+    },
+    {
+      "caseId": "TC-AUTH-002",
+      "status": "failed",
+      "startedAt": "2026-04-03T06:31:25.054Z",
+      "finishedAt": "2026-04-03T06:31:25.058Z",
+      "durationMs": 4,
+      "httpStatus": 200,
+      "responseBodyPreview": "{\"code\":1008,\"message\":\"未找到\",\"detail\":\"管理员不存在\",\"data\":null}"
+    },
+    {
+      "caseId": "TC-AUTH-003",
+      "status": "failed",
+      "startedAt": "2026-04-03T06:31:25.058Z",
+      "finishedAt": "2026-04-03T06:31:25.062Z",
+      "durationMs": 4,
+      "httpStatus": 200,
+      "responseBodyPreview": "{\"code\":1008,\"message\":\"未找到\",\"detail\":\"管理员不存在\",\"data\":null}"
+    },
+    {
+      "caseId": "TC-AUTH-004",
+      "status": "failed",
+      "startedAt": "2026-04-03T06:31:25.062Z",
+      "finishedAt": "2026-04-03T06:31:25.064Z",
+      "durationMs": 2,
+      "httpStatus": 200,
+      "responseBodyPreview": "{\"code\":1000,\"message\":\"失败\",\"detail\":\"邮箱或密码不能为空\",\"data\":null}"
+    }
+  ]
+}
