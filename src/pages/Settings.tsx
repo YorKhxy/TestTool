@@ -48,6 +48,38 @@ export default function Settings() {
           {error ? <div className="text-sm text-rose-300">{error}</div> : null}
         </div>
       </div>
+
+      <div className="rounded-xl border-2 border-zinc-600 bg-zinc-900 p-4">
+        <div className="text-sm font-semibold text-zinc-100">AI 用例生成设置</div>
+        <div className="mt-1 text-xs text-zinc-400">配置 AI API 接口信息，用于从 Swagger 文档生成测试用例</div>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <Field label="AI API URL" value={local.aiApiUrl} onChange={(v) => setLocal((s) => ({ ...s, aiApiUrl: v }))} placeholder="https://api.openai.com/v1" />
+          <Field label="AI API Key" value={local.aiApiKey} onChange={(v) => setLocal((s) => ({ ...s, aiApiKey: v }))} placeholder="sk-..." />
+          <Field label="AI 模型" value={local.aiModel} onChange={(v) => setLocal((s) => ({ ...s, aiModel: v }))} placeholder="gpt-4" />
+        </div>
+        <div className="mt-4">
+          <div className="text-xs font-medium text-zinc-300">AI 提示词</div>
+          <textarea
+            className="mt-1 w-full rounded-lg border border-zinc-600 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-zinc-500"
+            rows={8}
+            value={local.aiPrompt}
+            onChange={(e) => setLocal((s) => ({ ...s, aiPrompt: e.target.value }))}
+            placeholder="输入提示词，指导 AI 如何生成测试用例..."
+          />
+        </div>
+        <div className="mt-4 flex items-center gap-2">
+          <button
+            className="inline-flex items-center gap-2 rounded-lg bg-indigo-500 px-3 py-2 text-sm font-medium text-white transition hover:bg-indigo-400"
+            onClick={async () => {
+              setSettings(local);
+              await saveSettings(local);
+            }}
+          >
+            <Save className="h-4 w-4" />
+            保存
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
