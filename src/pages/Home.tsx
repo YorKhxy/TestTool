@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
-import { FileUp, Play, Trash2, GripVertical } from 'lucide-react';
+import { FileUp, Play, Trash2, GripVertical, Wand2, Save, Package } from 'lucide-react';
 import CaseDetailPanel from '@/components/CaseDetailPanel';
 import CaseTable from '@/components/CaseTable';
 import { useRunnerStore } from '@/hooks/useRunnerStore';
@@ -7,25 +7,39 @@ import { cn } from '@/lib/utils';
 
 export default function Home() {
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const swaggerInputRef = useRef<HTMLInputElement | null>(null);
+  const zipInputRef = useRef<HTMLInputElement | null>(null);
   const [filter, setFilter] = useState('');
   const [leftWidth, setLeftWidth] = useState(65);
   const [isDragging, setIsDragging] = useState(false);
   const [showWidthIndicator, setShowWidthIndicator] = useState(false);
+  const [showSaveInput, setShowSaveInput] = useState(false);
+  const [saveFilePath, setSaveFilePath] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
   const dragStateRef = useRef({ isDragging: false });
 
   const {
     fileName,
+    swaggerFileName,
+    swaggerContent,
     parsed,
     selectedIds,
     overrides,
     settings,
     activeCaseId,
     isRunning,
+    isGenerating,
     lastReport,
     error,
+    uploadedDocuments,
+    uploadedZipName,
     loadSettings,
     importMarkdown,
+    importSwagger,
+    generateFromSwagger,
+    supplementCases,
+    saveMarkdown,
+    uploadDocumentsZip,
     setActiveCase,
     toggleSelect,
     setSelectMany,
@@ -120,6 +134,35 @@ export default function Home() {
                 e.target.value = '';
               }}
             />
+            <input
+              ref={swaggerInputRef}
+              type="file"
+              accept=".json"
+              className="hidden"
+              onChange={async (e) => {
+                const f = e.target.files?.[0];
+                if (!f) return;
+                try {
+                  const swagger = JSON.parse(await f.text());
+                  importSwagger(f.name, swagger);
+                } catch {
+                  alert('Swagger JSON 解析失败');
+                }
+                e.target.value = '';
+              }}
+            />
+            <input
+              ref={zipInputRef}
+              type="file"
+              accept=".zip"
+              className="hidden"
+              onChange={async (e) => {
+                const f = e.target.files?.[0];
+                if (!f) return;
+                await uploadDocumentsZip(f.name);
+                e.target.value = '';
+              }}
+            />
             <button
               className={cn(
                 'inline-flex items-center gap-2 rounded-lg bg-indigo-500 px-3 py-2 text-sm font-medium text-white transition hover:bg-indigo-400',
@@ -129,6 +172,46 @@ export default function Home() {
             >
               <FileUp className="h-4 w-4" />
               导入Markdown
+            </button>
+            <button
+              className={cn(
+                'inline-flex items-center gap-2 rounded-lg border border-indigo-600 bg-indigo-900/30 px-3 py-2 text-sm font-medium text-indigo-200 transition hover:bg-indigo-900/50',
+                (isRunning || isGenerating || (!swaggerFileName && !uploadedDocuments.length)) && 'pointer-events-none opacity-50',
+              )}
+              onClick={() => void generateFromSwagger()}
+            >
+              <Wand2 className="h-4 w-4" />
+              {isGenerating ? '生成中...' : 'AI生成用例'}
+            </button>
+            <button
+              className={cn(
+                'inline-flex items-center gap-2 rounded-lg border border-emerald-600 bg-emerald-900/30 px-3 py-2 text-sm font-medium text-emerald-200 transition hover:bg-emerald-900/50',
+                (isRunning || isGenerating || (!swaggerContent && !uploadedDocuments.length) || !parsed) && 'pointer-events-none opacity-50',
+              )}
+              onClick={() => void supplementCases()}
+            >
+              <Wand2 className="h-4 w-4" />
+              补充用例
+            </button>
+            <button
+              className={cn(
+                'inline-flex items-center gap-2 rounded-lg border border-indigo-600 bg-indigo-900/30 px-3 py-2 text-sm font-medium text-indigo-200 transition hover:bg-indigo-900/50',
+                (isRunning || isGenerating) && 'pointer-events-none opacity-50',
+              )}
+              onClick={() => swaggerInputRef.current?.click()}
+            >
+              <FileUp className="h-4 w-4" />
+              {swaggerFileName ? `已上传: ${swaggerFileName}` : '上传Swagger'}
+            </button>
+            <button
+              className={cn(
+                'inline-flex items-center gap-2 rounded-lg border border-amber-600 bg-amber-900/30 px-3 py-2 text-sm font-medium text-amber-200 transition hover:bg-amber-900/50',
+                (isRunning || isGenerating) && 'pointer-events-none opacity-50',
+              )}
+              onClick={() => zipInputRef.current?.click()}
+            >
+              <Package className="h-4 w-4" />
+              {uploadedZipName ? `已上传: ${uploadedZipName}` : '上传文档包'}
             </button>
             <button
               className={cn(
@@ -157,10 +240,67 @@ export default function Home() {
           <div className="flex flex-wrap items-center gap-2">
             <InfoCard label="当前文件" value={fileName ?? '未导入'} />
             <InfoCard label="Base URL" value={settings.baseUrl || '未配置'} mono />
+            <InfoCard label="用例数量" value={parsed ? `${parsed.cases.length} 个` : '0 个'} />
+            <InfoCard label="已上传文档" value={uploadedDocuments.length > 0 ? `${uploadedDocuments.length} 个文档` : (uploadedZipName || '-')} />
             <InfoCard
               label="最近一次执行"
               value={summary ? `${summary.passed}/${summary.total} 通过，${summary.failed} 失败` : '暂无'}
             />
+          </div>
+          <div className="flex items-center gap-2">
+            {showSaveInput ? (
+              <>
+                <input
+                  className="rounded-lg border border-zinc-600 bg-zinc-800 px-2 py-1 text-sm text-zinc-100 outline-none placeholder:text-zinc-500"
+                  placeholder="输入保存路径，如 D:\TestTool\cases.md"
+                  value={saveFilePath}
+                  onChange={(e) => setSaveFilePath(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && saveFilePath.trim()) {
+                      void saveMarkdown(saveFilePath.trim());
+                      setShowSaveInput(false);
+                      setSaveFilePath('');
+                    } else if (e.key === 'Escape') {
+                      setShowSaveInput(false);
+                      setSaveFilePath('');
+                    }
+                  }}
+                  autoFocus
+                />
+                <button
+                  className="rounded-lg border border-emerald-600 bg-emerald-900/30 px-2 py-1 text-sm text-emerald-200 transition hover:bg-emerald-900/50"
+                  onClick={() => {
+                    if (saveFilePath.trim()) {
+                      void saveMarkdown(saveFilePath.trim());
+                      setShowSaveInput(false);
+                      setSaveFilePath('');
+                    }
+                  }}
+                >
+                  确认
+                </button>
+                <button
+                  className="rounded-lg border border-zinc-600 bg-zinc-800 px-2 py-1 text-sm text-zinc-200 transition hover:bg-zinc-700"
+                  onClick={() => {
+                    setShowSaveInput(false);
+                    setSaveFilePath('');
+                  }}
+                >
+                  取消
+                </button>
+              </>
+            ) : (
+              <button
+                className={cn(
+                  'inline-flex items-center gap-2 rounded-lg border border-emerald-600 bg-emerald-900/30 px-3 py-2 text-sm font-medium text-emerald-200 transition hover:bg-emerald-900/50',
+                  (!parsed || parsed.cases.length === 0) && 'pointer-events-none opacity-50',
+                )}
+                onClick={() => setShowSaveInput(true)}
+              >
+                <Save className="h-4 w-4" />
+                保存用例
+              </button>
+            )}
           </div>
         </div>
 

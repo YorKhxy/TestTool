@@ -11,6 +11,10 @@ type SavedSettings = {
   concurrency: number;
   continueOnFail: boolean;
   auth?: { email: string; password: string; mfaCode?: string };
+  aiApiUrl?: string;
+  aiApiKey?: string;
+  aiPrompt?: string;
+  aiModel?: string;
 };
 
 function getDataDir() {
@@ -25,7 +29,7 @@ async function ensureDataDir() {
   await fs.mkdir(getDataDir(), { recursive: true });
 }
 
-function normalizeSettings(input: Partial<RunConfig> | null | undefined): SavedSettings {
+function normalizeSettings(input: Partial<RunConfig & { aiApiUrl?: string; aiApiKey?: string; aiPrompt?: string; aiModel?: string }> | null | undefined, existing?: SavedSettings | null): SavedSettings {
   const baseUrl = typeof input?.baseUrl === 'string' ? input.baseUrl.replace(/`/g, '').trim() : '';
   const timeoutMs = typeof input?.timeoutMs === 'number' && Number.isFinite(input.timeoutMs) ? input.timeoutMs : 15000;
   const concurrency = typeof input?.concurrency === 'number' && Number.isFinite(input.concurrency) ? input.concurrency : 1;
@@ -37,6 +41,10 @@ function normalizeSettings(input: Partial<RunConfig> | null | undefined): SavedS
     timeoutMs: Math.max(1000, Math.floor(timeoutMs)),
     concurrency: Math.max(1, Math.min(10, Math.floor(concurrency))),
     continueOnFail,
+    aiApiUrl: typeof input?.aiApiUrl === 'string' ? input.aiApiUrl : (existing?.aiApiUrl ?? ''),
+    aiApiKey: typeof input?.aiApiKey === 'string' ? input.aiApiKey : (existing?.aiApiKey ?? ''),
+    aiPrompt: typeof input?.aiPrompt === 'string' ? input.aiPrompt : (existing?.aiPrompt ?? ''),
+    aiModel: typeof input?.aiModel === 'string' ? input.aiModel : (existing?.aiModel ?? 'gpt-4'),
   };
 
   if (auth && typeof auth.email === 'string' && typeof auth.password === 'string') {
@@ -60,12 +68,14 @@ async function readSettings(): Promise<SavedSettings | null> {
 }
 
 router.get('/', async (_req: Request, res: Response) => {
-  const s = (await readSettings()) ?? normalizeSettings(null);
+  const existing = await readSettings();
+  const s = existing ?? normalizeSettings(null);
   res.json({ success: true, data: s });
 });
 
 router.put('/', async (req: Request, res: Response) => {
-  const normalized = normalizeSettings(req.body);
+  const existing = await readSettings();
+  const normalized = normalizeSettings(req.body, existing);
   if (!normalized.baseUrl) {
     res.status(400).json({ success: false, error: 'baseUrl 不能为空' });
     return;

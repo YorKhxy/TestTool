@@ -75,6 +75,10 @@ type SettingsState = {
   authEmail: string;
   authPassword: string;
   mfaCode: string;
+  aiApiUrl: string;
+  aiApiKey: string;
+  aiPrompt: string;
+  aiModel: string;
 };
 
 type SettingsDto = {
@@ -83,10 +87,16 @@ type SettingsDto = {
   concurrency: number;
   continueOnFail: boolean;
   auth?: { email: string; password: string; mfaCode?: string };
+  aiApiUrl?: string;
+  aiApiKey?: string;
+  aiPrompt?: string;
+  aiModel?: string;
 };
 
 type RunnerState = {
   fileName: string | null;
+  swaggerFileName: string | null;
+  swaggerContent: object | null;
   parsed: ParsedTestPlan | null;
   selectedIds: Record<string, boolean>;
   overrides: Record<string, CaseOverride>;
@@ -95,11 +105,20 @@ type RunnerState = {
   isRunning: boolean;
   lastReport: RunReport | null;
   error: string | null;
+  isGenerating: boolean;
+  markdownContent: string | null;
+  uploadedDocuments: { name: string; path: string; content: string }[];
+  uploadedZipName: string | null;
 
   loadSettings: () => Promise<void>;
   saveSettings: (s: SettingsState) => Promise<void>;
   setSettings: (patch: Partial<SettingsState>) => void;
   importMarkdown: (fileName: string, markdown: string) => Promise<void>;
+  importSwagger: (fileName: string, swagger: object) => void;
+  uploadDocumentsZip: (zipFileName: string) => Promise<void>;
+  generateFromSwagger: () => Promise<void>;
+  supplementCases: () => Promise<void>;
+  saveMarkdown: (filePath: string) => Promise<void>;
   setActiveCase: (id: string | null) => void;
   toggleSelect: (id: string) => void;
   setSelectMany: (ids: string[], selected: boolean) => void;
@@ -177,6 +196,8 @@ function buildCaseRequests(cases: TestCase[], overrides: Record<string, CaseOver
 
 export const useRunnerStore = create<RunnerState>((set, get) => ({
   fileName: null,
+  swaggerFileName: null,
+  swaggerContent: null,
   parsed: null,
   selectedIds: {},
   overrides: {},
@@ -188,11 +209,19 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
     authEmail: '',
     authPassword: '',
     mfaCode: '',
+    aiApiUrl: '',
+    aiApiKey: '',
+    aiPrompt: '',
+    aiModel: 'gpt-4',
   },
   activeCaseId: null,
   isRunning: false,
   lastReport: null,
   error: null,
+  isGenerating: false,
+  markdownContent: null,
+  uploadedDocuments: [],
+  uploadedZipName: null,
 
   loadSettings: async () => {
     try {
@@ -207,6 +236,10 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
           authEmail: (r.data.auth?.email || s.settings.authEmail || '').replace(/`/g, '').trim(),
           authPassword: (r.data.auth?.password || s.settings.authPassword || '').replace(/`/g, '').trim(),
           mfaCode: r.data.auth?.mfaCode || s.settings.mfaCode,
+          aiApiUrl: r.data.aiApiUrl || s.settings.aiApiUrl || '',
+          aiApiKey: r.data.aiApiKey || s.settings.aiApiKey || '',
+          aiPrompt: r.data.aiPrompt || s.settings.aiPrompt || '',
+          aiModel: r.data.aiModel || s.settings.aiModel || 'gpt-4',
         }),
       }));
     } catch (e: unknown) {
@@ -228,7 +261,13 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
     try {
       await apiJson('/api/settings', {
         method: 'PUT',
-        body: JSON.stringify(buildRunConfig(s2)),
+        body: JSON.stringify({
+          ...buildRunConfig(s2),
+          aiApiUrl: s2.aiApiUrl,
+          aiApiKey: s2.aiApiKey,
+          aiPrompt: s2.aiPrompt,
+          aiModel: s2.aiModel,
+        }),
       });
       set({ settings: s2, error: null });
     } catch (e: unknown) {
@@ -248,6 +287,7 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
       set((s) => ({
         fileName,
         parsed,
+        markdownContent: markdown,
         selectedIds: {},
         overrides: {},
         activeCaseId: parsed.cases[0]?.id ?? null,
@@ -262,6 +302,132 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
       }));
     } catch (e: unknown) {
       set({ error: e instanceof Error ? e.message : '导入失败' });
+    }
+  },
+
+  importSwagger: (fileName: string, swagger: object) => {
+    set({ swaggerFileName: fileName, swaggerContent: swagger });
+  },
+
+  uploadDocumentsZip: async (zipFileName: string) => {
+    try {
+      set({ isGenerating: true, error: null });
+      const fileInput = document.querySelector<HTMLInputElement>('input[type="file"][accept*=".zip"]');
+      const file = fileInput?.files?.[0];
+      if (!file) {
+        set({ isGenerating: false, error: '请先选择 ZIP 文件' });
+        return;
+      }
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await fetch('/api/generate/upload-zip', {
+        method: 'POST',
+        body: formData,
+      });
+      const r = await response.json() as { success: boolean; documents?: { name: string; path: string; content: string }[]; error?: string };
+      if (!r.success || !r.documents) {
+        set({ isGenerating: false, error: r.error || '上传失败' });
+        return;
+      }
+      set({ uploadedDocuments: r.documents, uploadedZipName: zipFileName, isGenerating: false });
+    } catch (e: unknown) {
+      set({ isGenerating: false, error: e instanceof Error ? e.message : '上传失败' });
+    }
+  },
+
+  generateFromSwagger: async () => {
+    const { swaggerContent, uploadedDocuments, uploadedZipName } = get();
+    if (!swaggerContent && uploadedDocuments.length === 0) {
+      set({ error: '请先上传 Swagger 文件或用例文档压缩包' });
+      return;
+    }
+    try {
+      set({ isGenerating: true, error: null });
+      const r = await apiJson<{ success: true; data: string }>('/api/generate/ai-generate', {
+        method: 'POST',
+        body: JSON.stringify({
+          swagger: swaggerContent,
+          documents: uploadedDocuments.length > 0 ? uploadedDocuments : undefined,
+        }),
+      });
+      const markdown = r.data;
+      await get().importMarkdown(uploadedZipName ?? 'AI生成的测试用例.md', markdown);
+      set({ swaggerFileName: null, isGenerating: false });
+    } catch (e: unknown) {
+      set({ isGenerating: false, error: e instanceof Error ? e.message : 'AI 生成失败' });
+    }
+  },
+
+  supplementCases: async () => {
+    const { swaggerContent, uploadedDocuments, parsed } = get();
+    console.log('supplementCases called, parsed cases:', parsed?.cases?.length);
+    if (!swaggerContent && uploadedDocuments.length === 0) {
+      set({ error: '请先上传 Swagger 文件或用例文档压缩包' });
+      return;
+    }
+    if (!parsed || parsed.cases.length === 0) {
+      set({ error: '请先生成初始用例' });
+      return;
+    }
+    try {
+      set({ isGenerating: true, error: null });
+      const existingCasesText = parsed.cases
+        .map((c) => `${c.id} | ${c.title} | ${c.method} | ${c.path}`)
+        .join('\n');
+      console.log('Sending request with existing cases count:', parsed.cases.length);
+      const r = await apiJson<{ success: true; data: string }>('/api/generate/ai-generate', {
+        method: 'POST',
+        body: JSON.stringify({
+          swagger: swaggerContent,
+          documents: uploadedDocuments.length > 0 ? uploadedDocuments : undefined,
+          existingCases: existingCasesText,
+        }),
+      });
+      console.log('AI response received, markdown length:', r.data.length);
+      const newMarkdown = r.data;
+      console.log('New markdown preview:', r.data.substring(0, 200));
+      const newParsed = await apiJson<{ success: true; data: ParsedTestPlan }>('/api/testplan/parse', {
+        method: 'POST',
+        body: JSON.stringify({ markdown: newMarkdown }),
+      });
+      console.log('Parsed new cases count:', newParsed.data.cases.length);
+      set((s) => {
+        console.log('Setting new cases, current cases:', s.parsed?.cases?.length, 'new cases:', newParsed.data.cases.length);
+        const combinedMarkdown = s.markdownContent
+          ? s.markdownContent + '\n\n' + newMarkdown
+          : newMarkdown;
+        return {
+          parsed: { ...s.parsed!, cases: [...(s.parsed?.cases ?? []), ...newParsed.data.cases] },
+          markdownContent: combinedMarkdown,
+          isGenerating: false,
+          error: null,
+        };
+      });
+    } catch (e: unknown) {
+      console.error('Supplement error:', e);
+      set({ isGenerating: false, error: e instanceof Error ? e.message : 'AI 补充用例失败' });
+    }
+  },
+
+  saveMarkdown: async (filePath: string) => {
+    const { markdownContent } = get();
+    if (!markdownContent) {
+      set({ error: '没有可保存的用例内容，请先生成用例' });
+      return;
+    }
+    try {
+      console.log('Saving markdown, length:', markdownContent.length);
+      const r = await apiJson<{ success: boolean; path?: string; error?: string }>('/api/testplan/save', {
+        method: 'POST',
+        body: JSON.stringify({ filePath, markdown: markdownContent }),
+      });
+      console.log('Save result:', r);
+      if (!r.success) {
+        set({ error: r.error || '保存失败' });
+      }
+    } catch (e: unknown) {
+      console.error('Save error:', e);
+      set({ error: e instanceof Error ? e.message : '保存失败' });
     }
   },
 
