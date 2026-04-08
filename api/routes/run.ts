@@ -1,7 +1,7 @@
 import { Router, type Request, type Response } from 'express';
 import fs from 'fs/promises';
 import path from 'path';
-import type { CaseRequest, CaseResult, RunConfig, RunReport, RunSummary } from '../../shared/runTypes.js';
+import type { CaseRequest, CaseResult, RunConfig, RunReport, RunSummary, VariableExtractor, ExtractedVariables } from '../../shared/runTypes.js';
 
 const router = Router();
 
@@ -39,7 +39,7 @@ function buildUrl(baseUrl: string, pathname: string, query?: Record<string, stri
 }
 
 function safePreview(text: string, maxLen = 4000) {
-  const t = text.length > maxLen ? text.slice(0, maxLen) + '…' : text;
+  const t = text.length > maxLen ? text.slice(0, maxLen) + '...' : text;
   return t;
 }
 
@@ -83,9 +83,9 @@ async function login(baseUrl: string, auth: NonNullable<RunConfig['auth']>, time
       (isRecord(parsed) && isRecord(parsed.result) && typeof parsed.result.token === 'string' ? parsed.result.token : null);
     if (typeof token === 'string' && token) return token;
   } catch {
-    throw new Error(`登录响应不是JSON：${safePreview(text)}`);
+    throw new Error(`登录响应不是JSON格式: ${safePreview(text)}`);
   }
-  throw new Error(`登录响应未包含 token：${safePreview(text)}`);
+  throw new Error(`登录响应未包含token: ${safePreview(text)}`);
 }
 
 function parseExpectedResult(expected: string | undefined): { expectedStatus: number | null; expectedContent: string[] } {
@@ -105,7 +105,7 @@ function parseExpectedResult(expected: string | undefined): { expectedStatus: nu
     const contentMatch = trimmed.match(/响应体[包含含有]"?([^"]+)"?/);
     if (contentMatch) {
       const content = contentMatch[1].trim();
-      const items = content.split(/[，,]/).map(s => s.trim()).filter(s => s);
+      const items = content.split(/[,;]/).map(s => s.trim()).filter(s => s);
       result.expectedContent.push(...items);
     } else if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
       result.expectedContent.push(trimmed.slice(1, -1));
@@ -157,6 +157,58 @@ function shouldPassByBody(responseJson: unknown): boolean | null {
   return code === 0;
 }
 
+function extractValueByPath(obj: unknown, pathStr: string): unknown {
+  if (!isRecord(obj) && !Array.isArray(obj)) return undefined;
+  const parts = pathStr.split('.');
+  let current: unknown = obj;
+  for (const part of parts) {
+    if (current === null || current === undefined) return undefined;
+    if (isRecord(current)) {
+      current = (current as Record<string, unknown>)[part];
+    } else if (Array.isArray(current)) {
+      const idx = parseInt(part, 10);
+      if (isNaN(idx)) return undefined;
+      current = current[idx];
+    } else {
+      return undefined;
+    }
+  }
+  return current;
+}
+
+function extractVariables(responseJson: unknown, responseHeaders: Record<string, string>, extractors: VariableExtractor[] | undefined): ExtractedVariables {
+  const vars: ExtractedVariables = {};
+  if (!extractors || extractors.length === 0) return vars;
+
+  for (const extractor of extractors) {
+    let value: unknown;
+    if (extractor.source === 'header') {
+      value = responseHeaders[extractor.path];
+    } else {
+      value = extractValueByPath(responseJson, extractor.path);
+    }
+    if (value !== undefined) {
+      vars[extractor.name] = value as string | number | boolean | object;
+    }
+  }
+
+  return vars;
+}
+
+function replaceVariables(text: string, vars: ExtractedVariables): string {
+  return text.replace(/\$\{([^}]+)\}/g, (_match, varName) => {
+    const trimmedName = varName.trim();
+    if (trimmedName in vars) {
+      const value = vars[trimmedName];
+      if (typeof value === 'object') {
+        return JSON.stringify(value);
+      }
+      return String(value);
+    }
+    return _match;
+  });
+}
+
 async function runOneCase(c: CaseRequest, config: RunConfig, token: string | null): Promise<CaseResult> {
   const startedAt = nowIso();
   const start = Date.now();
@@ -169,7 +221,9 @@ async function runOneCase(c: CaseRequest, config: RunConfig, token: string | nul
       }
     }
     const needsAuth = c.requiresAuth !== false;
-    if (needsAuth && token) headers.authorization = `Bearer ${token}`;
+    if (needsAuth && token && !headers['authorization'] && !headers['Authorization']) {
+      headers.authorization = `Bearer ${token}`;
+    }
 
     let body: string | undefined;
     if (c.body !== undefined && c.method !== 'GET' && c.method !== 'HEAD') {
@@ -231,6 +285,16 @@ async function runOneCase(c: CaseRequest, config: RunConfig, token: string | nul
       }
     }
 
+    let extractedVariables: ExtractedVariables = {};
+    if (res.ok) {
+      try {
+        const json = JSON.parse(text);
+        extractedVariables = extractVariables(json, {}, c.variableExtractors);
+      } catch (e) {
+        void 0;
+      }
+    }
+
     return {
       caseId: c.id,
       status,
@@ -240,6 +304,7 @@ async function runOneCase(c: CaseRequest, config: RunConfig, token: string | nul
       httpStatus: res.status,
       responseBodyPreview: safePreview(text),
       expectedResult: c.expectedResult,
+      extractedVariables,
     };
   } catch (e: unknown) {
     const finishedAt = nowIso();
@@ -252,6 +317,7 @@ async function runOneCase(c: CaseRequest, config: RunConfig, token: string | nul
       durationMs,
       errorMessage: e instanceof Error ? e.message : 'Unknown error',
       expectedResult: c.expectedResult,
+      extractedVariables: {},
     };
   }
 }
@@ -282,7 +348,7 @@ function summarize(runId: string, startedAt: string, results: CaseResult[]): Run
   };
 }
 
-async function runAll(cases: CaseRequest[], config: RunConfig) {
+async function runAll(cases: CaseRequest[], config: RunConfig, initialVars?: ExtractedVariables) {
   const startedAt = nowIso();
   const runId = makeRunId();
 
@@ -291,51 +357,119 @@ async function runAll(cases: CaseRequest[], config: RunConfig) {
 
   const results: CaseResult[] = [];
   const concurrency = Math.max(1, Math.min(10, Math.floor(config.concurrency || 1)));
+  const useConcurrency = concurrency > 1 && !cases.some((c) => c.variableExtractors && c.variableExtractors.length > 0);
 
-  let cursor = 0;
-  let stoppedByFail = false;
-  const workers = Array.from({ length: concurrency }).map(async () => {
-    while (true) {
-      const idx = cursor;
-      cursor++;
-      if (idx >= cases.length) return;
-      if (stoppedByFail) return;
+  if (useConcurrency) {
+    let cursor = 0;
+    let stoppedByFail = false;
+    const workers = Array.from({ length: concurrency }).map(async () => {
+      while (true) {
+        const idx = cursor;
+        cursor++;
+        if (idx >= cases.length) return;
+        if (stoppedByFail) return;
 
-      const r = await runOneCase(cases[idx]!, config, token);
-      results[idx] = r;
-      if (!config.continueOnFail && r.status === 'failed') {
-        stoppedByFail = true;
+        const r = await runOneCase(cases[idx]!, config, token);
+        results[idx] = r;
+        if (!config.continueOnFail && r.status === 'failed') {
+          stoppedByFail = true;
+        }
+      }
+    });
+    await Promise.all(workers);
+
+    for (let i = 0; i < cases.length; i++) {
+      if (!results[i]) {
+        results[i] = {
+          caseId: cases[i]!.id,
+          status: 'canceled',
+          startedAt,
+          finishedAt: nowIso(),
+          durationMs: 0,
+          errorMessage: '已停止',
+        };
       }
     }
-  });
 
-  await Promise.all(workers);
+    const summary = summarize(runId, startedAt, results);
+    const report: RunReport = {
+      summary,
+      config,
+      cases,
+      results,
+    };
 
-  for (let i = 0; i < cases.length; i++) {
-    if (!results[i]) {
-      results[i] = {
-        caseId: cases[i]!.id,
-        status: 'canceled',
-        startedAt,
-        finishedAt: nowIso(),
-        durationMs: 0,
-        errorMessage: '已停止',
-      };
+    await ensureReportsDir();
+    const filePath = path.join(getReportsDir(), `${runId}.json`);
+    await fs.writeFile(filePath, JSON.stringify(report, null, 2), 'utf-8');
+    return report;
+  } else {
+    let globalVars: ExtractedVariables = initialVars ? { ...initialVars } : {};
+
+    const caseResults: (CaseResult | undefined)[] = new Array(cases.length).fill(undefined);
+
+    for (let pass = 0; pass < 2; pass++) {
+      for (let i = 0; i < cases.length; i++) {
+        const c = { ...cases[i]! };
+        const hasExtractors = c.variableExtractors && c.variableExtractors.length > 0;
+
+        if (pass === 0 && !hasExtractors) continue;
+        if (pass === 1 && hasExtractors) continue;
+
+        if (c.headers) {
+          const newHeaders: Record<string, string> = {};
+          for (const [k, v] of Object.entries(c.headers)) {
+            newHeaders[k] = replaceVariables(v, globalVars);
+          }
+          c.headers = newHeaders;
+        }
+        if (c.query) {
+          const newQuery: Record<string, string> = {};
+          for (const [k, v] of Object.entries(c.query)) {
+            newQuery[k] = replaceVariables(v, globalVars);
+          }
+          c.query = newQuery;
+        }
+        if (typeof c.body === 'string') {
+          c.body = replaceVariables(c.body, globalVars);
+        }
+
+        const r = await runOneCase(c, config, token);
+        if (r.extractedVariables && Object.keys(r.extractedVariables).length > 0) {
+          globalVars = { ...globalVars, ...r.extractedVariables };
+        }
+        caseResults[i] = r;
+
+        if (!config.continueOnFail && r.status === 'failed') break;
+      }
     }
+
+    for (let i = 0; i < cases.length; i++) {
+      if (!caseResults[i]) {
+        caseResults[i] = {
+          caseId: cases[i]!.id,
+          status: 'canceled',
+          startedAt,
+          finishedAt: nowIso(),
+          durationMs: 0,
+          errorMessage: '已停止',
+        };
+      }
+    }
+
+    const summary = summarize(runId, startedAt, caseResults as CaseResult[]);
+    const report: RunReport = {
+      summary,
+      config,
+      cases,
+      results: caseResults as CaseResult[],
+    };
+
+    await ensureReportsDir();
+    const filePath = path.join(getReportsDir(), `${runId}.json`);
+    await fs.writeFile(filePath, JSON.stringify(report, null, 2), 'utf-8');
+    return report;
   }
-
-  const summary = summarize(runId, startedAt, results);
-  const report: RunReport = {
-    summary,
-    config,
-    cases,
-    results,
-  };
-
-  await ensureReportsDir();
-  const filePath = path.join(getReportsDir(), `${runId}.json`);
-  await fs.writeFile(filePath, JSON.stringify(report, null, 2), 'utf-8');
-  return report;
 }
 
 router.post('/', async (req: Request, res: Response) => {
@@ -355,10 +489,11 @@ router.post('/', async (req: Request, res: Response) => {
     concurrency: typeof config.concurrency === 'number' && Number.isFinite(config.concurrency) ? config.concurrency : 1,
     continueOnFail: typeof config.continueOnFail === 'boolean' ? config.continueOnFail : true,
     auth: config.auth,
+    extractedVariables: config.extractedVariables,
   };
 
   try {
-    const report = await runAll(cases, normalized);
+    const report = await runAll(cases, normalized, config.extractedVariables);
     res.json({ success: true, data: report });
   } catch (e: unknown) {
     res.status(500).json({ success: false, error: e instanceof Error ? e.message : '执行失败' });

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { FileUp, Play, Trash2, GripVertical, Wand2, Save, Package } from 'lucide-react';
 import CaseDetailPanel from '@/components/CaseDetailPanel';
 import CaseTable from '@/components/CaseTable';
+import VariablesPanel from '@/components/VariablesPanel';
 import { useRunnerStore } from '@/hooks/useRunnerStore';
 import { cn } from '@/lib/utils';
 
@@ -360,15 +361,22 @@ export default function Home() {
         </div>
 
         <div className="h-full overflow-hidden" style={{ width: `${100 - leftWidth}%` }}>
-          <CaseDetailPanel
-            testCase={activeCase}
-            override={activeOverride}
-            onChange={(patch) => {
-              if (!activeCase) return;
-              updateOverride(activeCase.id, patch);
-            }}
-            report={lastReport}
-          />
+          <div className="flex h-full flex-col gap-2 overflow-hidden">
+            <div className="flex-1 overflow-hidden">
+              <CaseDetailPanel
+                testCase={activeCase}
+                override={activeOverride}
+                onChange={(patch) => {
+                  if (!activeCase) return;
+                  updateOverride(activeCase.id, patch);
+                }}
+                report={lastReport}
+              />
+            </div>
+            <div className="shrink-0">
+              <VariablesPanel />
+            </div>
+          </div>
         </div>
       </div>
     </div>
