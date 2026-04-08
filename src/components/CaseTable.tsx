@@ -82,6 +82,7 @@ export default function CaseTable({
               <th className="w-20 px-2 py-2">方法</th>
               <th className="px-2 py-2">路径</th>
               <th className="w-20 px-2 py-2">状态</th>
+              <th className="w-48 px-2 py-2">预期结果</th>
               <th className="w-20 px-2 py-2">操作</th>
             </tr>
           </thead>
@@ -151,6 +152,11 @@ export default function CaseTable({
                     ) : (
                       <span className="text-xs text-zinc-600">-</span>
                     )}
+                  </td>
+                  <td className="px-2 py-2">
+                    <div className="max-w-48 truncate text-xs text-zinc-400" title={c.expectedResult || '-'}>
+                      {c.expectedResult || '-'}
+                    </div>
                   </td>
                   <td className="px-2 py-2" onClick={(e) => e.stopPropagation()}>
                     <button
