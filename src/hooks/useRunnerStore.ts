@@ -110,6 +110,7 @@ type RunnerState = {
   markdownContent: string | null;
   uploadedDocuments: { name: string; path: string; content: string }[];
   uploadedZipName: string | null;
+  extractedVariables: Record<string, string | number | boolean | object>;
 
   loadSettings: () => Promise<void>;
   saveSettings: (s: SettingsState) => Promise<void>;
@@ -125,6 +126,8 @@ type RunnerState = {
   setSelectMany: (ids: string[], selected: boolean) => void;
   clearSelection: () => void;
   updateOverride: (id: string, patch: Partial<CaseOverride>) => void;
+  setExtractedVariables: (vars: Record<string, string | number | boolean | object>) => void;
+  clearExtractedVariables: () => void;
   runSelected: () => Promise<void>;
   runSingle: (id: string) => Promise<void>;
 };
@@ -176,7 +179,26 @@ function applyVariables(text: string, enableVariableReplace: boolean, email: str
   return interpolateVariables(text, email, password);
 }
 
-function buildCaseRequests(cases: TestCase[], overrides: Record<string, CaseOverride>, settings: SettingsState) {
+function applyExtractedVariables(text: string, vars: Record<string, string | number | boolean | object>): string {
+  return text.replace(/\$\{([^}]+)\}/g, (_match, varName) => {
+    const trimmedName = varName.trim();
+    if (trimmedName in vars) {
+      const value = vars[trimmedName];
+      if (typeof value === 'object') {
+        return JSON.stringify(value);
+      }
+      return String(value);
+    }
+    return _match;
+  });
+}
+
+function buildCaseRequests(
+  cases: TestCase[],
+  overrides: Record<string, CaseOverride>,
+  settings: SettingsState,
+  extractedVars: Record<string, string | number | boolean | object> = {}
+) {
   const out: CaseRequest[] = [];
   const email = settings.authEmail || '';
   const password = settings.authPassword || '';
@@ -193,12 +215,23 @@ function buildCaseRequests(cases: TestCase[], overrides: Record<string, CaseOver
     const body = safeParseJsonAny(bodyText);
     if ('error' in body) throw new Error(`${c.id} body：${body.error}`);
 
+    const finalHeaders: Record<string, string> = {};
+    for (const [k, v] of Object.entries(headers)) {
+      finalHeaders[k] = applyExtractedVariables(v, extractedVars);
+    }
+    const finalQuery: Record<string, string> = {};
+    for (const [k, v] of Object.entries(query)) {
+      finalQuery[k] = applyExtractedVariables(v, extractedVars);
+    }
+    const finalBodyText = applyExtractedVariables(bodyText, extractedVars);
+    const finalBody = safeParseJsonAny(finalBodyText);
+
     out.push({
       ...c,
       requiresAuth: typeof o?.requiresAuth === 'boolean' ? o.requiresAuth : c.requiresAuth,
-      headers,
-      query,
-      body: body.value,
+      headers: finalHeaders,
+      query: finalQuery,
+      body: finalBody.value,
     });
   }
   return out;
@@ -233,6 +266,7 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
   markdownContent: null,
   uploadedDocuments: [],
   uploadedZipName: null,
+  extractedVariables: {},
 
   loadSettings: async () => {
     try {
@@ -474,6 +508,13 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
       };
     }),
 
+  setExtractedVariables: (vars) =>
+    set((s) => ({
+      extractedVariables: { ...s.extractedVariables, ...vars },
+    })),
+
+  clearExtractedVariables: () => set({ extractedVariables: {} }),
+
   runSelected: async () => {
     const parsed = get().parsed;
     if (!parsed) {
@@ -501,12 +542,24 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
 
     try {
       set({ isRunning: true, error: null });
-      const caseReqs = buildCaseRequests(selected, get().overrides, get().settings);
+      const extractedVars = get().extractedVariables;
+      const caseReqs = buildCaseRequests(selected, get().overrides, get().settings, extractedVars);
+      const configWithVars = { ...buildRunConfig(s), extractedVariables: extractedVars };
       const r = await apiJson<{ success: true; data: RunReport }>('/api/runs', {
         method: 'POST',
-        body: JSON.stringify({ config: buildRunConfig(s), cases: caseReqs }),
+        body: JSON.stringify({ config: configWithVars, cases: caseReqs }),
       });
-      set({ lastReport: r.data, isRunning: false });
+      const allVars: Record<string, string | number | boolean | object> = {};
+      for (const result of r.data.results) {
+        if (result.extractedVariables) {
+          Object.assign(allVars, result.extractedVariables);
+        }
+      }
+      set((prev) => ({
+        lastReport: r.data,
+        isRunning: false,
+        extractedVariables: { ...prev.extractedVariables, ...allVars },
+      }));
     } catch (e: unknown) {
       set({ isRunning: false, error: e instanceof Error ? e.message : '执行失败' });
     }
@@ -532,12 +585,24 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
 
     try {
       set({ isRunning: true, error: null });
-      const caseReqs = buildCaseRequests(selected, get().overrides, get().settings);
+      const extractedVars = get().extractedVariables;
+      const caseReqs = buildCaseRequests(selected, get().overrides, get().settings, extractedVars);
+      const configWithVars = { ...buildRunConfig(s), extractedVariables: extractedVars };
       const r = await apiJson<{ success: true; data: RunReport }>('/api/runs', {
         method: 'POST',
-        body: JSON.stringify({ config: buildRunConfig(s), cases: caseReqs }),
+        body: JSON.stringify({ config: configWithVars, cases: caseReqs }),
       });
-      set({ lastReport: r.data, isRunning: false });
+      const allVars: Record<string, string | number | boolean | object> = {};
+      for (const result of r.data.results) {
+        if (result.extractedVariables) {
+          Object.assign(allVars, result.extractedVariables);
+        }
+      }
+      set((prev) => ({
+        lastReport: r.data,
+        isRunning: false,
+        extractedVariables: { ...prev.extractedVariables, ...allVars },
+      }));
     } catch (e: unknown) {
       set({ isRunning: false, error: e instanceof Error ? e.message : '执行失败' });
     }

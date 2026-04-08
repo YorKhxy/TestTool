@@ -2,10 +2,20 @@ import type { TestCase } from './testPlan.js';
 
 export type CaseResultStatus = 'passed' | 'failed' | 'skipped' | 'running' | 'canceled';
 
+export type VariableExtractorSource = 'body' | 'header';
+
+export type VariableExtractor = {
+  id: string;
+  name: string;
+  source: VariableExtractorSource;
+  path: string;
+};
+
 export type CaseRequest = TestCase & {
   headers?: Record<string, string>;
   query?: Record<string, string>;
   body?: unknown;
+  variableExtractors?: VariableExtractor[];
 };
 
 export type RunAuth = {
@@ -20,6 +30,7 @@ export type RunConfig = {
   concurrency: number;
   continueOnFail: boolean;
   auth?: RunAuth;
+  extractedVariables?: ExtractedVariables;
 };
 
 export type CaseResult = {
@@ -32,7 +43,10 @@ export type CaseResult = {
   responseBodyPreview?: string;
   errorMessage?: string;
   expectedResult?: string;
+  extractedVariables?: Record<string, string | number | boolean | object>;
 };
+
+export type ExtractedVariables = Record<string, string | number | boolean | object>;
 
 export type RunSummary = {
   runId: string;

@@ -1,5 +1,14 @@
 export type TestCasePriority = 'P0' | 'P1' | 'P2' | 'P3' | string;
 
+export type VariableExtractorSource = 'body' | 'header';
+
+export type VariableExtractor = {
+  id: string;
+  name: string;
+  source: VariableExtractorSource;
+  path: string;
+};
+
 export type TestCase = {
   id: string;
   title: string;
@@ -12,6 +21,7 @@ export type TestCase = {
   queryRaw?: string;
   bodyRaw?: string;
   expectedResult?: string;
+  variableExtractors?: VariableExtractor[];
 };
 
 export type DocMeta = {
@@ -139,6 +149,43 @@ function extractAuthTestData(lines: string[], meta: DocMeta) {
   }
 }
 
+function parseVariableExtractors(extractRaw: string | undefined): VariableExtractor[] {
+  if (!extractRaw || extractRaw === '-' || extractRaw === '') return [];
+
+  const extractors: VariableExtractor[] = [];
+  const rules = extractRaw.split(',').map((s) => s.trim()).filter((s) => s.length > 0);
+
+  for (let i = 0; i < rules.length; i++) {
+    const rule = rules[i]!;
+    const colonIdx = rule.indexOf(':');
+    if (colonIdx < 0) continue;
+
+    const name = rule.slice(0, colonIdx).trim();
+    const path = rule.slice(colonIdx + 1).trim();
+
+    if (!name || !path) continue;
+
+    let source: VariableExtractorSource = 'body';
+    let actualPath = path;
+    if (path.startsWith('header.')) {
+      source = 'header';
+      actualPath = path.slice(7);
+    } else if (path.startsWith('body.')) {
+      source = 'body';
+      actualPath = path.slice(5);
+    }
+
+    extractors.push({
+      id: `ext_${i}`,
+      name,
+      source,
+      path: actualPath,
+    });
+  }
+
+  return extractors;
+}
+
 export function parseTestPlanMarkdown(markdown: string): ParsedTestPlan {
   const warnings: string[] = [];
   const lines = markdown.replace(/\r\n/g, '\n').split('\n');
@@ -174,6 +221,7 @@ export function parseTestPlanMarkdown(markdown: string): ParsedTestPlan {
       const queryIdx = headers.findIndex((x) => x.includes('query') || x.includes('params'));
       const bodyIdx = headers.findIndex((x) => x.includes('body') || x.includes('request'));
       const expectedIdx = headers.findIndex((x) => x.includes('预期结果') || x.includes('expected'));
+      const extractIdx = headers.findIndex((x) => x.includes('提取变量') || x.includes('extract'));
 
       if (idIdx < 0 || titleIdx < 0 || methodIdx < 0 || pathIdx < 0) {
         warnings.push(`发现疑似用例表，但列不完整：第 ${i + 1} 行`);
@@ -191,6 +239,9 @@ export function parseTestPlanMarkdown(markdown: string): ParsedTestPlan {
         const queryRaw = queryIdx >= 0 ? (r[queryIdx] ?? '').trim() : undefined;
         const bodyRaw = bodyIdx >= 0 ? (r[bodyIdx] ?? '').trim() : undefined;
         const expectedResult = expectedIdx >= 0 ? (r[expectedIdx] ?? '').trim() : undefined;
+        const extractRaw = extractIdx >= 0 ? (r[extractIdx] ?? '').trim() : undefined;
+
+        const variableExtractors = parseVariableExtractors(extractRaw);
 
         if (!id || !method || !path) continue;
         cases.push({
@@ -205,6 +256,7 @@ export function parseTestPlanMarkdown(markdown: string): ParsedTestPlan {
           queryRaw: queryRaw && queryRaw !== '-' ? queryRaw : undefined,
           bodyRaw: bodyRaw && bodyRaw !== '-' ? bodyRaw : undefined,
           expectedResult: expectedResult && expectedResult !== '-' ? expectedResult : undefined,
+          variableExtractors,
         });
       }
 

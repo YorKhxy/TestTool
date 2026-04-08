@@ -236,160 +236,164 @@
 
 ### 4.1 认证模块测试用例
 
-| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 |
-|-------|---------|------|------|---------|--------------|--------------|-------|---------|
-| TC-AUTH-001 | 正常登录-邮箱密码正确 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "{{auth.email}}", "password": "{{auth.password}}"}` | P0 | HTTP 200; 响应体 `{"token": "eyJ..."}`; token为有效JWT格式，长度>100字符 |
-| TC-AUTH-002 | 登录失败-密码错误 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "{{auth.email}}", "password": "WrongPassword123"}` | P0 | HTTP 401; 响应体包含error字段，描述"密码错误"或类似信息 |
-| TC-AUTH-003 | 登录失败-用户不存在 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "nonexistent@example.com", "password": "AnyPassword123"}` | P1 | HTTP 401; 响应体包含error字段，描述"用户不存在"或类似信息 |
-| TC-AUTH-004 | 登录失败-邮箱为空 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "", "password": "admin123"}` | P1 | HTTP 400; 响应体包含error字段，描述"邮箱不能为空"或参数校验错误 |
-| TC-AUTH-005 | 登录失败-密码为空 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "{{auth.email}}", "password": ""}` | P1 | HTTP 400; 响应体包含error字段，描述"密码不能为空"或参数校验错误 |
-| TC-AUTH-006 | 登录失败-邮箱格式错误 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "not-an-email", "password": "admin123"}` | P2 | HTTP 400; 响应体包含error字段，描述"邮箱格式错误"或参数校验错误 |
-| TC-AUTH-007 | MFA登录-验证码正确 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "{{auth.email}}", "password": "{{auth.password}}", "mfa_code": "123456"}` | P1 | 若MFA已启用：HTTP 200 + token; 若MFA未启用：HTTP 200 + token（mfa_code被忽略） |
-| TC-AUTH-008 | MFA登录-验证码错误 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "{{auth.email}}", "password": "{{auth.password}}", "mfa_code": "000000"}` | P1 | HTTP 400; 响应体包含error字段，描述"MFA验证码错误"或"验证码无效" |
-| TC-AUTH-009 | Token过期后访问需认证API | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json; Authorization: Bearer expired_token_here | - | `{"email": "{{auth.email}}", "password": "{{auth.password}}"}` | P0 | HTTP 401; 响应体包含error字段，描述"token已过期"或"无效token" |
-| TC-AUTH-010 | 无Token访问需认证接口 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "{{auth.email}}", "password": "{{auth.password}}"}` | P0 | HTTP 401; 响应体包含error字段，描述"未授权"或"缺少认证信息" |
-| TC-AUTH-011 | 连续5次密码错误后登录 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "{{auth.email}}", "password": "WrongPass1"}` (重复5次) | P1 | 第5次后HTTP 401; 响应体包含error字段，描述"账户已锁定"或"密码错误次数过多" |
+| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
+|-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
+| TC-AUTH-001 | 正常登录-邮箱密码正确 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "{{auth.email}}", "password": "{{auth.password}}"}` | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"token": "eyJ..."}}` | auth_token: data.token |
+| TC-AUTH-002 | 登录失败-密码错误 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "{{auth.email}}", "password": "WrongPassword123"}` | P0 | HTTP 200; 响应体 `{"code": 3002, "message": "验证码无效", "data": null}` | - |
+| TC-AUTH-003 | 登录失败-用户不存在 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "nonexistent@example.com", "password": "AnyPassword123"}` | P1 | HTTP 200; 响应体 `{"code": 1008, "message": "common.notfound", "data": null}` | - |
+| TC-AUTH-004 | 登录失败-邮箱为空 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "", "password": "admin123"}` | P1 | HTTP 200; 响应体 `{"code": 3001, "message": "邮箱格式不正确", "data": null}` | - |
+| TC-AUTH-005 | 登录失败-密码为空 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "{{auth.email}}", "password": ""}` | P1 | HTTP 200; 响应体 `{"code": 6001, "message": "param.invalid", "data": null}` | - |
+| TC-AUTH-006 | 登录失败-邮箱格式错误 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "not-an-email", "password": "admin123"}` | P2 | HTTP 200; 响应体 `{"code": 3001, "message": "邮箱格式不正确", "data": null}` | - |
+| TC-AUTH-007 | MFA登录-验证码正确 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "{{auth.email}}", "password": "{{auth.password}}", "mfa_code": "123456"}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"token": "eyJ..."}}` | auth_token: data.token |
+| TC-AUTH-008 | MFA登录-验证码错误 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "{{auth.email}}", "password": "{{auth.password}}", "mfa_code": "000000"}` | P1 | HTTP 200; 响应体 `{"code": 3002, "message": "验证码无效", "data": null}` | - |
+| TC-AUTH-009 | Token过期后访问需认证API | GET | /hashrate/admin/account/v1/users/me | Authorization: Bearer expired_token_here | - | - | P0 | HTTP 401; 响应体 `{"code": 401, "message": "token无效", "data": null}` | - |
+| TC-AUTH-010 | 无Token访问需认证接口 | GET | /hashrate/admin/account/v1/users/me | - | - | - | P0 | HTTP 401; 响应体 `{"code": 401, "message": "未授权", "data": null}` | - |
+| TC-AUTH-011 | 连续5次密码错误后登录 | POST | /hashrate/admin/auth/v1/login/password | Content-Type: application/json | - | `{"email": "{{auth.email}}", "password": "WrongPass1"}` (重复5次) | P1 | HTTP 200; 响应体 `{"code": 3002, "message": "验证码无效", "data": null}` | - |
 
 ### 4.2 管理员账户模块测试用例
-| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 |
-|-------|---------|------|------|---------|--------------|--------------|-------|---------|
-| TC-ACCT-001 | 获取当前管理员信息 | GET | /hashrate/admin/account/v1/users/me | Authorization: Bearer {token} | - | - | P0 | HTTP 200; 响应体包含字段：id(整数)、email(字符串)、name(字符串)、status(整数0/1)、mfa_enabled(整数0/1)、roles(数组) |
-| TC-ACCT-002 | 获取管理员列表-无参数 | GET | /hashrate/admin/account/v1/users | Authorization: Bearer {token} | - | - | P0 | HTTP 200; 响应体包含total(整数)和list(数组)，list每项包含id、email、name、status等字段 |
-| TC-ACCT-003 | 获取管理员列表-邮箱筛选 | GET | /hashrate/admin/account/v1/users | Authorization: Bearer {token} | email=admin@admin.com | - | P1 | HTTP 200; 返回list中所有email为admin@admin.com的管理员，total≥1 |
-| TC-ACCT-004 | 获取管理员列表-分页 | GET | /hashrate/admin/account/v1/users | Authorization: Bearer {token} | page=1&size=10 | - | P1 | HTTP 200; 返回最多10条记录，list长度≤10，total为总记录数 |
-| TC-ACCT-005 | 新增管理员-正常 | POST | /hashrate/admin/account/v1/users/create | Authorization: Bearer {token}; Content-Type: application/json | - | `{"email": "newadmin@admin.com", "name": "新管理员", "password": "Newadmin123", "role_ids": [1]}` | P0 | HTTP 200; 操作成功，无error字段 |
-| TC-ACCT-006 | 新增管理员-邮箱重复 | POST | /hashrate/admin/account/v1/users/create | Authorization: Bearer {token}; Content-Type: application/json | - | `{"email": "existing@example.com", "name": "重复管理员", "password": "admin123", "role_ids": [1]}` | P1 | HTTP 400/409; 响应体包含error字段，描述"邮箱已存在"或"用户已存在" |
-| TC-ACCT-007 | 新增管理员-参数缺失 | POST | /hashrate/admin/account/v1/users/create | Authorization: Bearer {token}; Content-Type: application/json | - | `{"email": "incomplete@example.com"}` | P1 | HTTP 400; 响应体包含error字段，描述缺少必填参数(password/name/role_ids) |
-| TC-ACCT-008 | 启用管理员 | POST | /hashrate/admin/account/v1/users/enable | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": 2}` | P0 | HTTP 200; 操作成功，该管理员status变为1 |
-| TC-ACCT-009 | 禁用管理员 | POST | /hashrate/admin/account/v1/users/disable | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": 2}` | P0 | HTTP 200; 操作成功，该管理员status变为0 |
-| TC-ACCT-010 | 修改密码-正常 | POST | /hashrate/admin/account/v1/users/password/change | Authorization: Bearer {token}; Content-Type: application/json | - | `{"email": "{{auth.email}}", "old_password": "{{auth.password}}", "new_password": "NewPass@123"}` | P0 | HTTP 200; 操作成功，旧密码验证通过，新密码已更新 |
-| TC-ACCT-011 | 修改密码-旧密码错误 | POST | /hashrate/admin/account/v1/users/password/change | Authorization: Bearer {token}; Content-Type: application/json | - | `{"email": "{{auth.email}}", "old_password": "WrongOldPass", "new_password": "NewPass@123"}` | P1 | HTTP 400; 响应体包含error字段，描述"旧密码错误" |
-| TC-ACCT-012 | 查询管理员角色 | GET | /hashrate/admin/account/v1/admins/roles/get | Authorization: Bearer {token} | admin_id=2 | - | P1 | HTTP 200; 返回该管理员的角色信息，包含role_ids数组 |
-| TC-ACCT-013 | 设置管理员角色 | POST | /hashrate/admin/account/v1/admins/roles/set | Authorization: Bearer {token}; Content-Type: application/json | - | `{"admin_id": 2, "role_ids": [1, 2]}` | P1 | HTTP 200; 操作成功，该管理员角色已更新 |
-| TC-ACCT-014 | 获取角色列表 | GET | /hashrate/admin/account/v1/roles/list | Authorization: Bearer {token} | - | - | P1 | HTTP 200; 响应体包含角色列表，每项包含id、name、description等字段 |
-| TC-ACCT-015 | 创建角色-正常 | POST | /hashrate/admin/account/v1/roles/create | Authorization: Bearer {token}; Content-Type: application/json | - | `{"name": "新角色", "description": "测试角色", "perms": ["user:view", "user:edit"]}` | P1 | HTTP 200; 操作成功，返回新角色ID或直接成功 |
-| TC-ACCT-016 | 更新角色 | POST | /hashrate/admin/account/v1/roles/update | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": 5, "name": "更新角色", "description": "更新描述", "perms": ["user:view"]}` | P1 | HTTP 200; 操作成功，角色信息已更新 |
-| TC-ACCT-017 | 删除角色 | POST | /hashrate/admin/account/v1/roles/delete | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": 5}` | P1 | HTTP 200; 操作成功，角色已删除 |
-| TC-ACCT-018 | 获取角色权限树 | GET | /hashrate/admin/account/v1/roles/perms/tree | Authorization: Bearer {token} | role_id=1 | - | P1 | HTTP 200; 返回权限树形结构，包含perms数组 |
-| TC-ACCT-019 | 获取权限列表 | GET | /hashrate/admin/account/v1/perms/list | Authorization: Bearer {token} | - | - | P1 | HTTP 200; 返回权限列表，每项包含key、title等字段 |
-| TC-ACCT-020 | 获取当前管理员权限树 | GET | /hashrate/admin/account/v1/perms/me | Authorization: Bearer {token} | - | - | P1 | HTTP 200; 返回当前管理员的权限树形结构 |
-| TC-ACCT-021 | 全量新增权限 | POST | /hashrate/admin/account/v1/perms/init | Authorization: Bearer {token}; Content-Type: application/json | - | `{"list": [{"key": "/new/path", "title": "新权限", "perms": "new:perm"}]}` | P2 | HTTP 200; 操作成功，权限列表已全量更新 |
-| TC-ACCT-022 | 生成MFA密钥 | GET | /hashrate/admin/account/v1/mfa/generate | Authorization: Bearer {token} | - | - | P1 | HTTP 200; 响应体包含TOTP密钥(otpauth_url或secret) |
-| TC-ACCT-023 | 开启MFA | POST | /hashrate/admin/account/v1/mfa/enable | Authorization: Bearer {token}; Content-Type: application/json | - | `{"code": "123456"}` | P1 | HTTP 200; 操作成功，mfa_enabled变为1 |
-| TC-ACCT-024 | 关闭MFA | POST | /hashrate/admin/account/v1/mfa/disable | Authorization: Bearer {token}; Content-Type: application/json | - | `{"code": "123456"}` | P1 | HTTP 200; 操作成功，mfa_enabled变为0 |
-| TC-ACCT-025 | 普通管理员访问超管API | POST | /hashrate/admin/account/v1/users/create | Authorization: Bearer {user_token}; Content-Type: application/json | - | `{"email": "newadmin@admin.com", "name": "新管理员", "password": "admin123", "role_ids": [1]}` | P0 | HTTP 403; 响应体包含error字段，描述"权限不足"或"禁止访问" |
-| TC-ACCT-026 | Token刷新机制测试 | GET | /hashrate/admin/account/v1/users/me | Authorization: Bearer {refreshed_token} | - | - | P1 | HTTP 200; 返回当前管理员信息，token验证通过 |
-| TC-ACCT-027 | 分页参数page=0 | GET | /hashrate/admin/account/v1/users | Authorization: Bearer {token} | page=0 | - | P1 | HTTP 200或400; 响应体返回空列表或错误提示 |
-| TC-ACCT-028 | 分页参数page=-1 | GET | /hashrate/admin/account/v1/users | Authorization: Bearer {token} | page=-1 | - | P1 | HTTP 200或400; 响应体返回空列表或错误提示 |
-| TC-ACCT-029 | 分页参数size=0 | GET | /hashrate/admin/account/v1/users | Authorization: Bearer {token} | size=0 | - | P1 | HTTP 200或400; 响应体返回空列表或错误提示 |
-| TC-ACCT-030 | 分页参数size超限(99999) | GET | /hashrate/admin/account/v1/users | Authorization: Bearer {token} | size=99999 | - | P2 | HTTP 200; 返回空列表或限制数量的结果（建议不超过1000） |
-| TC-ACCT-031 | 删除已分配用户的角色 | POST | /hashrate/admin/account/v1/roles/delete | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": 1}` | P1 | HTTP 400; 响应体包含error字段，描述"该角色已分配给用户，无法删除" |
-| TC-ACCT-032 | 创建密码为空的管理员 | POST | /hashrate/admin/account/v1/users/create | Authorization: Bearer {token}; Content-Type: application/json | - | `{"email": "empty@example.com", "name": "空密码管理员", "password": "", "role_ids": [1]}` | P1 | HTTP 400; 响应体包含error字段，描述"密码不能为空"或参数校验错误 |
-| TC-ACCT-033 | 创建密码过短(3字符)的管理员 | POST | /hashrate/admin/account/v1/users/create | Authorization: Bearer {token}; Content-Type: application/json | - | `{"email": "short@example.com", "name": "短密码管理员", "password": "abc", "role_ids": [1]}` | P2 | HTTP 400; 响应体包含error字段，描述"密码长度不足"或"密码强度不够" |
-| TC-ACCT-034 | 创建密码强度为纯数字的管理员 | POST | /hashrate/admin/account/v1/users/create | Authorization: Bearer {token}; Content-Type: application/json | - | `{"email": "weak@example.com", "name": "弱密码管理员", "password": "12345678", "role_ids": [1]}` | P2 | HTTP 400; 响应体包含error字段，描述"密码强度不够"或"密码必须包含字母" |
+| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
+|-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
+| TC-ACCT-001 | 获取当前管理员信息 | GET | /hashrate/admin/account/v1/users/me | X-Admin-Token: ${auth_token} | - | - | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"id": 1, "email": "admin@admin.com", "name": "管理员", "status": 1, "mfa_enabled": 0, "roles": [...]}}` | - |
+| TC-ACCT-002 | 获取管理员列表-无参数 | GET | /hashrate/admin/account/v1/users | X-Admin-Token: ${auth_token} | - | - | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [{"id": 1, "email": "...", "name": "...", "status": 1, "mfa_enabled": 0, "roles": [...]}, ...]}}` | - |
+| TC-ACCT-003 | 获取管理员列表-邮箱筛选 | GET | /hashrate/admin/account/v1/users | X-Admin-Token: ${auth_token} | email=admin@admin.com | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [...]}}`; list中所有email为admin@admin.com | - |
+| TC-ACCT-004 | 获取管理员列表-分页 | GET | /hashrate/admin/account/v1/users | X-Admin-Token: ${auth_token} | page=1&size=10 | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [...]}}`; list.length≤10 | - |
+| TC-ACCT-005 | 新增管理员-正常 | POST | /hashrate/admin/account/v1/users/create | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"email": "newadmin@admin.com", "name": "新管理员", "password": "Newadmin123", "role_ids": [1]}` | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"id": N}}` | - |
+| TC-ACCT-006 | 新增管理员-邮箱重复 | POST | /hashrate/admin/account/v1/users/create | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"email": "existing@example.com", "name": "重复管理员", "password": "admin123", "role_ids": [1]}` | P1 | HTTP 200; 响应体 `{"code": 3001, "message": "邮箱格式不正确", "data": null}` | - |
+| TC-ACCT-007 | 新增管理员-参数缺失 | POST | /hashrate/admin/account/v1/users/create | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"email": "incomplete@example.com"}` | P1 | HTTP 200; 响应体 `{"code": 6001, "message": "param.invalid", "data": null}` | - |
+| TC-ACCT-008 | 启用管理员 | POST | /hashrate/admin/account/v1/users/enable | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": 2}` | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-ACCT-009 | 禁用管理员 | POST | /hashrate/admin/account/v1/users/disable | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": 2}` | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-ACCT-010 | 修改密码-正常 | POST | /hashrate/admin/account/v1/users/password/change | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"email": "{{auth.email}}", "old_password": "{{auth.password}}", "new_password": "NewPass@123"}` | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-ACCT-011 | 修改密码-旧密码错误 | POST | /hashrate/admin/account/v1/users/password/change | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"email": "{{auth.email}}", "old_password": "WrongOldPass", "new_password": "NewPass@123"}` | P1 | HTTP 200; 响应体 `{"code": 3002, "message": "验证码无效", "data": null}` | - |
+| TC-ACCT-012 | 查询管理员角色 | GET | /hashrate/admin/account/v1/admins/roles/get | X-Admin-Token: ${auth_token} | admin_id=2 | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"role_ids": [...]}}` | - |
+| TC-ACCT-013 | 设置管理员角色 | POST | /hashrate/admin/account/v1/admins/roles/set | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"admin_id": 2, "role_ids": [1, 2]}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-ACCT-014 | 获取角色列表 | GET | /hashrate/admin/account/v1/roles/list | X-Admin-Token: ${auth_token} | - | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"list": [{"id": 1, "name": "...", "description": "..."}, ...]}}` | - |
+| TC-ACCT-015 | 创建角色-正常 | POST | /hashrate/admin/account/v1/roles/create | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"name": "新角色", "description": "测试角色", "perms": ["user:view", "user:edit"]}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"id": N}}` | - |
+| TC-ACCT-016 | 更新角色 | POST | /hashrate/admin/account/v1/roles/update | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": 5, "name": "更新角色", "description": "更新描述", "perms": ["user:view"]}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-ACCT-017 | 删除角色 | POST | /hashrate/admin/account/v1/roles/delete | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": 5}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-ACCT-018 | 获取角色权限树 | GET | /hashrate/admin/account/v1/roles/perms/tree | X-Admin-Token: ${auth_token} | role_id=1 | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"perms": [...]}}` | - |
+| TC-ACCT-019 | 获取权限列表 | GET | /hashrate/admin/account/v1/perms/list | X-Admin-Token: ${auth_token} | - | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"list": [{"key": "...", "title": "..."}, ...]}}` | - |
+| TC-ACCT-020 | 获取当前管理员权限树 | GET | /hashrate/admin/account/v1/perms/me | X-Admin-Token: ${auth_token} | - | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"perms": [...]}}` | - |
+| TC-ACCT-021 | 全量新增权限 | POST | /hashrate/admin/account/v1/perms/init | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"list": [{"key": "/new/path", "title": "新权限", "perms": "new:perm"}]}` | P2 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-ACCT-022 | 生成MFA密钥 | GET | /hashrate/admin/account/v1/mfa/generate | X-Admin-Token: ${auth_token} | - | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"otpauth_url": "...", "secret": "..."}}` | - |
+| TC-ACCT-023 | 开启MFA | POST | /hashrate/admin/account/v1/mfa/enable | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"code": "123456"}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-ACCT-024 | 关闭MFA | POST | /hashrate/admin/account/v1/mfa/disable | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"code": "123456"}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-ACCT-025 | 普通管理员访问超管API | POST | /hashrate/admin/account/v1/users/create | Authorization: Bearer ${user_token}; Content-Type: application/json | - | `{"email": "newadmin@admin.com", "name": "新管理员", "password": "admin123", "role_ids": [1]}` | P0 | HTTP 403; 响应体 `{"code": 5001, "message": "permission.denied", "data": null}` | - |
+| TC-ACCT-026 | Token刷新机制测试 | GET | /hashrate/admin/account/v1/users/me | Authorization: Bearer ${refreshed_token} | - | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"id": ..., "email": "..."}}` | - |
+| TC-ACCT-027 | 分页参数page=0 | GET | /hashrate/admin/account/v1/users | X-Admin-Token: ${auth_token} | page=0 | - | P1 | HTTP 200; 响应体 `{"code": 6001, "message": "param.invalid", "data": null}` | - |
+| TC-ACCT-028 | 分页参数page=-1 | GET | /hashrate/admin/account/v1/users | X-Admin-Token: ${auth_token} | page=-1 | - | P1 | HTTP 200; 响应体 `{"code": 6001, "message": "param.invalid", "data": null}` | - |
+| TC-ACCT-029 | 分页参数size=0 | GET | /hashrate/admin/account/v1/users | X-Admin-Token: ${auth_token} | size=0 | - | P1 | HTTP 200; 响应体 `{"code": 6001, "message": "param.invalid", "data": null}` | - |
+| TC-ACCT-030 | 分页参数size超限(99999) | GET | /hashrate/admin/account/v1/users | X-Admin-Token: ${auth_token} | size=99999 | - | P2 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [...]}}` | - |
+| TC-ACCT-031 | 删除已分配用户的角色 | POST | /hashrate/admin/account/v1/roles/delete | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": 1}` | P1 | HTTP 200; 响应体 `{"code": 6001, "message": "param.invalid", "data": null}` | - |
+| TC-ACCT-032 | 创建密码为空的管理员 | POST | /hashrate/admin/account/v1/users/create | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"email": "empty@example.com", "name": "空密码管理员", "password": "", "role_ids": [1]}` | P1 | HTTP 200; 响应体 `{"code": 6001, "message": "param.invalid", "data": null}` | - |
+| TC-ACCT-033 | 创建密码过短(3字符)的管理员 | POST | /hashrate/admin/account/v1/users/create | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"email": "short@example.com", "name": "短密码管理员", "password": "abc", "role_ids": [1]}` | P2 | HTTP 200; 响应体 `{"code": 6001, "message": "param.invalid", "data": null}` | - |
+| TC-ACCT-034 | 创建密码强度为纯数字的管理员 | POST | /hashrate/admin/account/v1/users/create | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"email": "weak@example.com", "name": "弱密码管理员", "password": "12345678", "role_ids": [1]}` | P2 | HTTP 200; 响应体 `{"code": 6001, "message": "param.invalid", "data": null}` | - |
 
 ### 4.3 公告管理模块测试用例
 
-| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 |
-|-------|---------|------|------|---------|--------------|--------------|-------|---------|
-| TC-ANN-001 | 获取公告列表 | GET | /hashrate/admin/announcement/v1/list | Authorization: Bearer {token} | page=1&size=20 | - | P0 | HTTP 200; 响应体包含total(整数)和list(数组)，list每项包含id、title、content、is_open、create_at、update_at字段 |
-| TC-ANN-002 | 创建公告-正常 | POST | /hashrate/admin/announcement/v1/create | Authorization: Bearer {token}; Content-Type: application/json | - | `{"title": "测试公告", "content": "这是一条测试公告内容", "is_open": 1}` | P0 | HTTP 200; 操作成功，新公告已创建，返回新公告ID或直接成功 |
-| TC-ANN-003 | 创建公告-参数缺失 | POST | /hashrate/admin/announcement/v1/create | Authorization: Bearer {token}; Content-Type: application/json | - | `{"title": "缺少内容"}` | P1 | HTTP 400; 响应体包含error字段，描述缺少必填参数(content或is_open) |
-| TC-ANN-004 | 修改公告 | POST | /hashrate/admin/announcement/v1/update | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": 1, "title": "更新标题", "content": "更新内容", "is_open": 1}` | P0 | HTTP 200; 操作成功，公告信息已更新 |
-| TC-ANN-005 | 删除公告 | POST | /hashrate/admin/announcement/v1/delete | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": 1}` | P0 | HTTP 200; 操作成功，公告已删除 |
-| TC-ANN-006 | 修改公告开关状态 | POST | /hashrate/admin/announcement/v1/status/update | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": 1, "is_open": 0}` | P1 | HTTP 200; 操作成功，该公告is_open字段已更新为0 |
-| TC-ANN-007 | 创建公告-内容超长(>10000字符) | POST | /hashrate/admin/announcement/v1/create | Authorization: Bearer {token}; Content-Type: application/json | - | `{"title": "超长公告", "content": "{'a':1}".repeat(5000)}` | P2 | HTTP 400或200; 若限制内容长度则返回错误，若不限制则创建成功 |
+| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
+|-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
+| TC-ANN-001 | 获取公告列表 | GET | /hashrate/admin/announcement/v1/list | X-Admin-Token: ${auth_token} | page=1&size=20 | - | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [{"id": 1, "title": "...", "content": "...", "is_open": 1, "create_at": "...", "update_at": "..."}, ...]}}` | - |
+| TC-ANN-002 | 创建公告-正常 | POST | /hashrate/admin/announcement/v1/create | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"title": "测试公告", "content": "这是一条测试公告内容", "is_open": 1}` | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"id": N}}` | - |
+| TC-ANN-003 | 创建公告-参数缺失 | POST | /hashrate/admin/announcement/v1/create | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"title": "缺少内容"}` | P1 | HTTP 200; 响应体 `{"code": 6001, "message": "param.invalid", "data": null}` | - |
+| TC-ANN-004 | 修改公告 | POST | /hashrate/admin/announcement/v1/update | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": 1, "title": "更新标题", "content": "更新内容", "is_open": 1}` | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-ANN-005 | 删除公告 | POST | /hashrate/admin/announcement/v1/delete | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": 1}` | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-ANN-006 | 修改公告开关状态 | POST | /hashrate/admin/announcement/v1/status/update | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": 1, "is_open": 0}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-ANN-007 | 创建公告-内容超长(>10000字符) | POST | /hashrate/admin/announcement/v1/create | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"title": "超长公告", "content": "{'a':1}".repeat(5000)}` | P2 | HTTP 200; 响应体 `{"code": 6001, "message": "param.invalid", "data": null}` | - |
 
 ### 4.4 算力管理模块测试用例
 
-| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 |
-|-------|---------|------|------|---------|--------------|--------------|-------|---------|
-| TC-HASH-001 | 获取算力币值列表 | GET | /hashrate/admin/v1/coin/value/list | Authorization: Bearer {token} | - | - | P0 | HTTP 200; 响应体包含币种列表，每项包含coin、amount等字段 |
-| TC-HASH-002 | 新增/保存算力币值 | POST | /hashrate/admin/v1/coin/value/upsert | Authorization: Bearer {token}; Content-Type: application/json | - | `{"seq": 1, "coin": "ETH", "amount": 2500.00}` | P0 | HTTP 200; 操作成功，币值信息已新增或更新 |
-| TC-HASH-003 | 删除算力币值 | POST | /hashrate/admin/v1/coin/value/delete | Authorization: Bearer {token}; Content-Type: application/json | - | `{"coin": "ETH"}` | P1 | HTTP 200; 操作成功，该币种已删除 |
-| TC-HASH-004 | 获取币值审核列表 | GET | /hashrate/admin/v1/coin/value/audit/list | Authorization: Bearer {token} | coin=ETH&status=-1&page=1&size=20 | - | P1 | HTTP 200; 响应体包含total和list，list每项包含id、coin、amount、status等字段 |
-| TC-HASH-005 | 申请修改币值 | POST | /hashrate/admin/v1/coin/value/audit/apply | Authorization: Bearer {token}; Content-Type: application/json | - | `{"coin": "ETH", "amount": 2600.00}` | P1 | HTTP 200; 操作成功，生成审核记录，status为0(待审核) |
-| TC-HASH-006 | 审核通过币值修改 | POST | /hashrate/admin/v1/coin/value/audit/approve | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": 1, "status": 1, "remark": "审核通过"}` | P1 | HTTP 200; 操作成功，该审核记录status变为1(通过)，币值已更新 |
-| TC-HASH-007 | 审核拒绝币值修改 | POST | /hashrate/admin/v1/coin/value/audit/approve | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": 2, "status": 2, "remark": "币值不合理"}` | P1 | HTTP 200; 操作成功，该审核记录status变为2(拒绝) |
-| TC-HASH-008 | 撤销币值修改申请 | POST | /hashrate/admin/v1/coin/value/audit/revoke | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": 3}` | P1 | HTTP 200; 操作成功，该审核记录status变为3(撤销) |
-| TC-HASH-009 | 获取算力单价档位列表 | GET | /hashrate/admin/v1/power/unitprice/grade/list | Authorization: Bearer {token} | - | - | P1 | HTTP 200; 返回档位列表，每项包含level、usdt_amount、power_amount等字段 |
-| TC-HASH-010 | 新增/保存算力单价档位 | POST | /hashrate/admin/v1/power/unitprice/grade/upsert | Authorization: Bearer {token}; Content-Type: application/json | - | `{"level": 1, "usdt_amount": 100.00, "power_amount": 10.00}` | P1 | HTTP 200; 操作成功，档位信息已新增或更新 |
-| TC-HASH-011 | 删除算力单价档位 | POST | /hashrate/admin/v1/power/unitprice/grade/delete | Authorization: Bearer {token}; Content-Type: application/json | - | `{"level": 1}` | P1 | HTTP 200; 操作成功，该档位已删除 |
-| TC-HASH-012 | 获取锁仓设置 | GET | /hashrate/admin/v1/lock/setting/get | Authorization: Bearer {token} | coin=ETH | - | P1 | HTTP 200; 响应体包含coin、days、lock_ratio等字段 |
-| TC-HASH-013 | 设置锁仓 | POST | /hashrate/admin/v1/lock/setting/set | Authorization: Bearer {token}; Content-Type: application/json | - | `{"coin": "ETH", "days": 30, "lock_ratio": 0.3}` | P1 | HTTP 200; 操作成功，锁仓设置已更新 |
-| TC-HASH-014 | 获取算力发放记录列表 | GET | /hashrate/admin/v1/recharge/release/list | Authorization: Bearer {token} | user_id=10001&page=1&size=20&coin=Hashrate | - | P1 | HTTP 200; 响应体包含total和list，list每项包含user_id、wallet_address、coin、amount、release_time等 |
-| TC-HASH-015 | 获取USDT和Point发放记录 | GET | /hashrate/admin/v1/asset/release/list | Authorization: Bearer {token} | user_id=10001&coin=Usdt&page=1&size=20 | - | P1 | HTTP 200; 响应体包含total和list，list每项包含user_id、coin、amount、release_time等 |
-| TC-HASH-016 | 审核状态-重复审核已通过记录 | POST | /hashrate/admin/v1/coin/value/audit/approve | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": 1, "status": 1, "remark": "重复审核"}` | P1 | HTTP 400; 响应体包含error字段，描述"该记录已审核"或"状态不允许操作" |
-| TC-HASH-017 | 审核状态-审核已拒绝记录 | POST | /hashrate/admin/v1/coin/value/audit/approve | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": 2, "status": 1, "remark": "重新通过"}` | P1 | HTTP 400; 响应体包含error字段，描述"该记录已拒绝"或"状态不允许操作" |
+| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
+|-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
+| TC-HASH-001 | 获取算力币值列表 | GET | /hashrate/admin/v1/coin/value/list | X-Admin-Token: ${auth_token} | - | - | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"list": [{"coin": "...", "amount": ...}, ...]}}` | - |
+| TC-HASH-002 | 新增/保存算力币值 | POST | /hashrate/admin/v1/coin/value/upsert | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"seq": 1, "coin": "ETH", "amount": 2500.00}` | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-HASH-003 | 删除算力币值 | POST | /hashrate/admin/v1/coin/value/delete | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"coin": "ETH"}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-HASH-004 | 获取币值审核列表 | GET | /hashrate/admin/v1/coin/value/audit/list | X-Admin-Token: ${auth_token} | coin=ETH&status=-1&page=1&size=20 | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [{"id": 1, "coin": "...", "amount": ..., "status": ...}, ...]}}` | - |
+| TC-HASH-005 | 申请修改币值 | POST | /hashrate/admin/v1/coin/value/audit/apply | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"coin": "ETH", "amount": 2600.00}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"id": N, "status": 0}}` | - |
+| TC-HASH-006 | 审核通过币值修改 | POST | /hashrate/admin/v1/coin/value/audit/approve | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": 1, "status": 1, "remark": "审核通过"}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-HASH-007 | 审核拒绝币值修改 | POST | /hashrate/admin/v1/coin/value/audit/approve | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": 2, "status": 2, "remark": "币值不合理"}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-HASH-008 | 撤销币值修改申请 | POST | /hashrate/admin/v1/coin/value/audit/revoke | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": 3}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-HASH-009 | 获取算力单价档位列表 | GET | /hashrate/admin/v1/power/unitprice/grade/list | X-Admin-Token: ${auth_token} | - | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"list": [{"level": 1, "usdt_amount": ..., "power_amount": ...}, ...]}}` | - |
+| TC-HASH-010 | 新增/保存算力单价档位 | POST | /hashrate/admin/v1/power/unitprice/grade/upsert | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"level": 1, "usdt_amount": 100.00, "power_amount": 10.00}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-HASH-011 | 删除算力单价档位 | POST | /hashrate/admin/v1/power/unitprice/grade/delete | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"level": 1}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-HASH-012 | 获取锁仓设置 | GET | /hashrate/admin/v1/lock/setting/get | X-Admin-Token: ${auth_token} | coin=ETH | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"coin": "...", "days": ..., "lock_ratio": ...}}` | - |
+| TC-HASH-013 | 设置锁仓 | POST | /hashrate/admin/v1/lock/setting/set | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"coin": "ETH", "days": 30, "lock_ratio": 0.3}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-HASH-014 | 获取算力发放记录列表 | GET | /hashrate/admin/v1/recharge/release/list | X-Admin-Token: ${auth_token} | user_id=10001&page=1&size=20&coin=Hashrate | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [{"user_id": ..., "wallet_address": "...", "coin": "...", "amount": ..., "release_time": "..."}, ...]}}` | - |
+| TC-HASH-015 | 获取USDT和Point发放记录 | GET | /hashrate/admin/v1/asset/release/list | X-Admin-Token: ${auth_token} | user_id=10001&coin=Usdt&page=1&size=20 | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [{"user_id": ..., "coin": "...", "amount": ..., "release_time": "..."}, ...]}}` | - |
+| TC-HASH-016 | 审核状态-重复审核已通过记录 | POST | /hashrate/admin/v1/coin/value/audit/approve | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": 1, "status": 1, "remark": "重复审核"}` | P1 | HTTP 200; 响应体 `{"code": 4001, "message": "订单状态不可操作", "data": null}` | - |
+| TC-HASH-017 | 审核状态-审核已拒绝记录 | POST | /hashrate/admin/v1/coin/value/audit/approve | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": 2, "status": 1, "remark": "重新通过"}` | P1 | HTTP 200; 响应体 `{"code": 4001, "message": "订单状态不可操作", "data": null}` | - |
 
 ### 4.5 用户管理模块测试用例
 
-| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 |
-|-------|---------|------|------|---------|--------------|--------------|-------|---------|
-| TC-USER-001 | 获取用户列表 | GET | /hashrate/user/admin/v1/list | Authorization: Bearer {token} | page=1&size=20 | - | P0 | HTTP 200; 响应体包含total(整数)和list(数组)，list每项包含user_id、wallet_address等字段 |
-| TC-USER-002 | 用户列表-UID搜索 | GET | /hashrate/user/admin/v1/list | Authorization: Bearer {token} | key=10001 | - | P1 | HTTP 200; 返回匹配该UID的用户列表 |
-| TC-USER-003 | 用户列表-钱包地址搜索 | GET | /hashrate/user/admin/v1/list | Authorization: Bearer {token} | key=0x1234567890abcdef1234567890abcdef12345678 | - | P1 | HTTP 200; 返回匹配该钱包地址的用户列表 |
-| TC-USER-004 | 获取用户收益详情 | GET | /hashrate/user/admin/v1/income/detail | Authorization: Bearer {token} | user_id=10001 | - | P1 | HTTP 200; 响应体包含该用户的收益详情：total_income、daily_income等字段 |
-| TC-USER-005 | 获取每日发放记录 | GET | /hashrate/user/admin/v1/release/history | Authorization: Bearer {token} | user_id=10001&page=1&size=20 | - | P1 | HTTP 200; 响应体包含total和list，list每项包含release_time、amount、source等 |
-| TC-USER-006 | 为用户发放算力 | POST | /hashrate/user/admin/v1/recharge/hashrate | Authorization: Bearer {token}; Content-Type: application/json | - | `{"walletAddress": "0x1234567890abcdef1234567890abcdef12345678", "amount": 100}` | P0 | HTTP 200; 响应体包含success:true，算力已发放到用户账户 |
-| TC-USER-007 | 用户充值任意算力 | POST | /hashrate/user/admin/v1/recharge/hashrate/any | Authorization: Bearer {token}; Content-Type: application/json | - | `{"walletAddress": "0x1234567890abcdef1234567890abcdef12345678", "amount": 50, "desc": "测试充值"}` | P1 | HTTP 200; 响应体包含success:true，任意算力已发放 |
-| TC-USER-008 | 用户发放点券 | POST | /hashrate/user/admin/v1/recharge/coupon | Authorization: Bearer {token}; Content-Type: application/json | - | `{"walletAddress": "0x1234567890abcdef1234567890abcdef12345678", "amount": 100, "desc": "点券发放"}` | P1 | HTTP 200; 响应体包含success:true，点券已发放 |
-| TC-USER-009 | 扣除用户算力 | POST | /hashrate/user/admin/v1/deduct/hashrate | Authorization: Bearer {token}; Content-Type: application/json | - | `{"walletAddress": "0x1234567890abcdef1234567890abcdef12345678", "amount": 10}` | P1 | HTTP 200; 响应体包含success:true，用户算力已扣除 |
-| TC-USER-010 | 扣除算力-余额不足 | POST | /hashrate/user/admin/v1/deduct/hashrate | Authorization: Bearer {token}; Content-Type: application/json | - | `{"walletAddress": "0x1234567890abcdef1234567890abcdef12345678", "amount": 999999}` | P1 | HTTP 400; 响应体包含error字段，描述"余额不足"或"算力不足" |
-| TC-USER-011 | 冻结用户收益 | POST | /hashrate/user/admin/v1/status/update | Authorization: Bearer {token}; Content-Type: application/json | - | `{"userId": "10001", "status": 1}` | P1 | HTTP 200; 操作成功，该用户收益已冻结，status变为1 |
-| TC-USER-012 | 解冻用户收益 | POST | /hashrate/user/admin/v1/status/update | Authorization: Bearer {token}; Content-Type: application/json | - | `{"userId": "10001", "status": 0}` | P1 | HTTP 200; 操作成功，该用户收益已解冻，status变为0 |
-| TC-USER-013 | 钱包地址格式错误-过短 | GET | /hashrate/user/admin/v1/list | Authorization: Bearer {token} | key=0x1234 | - | P1 | HTTP 200; 返回空列表或参数校验错误提示 |
-| TC-USER-014 | 钱包地址格式错误-非法字符 | GET | /hashrate/user/admin/v1/list | Authorization: Bearer {token} | key=0xZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ | - | P1 | HTTP 200; 返回空列表或参数校验错误提示 |
-| TC-USER-015 | user_id不存在时查询收益 | GET | /hashrate/user/admin/v1/income/detail | Authorization: Bearer {token} | user_id=99999999 | - | P1 | HTTP 200; 返回空数据或该user_id的初始收益状态 |
-| TC-USER-016 | 用户列表-key参数多条件组合 | GET | /hashrate/user/admin/v1/list | Authorization: Bearer {token} | key=10001&page=1&size=10 | - | P2 | HTTP 200; 返回匹配key且分页后的用户列表 |
+| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
+|-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
+| TC-USER-001 | 获取用户列表 | GET | /hashrate/user/admin/v1/list | X-Admin-Token: ${auth_token} | page=1&size=20 | - | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [{"user_id": 10001, "wallet_address": "0x...", ...}, ...]}}` | - |
+| TC-USER-002 | 用户列表-UID搜索 | GET | /hashrate/user/admin/v1/list | X-Admin-Token: ${auth_token} | key=10001 | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [...]}}` | - |
+| TC-USER-003 | 用户列表-钱包地址搜索 | GET | /hashrate/user/admin/v1/list | X-Admin-Token: ${auth_token} | key=0x1234567890abcdef1234567890abcdef12345678 | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [...]}}` | - |
+| TC-USER-004 | 获取用户收益详情 | GET | /hashrate/user/admin/v1/income/detail | X-Admin-Token: ${auth_token} | user_id=10001 | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total_income": ..., "daily_income": ...}}` | - |
+| TC-USER-005 | 获取每日发放记录 | GET | /hashrate/user/admin/v1/release/history | X-Admin-Token: ${auth_token} | user_id=10001&page=1&size=20 | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [{"release_time": "...", "amount": ..., "source": "..."}, ...]}}` | - |
+| TC-USER-006 | 为用户发放算力 | POST | /hashrate/user/admin/v1/recharge/hashrate | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"walletAddress": "0x1234567890abcdef1234567890abcdef12345678", "amount": 100}` | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-USER-007 | 用户充值任意算力 | POST | /hashrate/user/admin/v1/recharge/hashrate/any | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"walletAddress": "0x1234567890abcdef1234567890abcdef12345678", "amount": 50, "desc": "测试充值"}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-USER-008 | 用户发放点券 | POST | /hashrate/user/admin/v1/recharge/coupon | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"walletAddress": "0x1234567890abcdef1234567890abcdef12345678", "amount": 100, "desc": "点券发放"}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-USER-009 | 扣除用户算力 | POST | /hashrate/user/admin/v1/deduct/hashrate | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"walletAddress": "0x1234567890abcdef1234567890abcdef12345678", "amount": 10}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-USER-010 | 扣除算力-余额不足 | POST | /hashrate/user/admin/v1/deduct/hashrate | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"walletAddress": "0x1234567890abcdef1234567890abcdef12345678", "amount": 999999}` | P1 | HTTP 200; 响应体 `{"code": 1007, "message": "收益数量必须为正数", "data": null}` | - |
+| TC-USER-011 | 冻结用户收益 | POST | /hashrate/user/admin/v1/status/update | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"userId": "10001", "status": 1}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-USER-012 | 解冻用户收益 | POST | /hashrate/user/admin/v1/status/update | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"userId": "10001", "status": 0}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-USER-013 | 钱包地址格式错误-过短 | GET | /hashrate/user/admin/v1/list | X-Admin-Token: ${auth_token} | key=0x1234 | - | P1 | HTTP 200; 响应体 `{"code": 6001, "message": "param.invalid", "data": null}` | - |
+| TC-USER-014 | 钱包地址格式错误-非法字符 | GET | /hashrate/user/admin/v1/list | X-Admin-Token: ${auth_token} | key=0xZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ | - | P1 | HTTP 200; 响应体 `{"code": 6001, "message": "param.invalid", "data": null}` | - |
+| TC-USER-015 | user_id不存在时查询收益 | GET | /hashrate/user/admin/v1/income/detail | X-Admin-Token: ${auth_token} | user_id=99999999 | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total_income": 0, "daily_income": 0}}` | - |
+| TC-USER-016 | 用户列表-key参数多条件组合 | GET | /hashrate/user/admin/v1/list | X-Admin-Token: ${auth_token} | key=10001&page=1&size=10 | - | P2 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [...]}}` | - |
+| TC-USER-017 | 发放算力-金额为负数 | POST | /hashrate/user/admin/v1/recharge/hashrate | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"walletAddress": "0x1234567890abcdef1234567890abcdef12345678", "amount": -50}` | P2 | HTTP 200; 响应体 `{"code": 1002, "message": "算力值必须为非负数", "data": null}` | - |
+| TC-USER-018 | 发放点券-金额为负数 | POST | /hashrate/user/admin/v1/recharge/coupon | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"walletAddress": "0x1234567890abcdef1234567890abcdef12345678", "amount": -100, "desc": "负数点券"}` | P2 | HTTP 200; 响应体 `{"code": 1007, "message": "收益数量必须为正数", "data": null}` | - |
 
 ### 4.6 订单管理模块测试用例
 
-| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 |
-|-------|---------|------|------|---------|--------------|--------------|-------|---------|
-| TC-ORDER-001 | 获取订单列表 | GET | /hashrate/order/admin/v1/orders | Authorization: Bearer {token} | page=1&size=20 | - | P0 | HTTP 200; 响应体包含total(整数)和list(数组)，list每项包含order_id、user_id、coin、amount、status等字段 |
-| TC-ORDER-002 | 订单列表-用户筛选 | GET | /hashrate/order/admin/v1/orders | Authorization: Bearer {token} | user_id=10001 | - | P1 | HTTP 200; 返回该用户的订单列表 |
-| TC-ORDER-003 | 订单列表-分页 | GET | /hashrate/order/admin/v1/orders | Authorization: Bearer {token} | page=2&size=10 | - | P1 | HTTP 200; 返回第2页10条订单记录 |
+| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
+|-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
+| TC-ORDER-001 | 获取订单列表 | GET | /hashrate/order/admin/v1/orders | X-Admin-Token: ${auth_token} | page=1&size=20 | - | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [{"order_id": "...", "user_id": 10001, "coin": "ETH", "amount": 100.00, "status": 0, ...}, ...]}}` | - |
+| TC-ORDER-002 | 订单列表-用户筛选 | GET | /hashrate/order/admin/v1/orders | X-Admin-Token: ${auth_token} | user_id=10001 | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [...]}}` | - |
+| TC-ORDER-003 | 订单列表-分页 | GET | /hashrate/order/admin/v1/orders | X-Admin-Token: ${auth_token} | page=2&size=10 | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [...]}}` | - |
 
 ### 4.7 统计模块测试用例
 
-| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 |
-|-------|---------|------|------|---------|--------------|--------------|-------|---------|
-| TC-STATS-001 | 获取平台仪表盘统计 | GET | /hashrate/stats/admin/v1/dashboard | Authorization: Bearer {token} | - | - | P0 | HTTP 200; 响应体包含平台关键统计数据：总用户数、总订单数、总算力、24小时收益等 |
+| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
+|-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
+| TC-STATS-001 | 获取平台仪表盘统计 | GET | /hashrate/stats/admin/v1/dashboard | X-Admin-Token: ${auth_token} | - | - | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total_users": N, "total_orders": N, "total_hashrate": "...", "daily_income": ...}}` | - |
 
 ### 4.8 提现管理模块测试用例
 
-| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 |
-|-------|---------|------|------|---------|--------------|--------------|-------|---------|
-| TC-WD-001 | 获取提现申请列表 | GET | /hashrate/withdraw/admin/v1/apply/list | Authorization: Bearer {token} | page=1&size=20 | - | P0 | HTTP 200; 响应体包含total和list，list每项包含order_id、user_id、address、coin、amount、fee、status、submit_time等 |
-| TC-WD-002 | 提现申请列表-状态筛选 | GET | /hashrate/withdraw/admin/v1/apply/list | Authorization: Bearer {token} | status=0 | - | P1 | HTTP 200; 返回所有status=0(审核中)的提现申请列表 |
-| TC-WD-003 | 提现申请列表-日期范围 | GET | /hashrate/withdraw/admin/v1/apply/list | Authorization: Bearer {token} | start_date=2024-01-01&end_date=2024-01-31 | - | P1 | HTTP 200; 返回该日期范围内的提现申请列表 |
-| TC-WD-004 | 同意提现申请 | POST | /hashrate/withdraw/admin/v1/apply/agree | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": "withdraw_123"}` | P0 | HTTP 200; 操作成功，该提现申请status变为1(已完成) |
-| TC-WD-005 | 冻结提现申请 | POST | /hashrate/withdraw/admin/v1/apply/freeze | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": "withdraw_123"}` | P1 | HTTP 200; 操作成功，该提现申请已被冻结 |
-| TC-WD-006 | 解冻提现申请 | POST | /hashrate/withdraw/admin/v1/apply/unfreeze | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": "withdraw_123"}` | P1 | HTTP 200; 操作成功，该提现申请已解冻，可继续审核流程 |
-| TC-WD-007 | 获取提现配置列表 | GET | /hashrate/withdraw/admin/v1/config/list | Authorization: Bearer {token} | - | - | P1 | HTTP 200; 返回提现配置列表，每项包含coin、fee_amount、min_amount等 |
-| TC-WD-008 | 设置提现配置 | POST | /hashrate/withdraw/admin/v1/config/set | Authorization: Bearer {token}; Content-Type: application/json | - | `{"coin": "ETH", "fee_amount": 1.00, "min_amount": 10.00}` | P1 | HTTP 200; 操作成功，提现配置已更新 |
-| TC-WD-009 | 提现-重复同意已完成的提现 | POST | /hashrate/withdraw/admin/v1/apply/agree | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": "withdraw_completed_123"}` | P0 | HTTP 400; 响应体包含error字段，描述"该申请已处理"或"状态不允许操作" |
-| TC-WD-010 | 提现-修改已完成提现状态 | POST | /hashrate/withdraw/admin/v1/apply/freeze | Authorization: Bearer {token}; Content-Type: application/json | - | `{"id": "withdraw_completed_123"}` | P0 | HTTP 400; 响应体包含error字段，描述"该申请已完成"或"状态不允许操作" |
-| TC-WD-011 | 提现列表-status+coin组合筛选 | GET | /hashrate/withdraw/admin/v1/apply/list | Authorization: Bearer {token} | status=0&coin=ETH | - | P2 | HTTP 200; 返回status=0且coin=ETH的提现申请列表 |
-| TC-WD-012 | 提现列表-无效日期范围(start>end) | GET | /hashrate/withdraw/admin/v1/apply/list | Authorization: Bearer {token} | start_date=2024-01-31&end_date=2024-01-01 | - | P2 | HTTP 400; 响应体包含error字段，描述"开始日期不能大于结束日期"或返回空列表 |
+| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
+|-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
+| TC-WD-001 | 获取提现申请列表 | GET | /hashrate/withdraw/admin/v1/apply/list | X-Admin-Token: ${auth_token} | page=1&size=20 | - | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [{"order_id": "...", "user_id": 10001, "address": "0x...", "coin": "ETH", "amount": 100.00, "fee": 1.00, "status": 0, "submit_time": "...", ...}, ...]}}` | - |
+| TC-WD-002 | 提现申请列表-状态筛选 | GET | /hashrate/withdraw/admin/v1/apply/list | X-Admin-Token: ${auth_token} | status=0 | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [...]}}` | - |
+| TC-WD-003 | 提现申请列表-日期范围 | GET | /hashrate/withdraw/admin/v1/apply/list | X-Admin-Token: ${auth_token} | start_date=2024-01-01&end_date=2024-01-31 | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [...]}}` | - |
+| TC-WD-004 | 同意提现申请 | POST | /hashrate/withdraw/admin/v1/apply/agree | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": "withdraw_123"}` | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-WD-005 | 冻结提现申请 | POST | /hashrate/withdraw/admin/v1/apply/freeze | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": "withdraw_123"}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-WD-006 | 解冻提现申请 | POST | /hashrate/withdraw/admin/v1/apply/unfreeze | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": "withdraw_123"}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-WD-007 | 获取提现配置列表 | GET | /hashrate/withdraw/admin/v1/config/list | X-Admin-Token: ${auth_token} | - | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"list": [{"coin": "...", "fee_amount": ..., "min_amount": ...}, ...]}}` | - |
+| TC-WD-008 | 设置提现配置 | POST | /hashrate/withdraw/admin/v1/config/set | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"coin": "ETH", "fee_amount": 1.00, "min_amount": 10.00}` | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"success": true}}` | - |
+| TC-WD-009 | 提现-重复同意已完成的提现 | POST | /hashrate/withdraw/admin/v1/apply/agree | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": "withdraw_completed_123"}` | P0 | HTTP 200; 响应体 `{"code": 4001, "message": "订单状态不可操作", "data": null}` | - |
+| TC-WD-010 | 提现-修改已完成提现状态 | POST | /hashrate/withdraw/admin/v1/apply/freeze | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"id": "withdraw_completed_123"}` | P0 | HTTP 200; 响应体 `{"code": 4001, "message": "订单状态不可操作", "data": null}` | - |
+| TC-WD-011 | 提现列表-status+coin组合筛选 | GET | /hashrate/withdraw/admin/v1/apply/list | X-Admin-Token: ${auth_token} | status=0&coin=ETH | - | P2 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [...]}}` | - |
+| TC-WD-012 | 提现列表-无效日期范围(start>end) | GET | /hashrate/withdraw/admin/v1/apply/list | X-Admin-Token: ${auth_token} | start_date=2024-01-31&end_date=2024-01-01 | - | P2 | HTTP 200; 响应体 `{"code": 6001, "message": "param.invalid", "data": null}` | - |
+| TC-WD-013 | 设置提现配置-不支持的币种 | POST | /hashrate/withdraw/admin/v1/config/set | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"coin": "UNSUPPORTED", "fee_amount": 1.00, "min_amount": 10.00}` | P2 | HTTP 200; 响应体 `{"code": 4004, "message": "币种不支持", "data": null}` | - |
+| TC-WD-014 | 提现-手续费率超限 | POST | /hashrate/withdraw/admin/v1/config/set | X-Admin-Token: ${auth_token}; Content-Type: application/json | - | `{"coin": "ETH", "fee_amount": 2.00, "min_amount": 10.00}` | P2 | HTTP 200; 响应体 `{"code": 1004, "message": "手续费率必须在0-1之间", "data": null}` | - |
 
 ### 4.9 邀请管理模块测试用例
-| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 |
-|-------|---------|------|------|---------|--------------|--------------|-------|---------|
-| TC-INV-001 | 获取邀请人详情列表 | GET | /hashrate/invite/admin/v1/details | Authorization: Bearer {token} | inviter_id=10001&page=1&size=20 | - | P1 | HTTP 200; 响应体包含total和list，list每项包含inviter_id、invitee_id、invite_time等 |
+| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
+|-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
+| TC-INV-001 | 获取邀请人详情列表 | GET | /hashrate/invite/admin/v1/details | X-Admin-Token: ${auth_token} | inviter_id=10001&page=1&size=20 | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"total": N, "list": [{"inviter_id": 10001, "invitee_id": 10002, "invite_time": "...", ...}, ...]}}` | - |
 
 ### 4.10 客户端模块测试用例
-| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 |
-|-------|---------|------|------|---------|--------------|--------------|-------|---------|
-| TC-CLIENT-001 | 获取所有公告 | GET | /hashrate/client/announcement/v1/list | - | - | - | P1 | HTTP 200; 响应体包含公告列表（is_open=1的公告），每项包含id、title、content、create_at等 |
-| TC-CLIENT-002 | 获取客户端配置 | GET | /hashrate/front/config/v1/config | - | - | - | P0 | HTTP 200; 响应体包含客户端配置信息：版本号、下载地址、客服链接等 |
+| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
+|-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
+| TC-CLIENT-001 | 获取所有公告 | GET | /hashrate/client/announcement/v1/list | - | - | - | P1 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"list": [{"id": 1, "title": "...", "content": "...", "is_open": 1, "create_at": "..."}, ...]}}` | - |
+| TC-CLIENT-002 | 获取客户端配置 | GET | /hashrate/front/config/v1/config | - | - | - | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"version": "...", "download_url": "...", "customer_service_url": "..."}}` | - |
 
 ### 4.11 系统接口测试用例
 
-| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 |
-|-------|---------|------|------|---------|--------------|--------------|-------|---------|
-| TC-SYS-001 | 健康检查 | GET | /ping | - | - | - | P0 | HTTP 200; 响应体包含status:"ok"或类似内容 |
+| 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
+|-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
+| TC-SYS-001 | 健康检查 | GET | /ping | - | - | - | P0 | HTTP 200; 响应体 `{"code": 0, "message": "SUCCESS", "data": {"status": "ok"}}` | - |
 
 ---
 
