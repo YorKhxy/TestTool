@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Save } from 'lucide-react';
+import { Save, Check } from 'lucide-react';
 import { useRunnerStore } from '@/hooks/useRunnerStore';
 import { cn } from '@/lib/utils';
 
 export default function Settings() {
   const { settings, loadSettings, saveSettings, setSettings, error } = useRunnerStore();
   const [local, setLocal] = useState(settings);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   useEffect(() => {
     void loadSettings();
@@ -14,6 +15,13 @@ export default function Settings() {
   useEffect(() => {
     setLocal(settings);
   }, [settings]);
+
+  const handleSave = async () => {
+    setSettings(local);
+    await saveSettings(local);
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 3000);
+  };
 
   return (
     <div className="grid gap-4">
@@ -37,15 +45,18 @@ export default function Settings() {
         <div className="mt-4 flex items-center gap-2">
           <button
             className="inline-flex items-center gap-2 rounded-lg bg-indigo-500 px-3 py-2 text-sm font-medium text-white transition hover:bg-indigo-400"
-            onClick={async () => {
-              setSettings(local);
-              await saveSettings(local);
-            }}
+            onClick={() => void handleSave()}
           >
             <Save className="h-4 w-4" />
             保存
           </button>
           {error ? <div className="text-sm text-rose-300">{error}</div> : null}
+          {saveSuccess ? (
+            <div className="flex items-center gap-1 text-sm text-emerald-400">
+              <Check className="h-4 w-4" />
+              保存成功
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -70,14 +81,17 @@ export default function Settings() {
         <div className="mt-4 flex items-center gap-2">
           <button
             className="inline-flex items-center gap-2 rounded-lg bg-indigo-500 px-3 py-2 text-sm font-medium text-white transition hover:bg-indigo-400"
-            onClick={async () => {
-              setSettings(local);
-              await saveSettings(local);
-            }}
+            onClick={() => void handleSave()}
           >
             <Save className="h-4 w-4" />
             保存
           </button>
+          {saveSuccess ? (
+            <div className="flex items-center gap-1 text-sm text-emerald-400">
+              <Check className="h-4 w-4" />
+              保存成功
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
