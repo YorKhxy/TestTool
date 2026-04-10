@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { ClipboardList, FileText, Settings, Globe, Play, PlayCircle, List } from 'lucide-react';
+import { ClipboardList, FileText, Settings, Globe, Play, PlayCircle } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -49,7 +49,6 @@ export default function AppShell({ children }: { children: ReactNode }) {
                 <>
                   <div className="px-2 py-1 text-xs font-medium text-zinc-500">Playwright 模式</div>
                   <NavItem to="/playwright" icon={<PlayCircle className="h-4 w-4" />} label="工作台" end />
-                  <NavItem to="/playwright/cases" icon={<List className="h-4 w-4" />} label="用例管理" />
                   <NavItem to="/playwright/settings" icon={<Settings className="h-4 w-4" />} label="浏览器设置" />
                   <NavItem to="/playwright/reports" icon={<FileText className="h-4 w-4" />} label="执行报告" />
                 </>

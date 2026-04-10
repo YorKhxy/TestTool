@@ -44,6 +44,7 @@ export type PlaywrightCase = {
   afterAll?: PlaywrightStep[];
   timeout?: number;
   retries?: number;
+  url?: string;
 };
 
 export type PlaywrightSuite = {
@@ -65,3 +66,83 @@ export type PlaywrightConfig = {
 
 export type PlaywrightCaseCreateInput = Omit<PlaywrightCase, 'id'>;
 export type PlaywrightCaseUpdateInput = Partial<Omit<PlaywrightCase, 'id'>>;
+
+export type ExecutionStatus = 'pending' | 'running' | 'passed' | 'failed' | 'skipped' | 'canceled';
+
+export type StepExecutionLog = {
+  stepId: string;
+  stepIndex: number;
+  stepType: PlaywrightStepType;
+  description: string;
+  status: ExecutionStatus;
+  startedAt: string;
+  finishedAt?: string;
+  durationMs?: number;
+  request?: {
+    url?: string;
+    method?: string;
+    headers?: Record<string, string>;
+    body?: unknown;
+  };
+  response?: {
+    status?: number;
+    headers?: Record<string, string>;
+    body?: unknown;
+  };
+  assertResult?: {
+    expected: string;
+    actual: string;
+    operator: AssertionOperator;
+    passed: boolean;
+  };
+  error?: string;
+  screenshot?: string;
+};
+
+export type CaseExecutionLog = {
+  caseId: string;
+  caseTitle: string;
+  caseGroup?: string;
+  priority?: string;
+  status: ExecutionStatus;
+  startedAt: string;
+  finishedAt?: string;
+  durationMs?: number;
+  stepLogs: StepExecutionLog[];
+  error?: string;
+  totalSteps: number;
+  passedSteps: number;
+  failedSteps: number;
+};
+
+export type PlaywrightExecutionLog = {
+  id: string;
+  runId: string;
+  suiteName: string;
+  startedAt: string;
+  finishedAt?: string;
+  totalCases: number;
+  passedCases: number;
+  failedCases: number;
+  skippedCases: number;
+  canceledCases: number;
+  durationMs?: number;
+  caseLogs: CaseExecutionLog[];
+  config: PlaywrightConfig;
+  baseURL: string;
+};
+
+export type ImportResult = {
+  success: boolean;
+  suite?: PlaywrightSuite;
+  cases: PlaywrightCase[];
+  errors?: string[];
+  warnings?: string[];
+};
+
+export type ReorderAction = {
+  caseId: string;
+  fromIndex: number;
+  toIndex: number;
+  type: 'drag' | 'moveUp' | 'moveDown' | 'moveTo';
+};

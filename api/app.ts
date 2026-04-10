@@ -13,6 +13,11 @@ import runRoutes from './routes/run.js'
 import reportRoutes from './routes/reports.js'
 import exportRoutes from './routes/export.js'
 import settingsRoutes from './routes/settings.js'
+import playwrightCasesRoutes from './routes/playwright/cases.js'
+import playwrightRunRoutes from './routes/playwright/run.js'
+import playwrightLogsRoutes from './routes/playwright/logs.js'
+import playwrightSettingsRoutes from './routes/playwright/settings.js'
+import playwrightExportRoutes from './routes/playwright/export.js'
 
 // load env
 dotenv.config()
@@ -28,6 +33,11 @@ app.use('/api/runs', runRoutes)
 app.use('/api/reports', reportRoutes)
 app.use('/api/export', exportRoutes)
 app.use('/api/settings', settingsRoutes)
+app.use('/api/playwright/cases', playwrightCasesRoutes)
+app.use('/api/playwright/run', playwrightRunRoutes)
+app.use('/api/playwright/logs', playwrightLogsRoutes)
+app.use('/api/playwright/settings', playwrightSettingsRoutes)
+app.use('/api/playwright/export', playwrightExportRoutes)
 
 /**
  * health
