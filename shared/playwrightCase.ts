@@ -5,6 +5,7 @@ export type PlaywrightStepType =
   | 'select'
   | 'wait'
   | 'waitForSelector'
+  | 'waitForURL'
   | 'assert'
   | 'screenshot'
   | 'evaluate'
@@ -61,6 +62,7 @@ export type PlaywrightConfig = {
   timeout: number;
   screenshotOnFailure: boolean;
   recordVideo: boolean;
+  headless: boolean;
   baseURL?: string;
 };
 

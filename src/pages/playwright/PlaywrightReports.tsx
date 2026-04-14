@@ -9,6 +9,7 @@ export default function PlaywrightReports() {
   const [isLoading, setIsLoading] = useState(true);
   const [exportingId, setExportingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const loadLogs = async () => {
     try {
@@ -80,6 +81,40 @@ export default function PlaywrightReports() {
     }
   };
 
+  const toggleSelect = (logId: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(logId)) {
+        next.delete(logId);
+      } else {
+        next.add(logId);
+      }
+      return next;
+    });
+  };
+
+  const selectAll = () => {
+    setSelectedIds(new Set(logs.map((l) => l.id)));
+  };
+
+  const deselectAll = () => {
+    setSelectedIds(new Set());
+  };
+
+  const handleBatchDelete = async () => {
+    if (selectedIds.size === 0) return;
+    if (!confirm(`确定要删除选中的 ${selectedIds.size} 条执行记录吗？`)) return;
+    try {
+      for (const logId of selectedIds) {
+        await apiJson(`/api/playwright/logs/${logId}`, { method: 'DELETE' });
+      }
+      setSelectedIds(new Set());
+      await loadLogs();
+    } catch (e) {
+      console.error('Batch delete failed:', e);
+    }
+  };
+
   const formatDuration = (ms?: number) => {
     if (!ms) return '-';
     return `${(ms / 1000).toFixed(2)}s`;
@@ -97,17 +132,28 @@ export default function PlaywrightReports() {
             <div className="text-sm font-semibold text-zinc-100">Playwright 执行报告</div>
             <div className="mt-1 text-xs text-zinc-400">查看历史执行记录并导出报告</div>
           </div>
-          <button
-            onClick={loadLogs}
-            disabled={isLoading}
-            className={cn(
-              'inline-flex items-center gap-2 rounded-lg border border-zinc-600 bg-zinc-800 px-3 py-2 text-sm text-zinc-200 transition',
-              !isLoading ? 'hover:bg-zinc-700' : 'opacity-50 cursor-not-allowed',
+          <div className="flex items-center gap-2">
+            {selectedIds.size > 0 && (
+              <button
+                onClick={handleBatchDelete}
+                className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-500"
+              >
+                <Trash2 className="h-4 w-4" />
+                批量删除 ({selectedIds.size})
+              </button>
             )}
-          >
-            <Loader className={cn('h-4 w-4', isLoading && 'animate-spin')} />
-            刷新
-          </button>
+            <button
+              onClick={loadLogs}
+              disabled={isLoading}
+              className={cn(
+                'inline-flex items-center gap-2 rounded-lg border border-zinc-600 bg-zinc-800 px-3 py-2 text-sm text-zinc-200 transition',
+                !isLoading ? 'hover:bg-zinc-700' : 'opacity-50 cursor-not-allowed',
+              )}
+            >
+              <Loader className={cn('h-4 w-4', isLoading && 'animate-spin')} />
+              刷新
+            </button>
+          </div>
         </div>
       </div>
 
@@ -122,6 +168,14 @@ export default function PlaywrightReports() {
             <table className="w-full table-fixed">
               <thead className="sticky top-0 z-10 bg-zinc-800 border-b border-zinc-600">
                 <tr className="text-left text-xs text-zinc-400">
+                  <th className="px-4 py-3 w-10">
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.size === logs.length && logs.length > 0}
+                      onChange={(e) => e.target.checked ? selectAll() : deselectAll()}
+                      className="h-4 w-4 rounded border-zinc-600 bg-zinc-700 text-indigo-500 focus:ring-indigo-500"
+                    />
+                  </th>
                   <th className="px-4 py-3">执行ID</th>
                   <th className="px-4 py-3">套件名称</th>
                   <th className="px-4 py-3">执行时间</th>
@@ -137,8 +191,19 @@ export default function PlaywrightReports() {
                 {logs.map((log) => (
                   <tr
                     key={log.id}
-                    className="border-t border-zinc-700 hover:bg-zinc-800/30 transition-colors"
+                    className={cn(
+                      "border-t border-zinc-700 hover:bg-zinc-800/30 transition-colors",
+                      selectedIds.has(log.id) && "bg-indigo-500/5"
+                    )}
                   >
+                    <td className="px-4 py-3">
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.has(log.id)}
+                        onChange={() => toggleSelect(log.id)}
+                        className="h-4 w-4 rounded border-zinc-600 bg-zinc-700 text-indigo-500 focus:ring-indigo-500"
+                      />
+                    </td>
                     <td className="px-4 py-3">
                       <div className="font-mono text-xs text-zinc-300 truncate" title={log.runId}>
                         {log.runId}

@@ -2,12 +2,21 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { ClipboardList, FileText, Settings, Globe, Play, PlayCircle } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
+import { useEffect } from 'react';
+import { usePlaywrightStore } from '@/hooks/usePlaywrightStore';
 
 type Mode = 'http' | 'playwright';
 
 export default function AppShell({ children }: { children: ReactNode }) {
   const location = useLocation();
   const mode: Mode = location.pathname.startsWith('/playwright') ? 'playwright' : 'http';
+  const loadSettings = usePlaywrightStore((s) => s.loadSettings);
+
+  useEffect(() => {
+    if (mode === 'playwright') {
+      void loadSettings();
+    }
+  }, [mode, loadSettings]);
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">

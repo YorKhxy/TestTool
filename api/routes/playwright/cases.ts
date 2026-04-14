@@ -88,6 +88,7 @@ function parseMarkdownToCases(content: string, fileName: string): ImportResult {
             select: 'select',
             wait: 'wait',
             waitforselector: 'waitForSelector',
+            waitforurl: 'waitForURL',
             assert: 'assert',
             screenshot: 'screenshot',
             evaluate: 'evaluate',
@@ -160,6 +161,108 @@ function parseSpecToCases(content: string, fileName: string): ImportResult {
   const warnings: string[] = [];
   const cases: PlaywrightCase[] = [];
 
+  const constants: Record<string, string> = {};
+  const constRegex = /const\s+(\w+)\s*=\s*['"`]([^'"`]+)['"`]/g;
+  let constMatch;
+  while ((constMatch = constRegex.exec(content)) !== null) {
+    constants[constMatch[1]] = constMatch[2];
+  }
+
+  function expandTemplate(text: string): string {
+    return text.replace(/\$\{(\w+)\}/g, (match, varName) => {
+      return constants[varName] !== undefined ? constants[varName] : match;
+    });
+  }
+
+  function expandValue(text: string): string {
+    if (text.includes('${')) {
+      return expandTemplate(text);
+    }
+    return text;
+  }
+
+  const locatorVars: Record<string, string> = {};
+  const locatorVarRegex = /const\s+(\w+)\s*=\s*(?:page\.)?locator\s*\(\s*'([^']+)'\s*\)/g;
+  let varMatch;
+  while ((varMatch = locatorVarRegex.exec(content)) !== null) {
+    locatorVars[varMatch[1]] = varMatch[2];
+  }
+
+  const locatorVarFirstRegex = /const\s+(\w+)\s*=\s*(?:page\.)?locator\s*\(\s*'([^']+)'\s*\)\.first\(\)/g;
+  while ((varMatch = locatorVarFirstRegex.exec(content)) !== null) {
+    locatorVars[varMatch[1]] = varMatch[2];
+  }
+
+  const stepPatterns: Array<{
+    regex: RegExp;
+    type: PlaywrightStepType;
+    getSelector?: (m: RegExpMatchArray, line: string) => string | undefined;
+    getValue?: (m: RegExpMatchArray) => string;
+    getDesc?: (s?: string, v?: string) => string;
+  }> = [
+    { regex: /page\.goto\s*\(\s*`([^`]+)`/, type: 'navigate', getValue: (m) => m[1], getDesc: (v) => `导航到 ${v}` },
+    { regex: /page\.goto\s*\(\s*'([^']+)'/, type: 'navigate', getValue: (m) => m[1], getDesc: (v) => `导航到 ${v}` },
+    { regex: /page\.fill\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
+    { regex: /\.locator\s*\(\s*'([^']+)'\)\.first\(\)\.fill\s*\(\s*'([^']+)'/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
+    { regex: /\.locator\s*\(\s*'([^']+)'\)\.fill\s*\(\s*'([^']+)'/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
+    { regex: /\.fill\s*\(\s*'([^']+)'/, type: 'fill', getSelector: (m, line) => {
+      const varName = line.match(/(?:await\s+)?(\w+)\.fill/)?.[1];
+      if (varName && locatorVars[varName]) return locatorVars[varName];
+      return undefined;
+    }, getValue: (m) => m[1], getDesc: (s, v) => `填写 ${s || '未知'}: ${v}` },
+    { regex: /page\.click\s*\(\s*'([^']+)'/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
+    { regex: /\.click\s*\(\s*\)/, type: 'click', getSelector: (m, line) => {
+      const varName = line.match(/(?:await\s+)?(\w+)\.click/)?.[1];
+      if (varName && locatorVars[varName]) return locatorVars[varName];
+      return undefined;
+    }, getDesc: (s) => s ? `点击 ${s}` : `点击元素` },
+    { regex: /\.locator\s*\(\s*'([^']+)'\)\.first\(\)\.click\s*\(\)/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
+    { regex: /\.locator\s*\(\s*'([^']+)'\)\.click\s*\(\)/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
+    { regex: /page\.selectOption\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/, type: 'select', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `选择 ${s}: ${v}` },
+    { regex: /page\.waitForSelector\s*\(\s*'([^']+)'/, type: 'waitForSelector', getSelector: (m) => m[1], getDesc: (s) => `等待元素 ${s}` },
+    { regex: /page\.waitForTimeout\s*\(\s*(\d+)/, type: 'wait', getValue: (m) => m[1], getDesc: (v) => `等待 ${v}ms` },
+    { regex: /page\.press\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/, type: 'press', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `按键 ${s}: ${v}` },
+    { regex: /page\.waitForURL\s*\(\s*'([^']+)'/, type: 'waitForURL', getValue: (m) => m[1], getDesc: (v) => `等待 URL: ${v}` },
+    { regex: /page\.waitForLoadState\s*\(\s*'([^']+)'/, type: 'wait', getValue: (m) => m[1], getDesc: (v) => `等待加载状态: ${v}` },
+  ];
+
+  function extractSteps(text: string): PlaywrightStep[] {
+    const steps: PlaywrightStep[] = [];
+    let stepIndex = 0;
+    const lines = text.split('\n');
+
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+
+      for (const pattern of stepPatterns) {
+        const regex = new RegExp(pattern.regex.source, 'g');
+        let stepMatch;
+        while ((stepMatch = regex.exec(trimmedLine)) !== null) {
+          stepIndex++;
+          const step: PlaywrightStep = {
+            id: `step_${stepIndex}`,
+            type: pattern.type,
+            description: pattern.getDesc ? pattern.getDesc(pattern.getSelector?.(stepMatch, trimmedLine), pattern.getValue?.(stepMatch)) : `Step ${stepIndex}`,
+          };
+          if (pattern.getSelector) {
+            const selector = pattern.getSelector(stepMatch, trimmedLine);
+            if (selector) step.selector = expandValue(selector);
+          }
+          if (pattern.getValue) step.value = expandValue(pattern.getValue(stepMatch));
+          steps.push(step);
+        }
+      }
+    }
+    return steps;
+  }
+
+  const beforeEachBlockMatch = content.match(/test\.beforeEach\s*\(\s*(?:async\s*)?\([^)]*\)\s*=>?\s*\{([\s\S]*?)\n  \}/);
+  let beforeEachSteps: PlaywrightStep[] = [];
+  if (beforeEachBlockMatch) {
+    const beforeEachContent = beforeEachBlockMatch[1].trim();
+    beforeEachSteps = extractSteps(beforeEachContent);
+  }
+
   const testRegex = /test\s*\(\s*'([^']+)'\s*,/g;
   let match;
 
@@ -184,50 +287,34 @@ function parseSpecToCases(content: string, fileName: string): ImportResult {
     const caseEndIndex = nextMatch === -1 ? content.length : nextMatch;
     let caseContent = content.slice(caseStartIndex, caseEndIndex);
 
-    // Remove beforeEach/afterEach blocks from case content to avoid parsing their steps
     caseContent = caseContent.replace(/\n\s*test\.beforeEach\s*\([^)]*\)\s*\{[^}]*\}/g, '');
     caseContent = caseContent.replace(/\n\s*test\.afterEach\s*\([^)]*\)\s*\{[^}]*\}/g, '');
 
-    const steps: PlaywrightStep[] = [];
+    const steps: PlaywrightStep[] = [...beforeEachSteps];
 
-    const stepPatterns: Array<{
-      regex: RegExp;
-      type: PlaywrightStepType;
-      getSelector?: (m: RegExpMatchArray) => string;
-      getValue?: (m: RegExpMatchArray) => string;
-      getDesc?: (s?: string, v?: string) => string;
-    }> = [
-      { regex: /page\.goto\s*\(\s*`([^`]+)`/, type: 'navigate', getValue: (m) => m[1], getDesc: (v) => `导航到 ${v}` },
-      { regex: /page\.goto\s*\(\s*'([^']+)'/, type: 'navigate', getValue: (m) => m[1], getDesc: (v) => `导航到 ${v}` },
-      { regex: /page\.fill\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
-      { regex: /\.locator\s*\(\s*'([^']+)'\)\.first\(\)\.fill\s*\(\s*'([^']+)'/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
-      { regex: /\.locator\s*\(\s*'([^']+)'\)\.fill\s*\(\s*'([^']+)'/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
-      { regex: /page\.click\s*\(\s*'([^']+)'/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
-      { regex: /\.locator\s*\(\s*'([^']+)'\)\.first\(\)\.click\s*\(\)/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
-      { regex: /\.locator\s*\(\s*'([^']+)'\)\.click\s*\(\)/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
-      { regex: /\.first\(\)\.click\s*\(\)/, type: 'click', getDesc: () => `点击元素` },
-      { regex: /page\.selectOption\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/, type: 'select', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `选择 ${s}: ${v}` },
-      { regex: /page\.waitForSelector\s*\(\s*'([^']+)'/, type: 'waitForSelector', getSelector: (m) => m[1], getDesc: (s) => `等待元素 ${s}` },
-      { regex: /page\.waitForTimeout\s*\(\s*(\d+)/, type: 'wait', getValue: (m) => m[1], getDesc: (v) => `等待 ${v}ms` },
-      { regex: /page\.press\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/, type: 'press', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `按键 ${s}: ${v}` },
-      { regex: /page\.waitForURL\s*\(\s*'([^']+)'/, type: 'wait', getValue: (m) => m[1], getDesc: (v) => `等待 URL: ${v}` },
-      { regex: /page\.waitForLoadState\s*\(\s*'([^']+)'/, type: 'wait', getValue: (m) => m[1], getDesc: (v) => `等待加载状态: ${v}` },
-    ];
+    let stepIndex = steps.length;
+    const lines = caseContent.split('\n');
 
-    let stepIndex = 0;
-    for (const pattern of stepPatterns) {
-      const regex = new RegExp(pattern.regex.source, 'g');
-      let stepMatch;
-      while ((stepMatch = regex.exec(caseContent)) !== null) {
-        stepIndex++;
-        const step: PlaywrightStep = {
-          id: `step_${stepIndex}`,
-          type: pattern.type,
-          description: pattern.getDesc ? pattern.getDesc(pattern.getSelector?.(stepMatch), pattern.getValue?.(stepMatch)) : `Step ${stepIndex}`,
-        };
-        if (pattern.getSelector) step.selector = pattern.getSelector(stepMatch);
-        if (pattern.getValue) step.value = pattern.getValue(stepMatch);
-        steps.push(step);
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+
+      for (const pattern of stepPatterns) {
+        const regex = new RegExp(pattern.regex.source, 'g');
+        let stepMatch;
+        while ((stepMatch = regex.exec(trimmedLine)) !== null) {
+          stepIndex++;
+          const step: PlaywrightStep = {
+            id: `step_${stepIndex}`,
+            type: pattern.type,
+            description: pattern.getDesc ? pattern.getDesc(pattern.getSelector?.(stepMatch, trimmedLine), pattern.getValue?.(stepMatch)) : `Step ${stepIndex}`,
+          };
+          if (pattern.getSelector) {
+            const selector = pattern.getSelector(stepMatch, trimmedLine);
+            if (selector) step.selector = expandValue(selector);
+          }
+          if (pattern.getValue) step.value = expandValue(pattern.getValue(stepMatch));
+          steps.push(step);
+        }
       }
     }
 

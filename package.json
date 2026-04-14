@@ -1,7 +1,7 @@
 {
   "name": "apitester",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "client:dev": "vite",
@@ -47,6 +47,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
     "nodemon": "^3.1.10",
+    "playwright": "^1.59.1",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.20.3",

@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Save } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { usePlaywrightStore } from '@/hooks/usePlaywrightStore';
 
 export default function PlaywrightSettings() {
-  const { settings, setSettings, saveSettings } = usePlaywrightStore();
+  const { settings, setSettings, saveSettings, loadSettings } = usePlaywrightStore();
   const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    void loadSettings();
+  }, [loadSettings]);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -107,6 +111,15 @@ export default function PlaywrightSettings() {
                 </label>
               ))}
             </div>
+          </div>
+
+          <div className="md:col-span-2">
+            <Toggle
+              label="无头模式 (headless)"
+              checked={settings.headless}
+              onChange={(v) => setSettings({ headless: v })}
+            />
+            <div className="mt-1 text-xs text-zinc-500">关闭后可在窗口中看到浏览器执行过程</div>
           </div>
 
           <div>

@@ -8,7 +8,8 @@
   "timeout": 30000,
   "screenshotOnFailure": true,
   "recordVideo": false,
-  "baseURL": "http://192.168.1.73:3303",
+  "headless": false,
+  "baseURL": "http://192.168.1.73:3303/login",
   "baseURLEnabled": true,
   "useCaseUrl": false
 }

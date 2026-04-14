@@ -34,6 +34,7 @@ type SettingsState = {
   timeout: number;
   screenshotOnFailure: boolean;
   recordVideo: boolean;
+  headless: boolean;
   baseURL: string;
   baseURLEnabled: boolean;
   useCaseUrl: boolean;
@@ -99,6 +100,7 @@ const defaultSettings: SettingsState = {
   timeout: 30000,
   screenshotOnFailure: true,
   recordVideo: false,
+  headless: true,
   baseURL: 'http://localhost:3000',
   baseURLEnabled: false,
   useCaseUrl: false,
@@ -502,6 +504,7 @@ export const usePlaywrightStore = create<PlaywrightState>((set, get) => ({
               isExecuting: false,
               executingCaseId: null,
             });
+            void loadExecutionLogs();
             break;
         }
       } catch {

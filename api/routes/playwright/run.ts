@@ -106,21 +106,35 @@ async function executeStep(
       case 'navigate': {
         const path = step.value || '/';
         const url = path.startsWith('http') ? path : `${baseURL}${path}`;
+        console.log(`[RUN] Navigating to: ${url}`);
         await page.goto(url, { waitUntil: 'networkidle' });
+        console.log(`[RUN] Navigation complete`);
         break;
       }
 
       case 'click':
         if (step.selector) {
+          console.log(`[RUN] Clicking: ${step.selector}`);
           await page.click(step.selector);
+          await page.waitForTimeout(500);
+          console.log(`[RUN] Click completed, waiting 500ms for visual feedback`);
         }
         break;
 
       case 'fill':
       case 'type':
-        if (step.selector && step.value) {
-          await page.fill(step.selector, step.value);
+        if (!step.selector) {
+          console.log(`[RUN] Skipping fill step - no selector`);
+          break;
         }
+        if (!step.value) {
+          console.log(`[RUN] Skipping fill step - no value`);
+          break;
+        }
+        console.log(`[RUN] Filling: ${step.selector} with "${step.value}"`);
+        await page.fill(step.selector, step.value);
+        await page.waitForTimeout(200);
+        console.log(`[RUN] Fill completed`);
         break;
 
       case 'select':
@@ -158,8 +172,28 @@ async function executeStep(
         }
         break;
 
+      case 'waitForURL':
+        if (step.value) {
+          console.log(`[RUN] Waiting for URL: ${step.value}`);
+          await page.waitForURL(step.value, { timeout: step.options?.timeout || 30000 });
+          console.log(`[RUN] URL matched: ${step.value}`);
+        }
+        break;
+
       case 'wait':
-        await page.waitForTimeout(parseInt(step.value || '1000', 10));
+        console.log(`[RUN] Wait step: value=${step.value}`);
+        if (step.value && !isNaN(parseInt(step.value, 10))) {
+          const waitMs = parseInt(step.value, 10);
+          console.log(`[RUN] Waiting for ${waitMs}ms`);
+          await page.waitForTimeout(waitMs);
+          console.log(`[RUN] Wait completed`);
+        } else if (step.value === 'networkidle' || step.value === 'domcontentloaded' || step.value === 'load') {
+          console.log(`[RUN] Waiting for load state: ${step.value}`);
+          await page.waitForLoadState(step.value as 'networkidle' | 'domcontentloaded' | 'load');
+          console.log(`[RUN] Load state wait completed`);
+        } else {
+          console.log(`[RUN] Skipping wait - unrecognized value: ${step.value}`);
+        }
         break;
 
       case 'assert':
@@ -245,6 +279,7 @@ router.post('/', async (req: Request, res: Response) => {
       timeout: 30000,
       screenshotOnFailure: true,
       recordVideo: false,
+      headless: true,
       baseURL: 'http://localhost:3000',
     };
 
@@ -267,16 +302,29 @@ router.post('/', async (req: Request, res: Response) => {
       baseURL,
     };
 
-    currentBrowser = await chromium.launch({
-      headless: true,
+    console.log('[RUN] Launching browser with config:', JSON.stringify({
+      headless: config.headless ?? true,
       slowMo: config.slowMo || 0,
+      executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH || 'default',
+    }));
+
+    currentBrowser = await chromium.launch({
+      headless: config.headless ?? true,
+      slowMo: config.slowMo || 0,
+      executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH || undefined,
     });
+
+    console.log('[RUN] Browser launched successfully');
 
     const context = await currentBrowser.newContext({
       viewport: config.viewport || { width: 1920, height: 1080 },
     });
 
+    console.log('[RUN] Context created successfully');
+
     const page = await context.newPage();
+
+    console.log('[RUN] Page created successfully');
 
     sendSSEEvent({
       type: 'case_start',
@@ -380,9 +428,11 @@ router.post('/', async (req: Request, res: Response) => {
         }
       }
 
+      console.log(`[RUN] Checking case status: failedSteps=${caseLog.failedSteps}, totalSteps=${caseLog.totalSteps}, isCancelled=${isCancelled}`);
       if (isCancelled) {
         caseLog.status = 'canceled';
         executionLog.canceledCases++;
+        console.log(`[RUN] Sending case_end: canceled`);
         sendSSEEvent({
           type: 'case_end',
           runId,
@@ -392,6 +442,7 @@ router.post('/', async (req: Request, res: Response) => {
       } else if (caseLog.failedSteps === 0 && caseLog.totalSteps > 0) {
         caseLog.status = 'passed';
         executionLog.passedCases++;
+        console.log(`[RUN] Sending case_end: passed`);
         sendSSEEvent({
           type: 'case_end',
           runId,
@@ -424,20 +475,25 @@ router.post('/', async (req: Request, res: Response) => {
       caseLog.durationMs = new Date(caseLog.finishedAt).getTime() - new Date(caseStartedAt).getTime();
     }
 
+    console.log('[RUN] All cases completed, closing browser...');
     await currentBrowser.close();
     currentBrowser = null;
     currentRunId = null;
+    console.log('[RUN] Browser closed');
 
     executionLog.finishedAt = new Date().toISOString();
-    executionLog.durationMs = new Date(executionLog.finishedAt).getTime() - new Date(startedAt).getTime();
+    executionLog.durationMs = executionLog.finishedAt ? new Date(executionLog.finishedAt).getTime() - new Date(startedAt).getTime() : 0;
 
+    console.log('[RUN] Saving logs...');
     const logs = getLogsStorage();
     logs.unshift(executionLog);
     if (logs.length > 100) {
       logs.pop();
     }
     saveLogsStorage(logs);
+    console.log('[RUN] Logs saved');
 
+    console.log('[RUN] Sending complete event...');
     sendSSEEvent({
       type: 'complete',
       runId,
@@ -449,12 +505,14 @@ router.post('/', async (req: Request, res: Response) => {
         durationMs: executionLog.durationMs,
       },
     });
+    console.log('[RUN] Complete event sent');
 
     res.json({
       success: true,
       data: executionLog,
     });
   } catch (error) {
+    console.error('[RUN] Error during execution:', error);
     if (currentBrowser) {
       await currentBrowser.close();
       currentBrowser = null;
@@ -467,6 +525,7 @@ router.post('/', async (req: Request, res: Response) => {
       });
     }
     currentRunId = null;
+    console.error('[RUN] Error stack:', error instanceof Error ? error.stack : 'no stack');
     res.status(500).json({
       success: false,
       error: error instanceof Error ? error.message : '执行失败',

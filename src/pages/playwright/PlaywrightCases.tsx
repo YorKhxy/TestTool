@@ -28,6 +28,8 @@ export default function PlaywrightCases() {
     moveCaseDown,
     reorderCases,
     deleteCase,
+    getSelectedCases,
+    runCases,
     clearCases,
   } = usePlaywrightStore();
 
@@ -75,6 +77,17 @@ export default function PlaywrightCases() {
             </div>
           </div>
 
+          <div className="mt-4 flex items-center justify-between">
+          <div className="flex items-center gap-4 text-sm text-zinc-400">
+            {loadedCases.length > 0 && (
+              <>
+                <span>{loadedCases.length} 个用例</span>
+                {selectedCount > 0 && (
+                  <span className="text-green-400">已选择 {selectedCount} 项</span>
+                )}
+              </>
+            )}
+          </div>
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setIsImportModalOpen(true)}
@@ -97,6 +110,22 @@ export default function PlaywrightCases() {
                 )}
               >
                 清空
+              </button>
+            )}
+            {selectedCount > 0 && (
+              <button
+                onClick={() => {
+                  const cases = getSelectedCases();
+                  void runCases(cases.map((c) => c.id));
+                }}
+                disabled={isExecuting || selectedCount === 0}
+                className={cn(
+                  'inline-flex items-center gap-2 rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition',
+                  !isExecuting && selectedCount > 0 ? 'hover:bg-green-500' : 'opacity-50 cursor-not-allowed',
+                )}
+              >
+                <Play className="h-4 w-4" />
+                执行已选中 ({selectedCount})
               </button>
             )}
           </div>

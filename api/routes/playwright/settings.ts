@@ -12,6 +12,7 @@ const defaultSettings: PlaywrightConfig = {
   timeout: 30000,
   screenshotOnFailure: true,
   recordVideo: false,
+  headless: true,
   baseURL: 'http://localhost:3000',
 };
 
