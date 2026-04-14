@@ -1,0 +1,1022 @@
+[
+  {
+    "id": "run_1776137270750",
+    "runId": "run_1776137270750",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T03:27:50.750Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-14T03:27:50.902Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:27:50.902Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[placeholder*=\"手机\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:28:20.903Z",
+            "durationMs": 30001
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:28:20.903Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[placeholder*=\"验证码\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:28:50.902Z",
+            "durationMs": 29999
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:28:50.902Z",
+            "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button[type=\"submit\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:29:20.904Z",
+            "durationMs": 30002
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T03:29:20.904Z",
+            "finishedAt": "2026-04-14T03:29:23.905Z",
+            "durationMs": 3001
+          }
+        ],
+        "totalSteps": 4,
+        "passedSteps": 1,
+        "failedSteps": 3,
+        "finishedAt": "2026-04-14T03:29:23.905Z",
+        "durationMs": 93003
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "baseURL": "http://192.168.1.73:3303/",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/",
+    "finishedAt": "2026-04-14T03:29:23.956Z",
+    "durationMs": 93206
+  },
+  {
+    "id": "run_1776136996174",
+    "runId": "run_1776136996174",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T03:23:16.174Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-14T03:23:16.335Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "fill",
+            "description": "填写 input[type=\"text\"]: 13800000000",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:23:16.335Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"text\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:23:46.335Z",
+            "durationMs": 30000
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "fill",
+            "description": "填写 input[type=\"password\"]: 123456",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:23:46.335Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"password\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:24:16.335Z",
+            "durationMs": 30000
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:24:16.335Z",
+            "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button[type=\"submit\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:24:46.337Z",
+            "durationMs": 30002
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "wait",
+            "description": "等待 URL: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T03:24:46.337Z",
+            "finishedAt": "2026-04-14T03:24:46.338Z",
+            "durationMs": 1
+          }
+        ],
+        "totalSteps": 4,
+        "passedSteps": 1,
+        "failedSteps": 3,
+        "finishedAt": "2026-04-14T03:24:46.338Z",
+        "durationMs": 90003
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "baseURL": "http://192.168.1.73:3303/",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/",
+    "finishedAt": "2026-04-14T03:24:46.387Z",
+    "durationMs": 90213
+  },
+  {
+    "id": "run_1776136790978",
+    "runId": "run_1776136790978",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T03:19:50.978Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-14T03:19:51.137Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "fill",
+            "description": "填写 input[type=\"text\"]: 13800000000",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:19:51.137Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"text\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:20:21.137Z",
+            "durationMs": 30000
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "fill",
+            "description": "填写 input[type=\"password\"]: 123456",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:20:21.137Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"password\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:20:51.137Z",
+            "durationMs": 30000
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:20:51.137Z",
+            "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button[type=\"submit\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:21:21.137Z",
+            "durationMs": 30000
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "wait",
+            "description": "等待 URL: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T03:21:21.137Z",
+            "finishedAt": "2026-04-14T03:21:21.140Z",
+            "durationMs": 3
+          }
+        ],
+        "totalSteps": 4,
+        "passedSteps": 1,
+        "failedSteps": 3,
+        "finishedAt": "2026-04-14T03:21:21.140Z",
+        "durationMs": 90003
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "baseURL": "http://192.168.1.73:3303/",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/",
+    "finishedAt": "2026-04-14T03:21:21.194Z",
+    "durationMs": 90216
+  },
+  {
+    "id": "run_1776136405995",
+    "runId": "run_1776136405995",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T03:13:25.995Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-14T03:13:26.134Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "fill",
+            "description": "填写 input[type=\"text\"]: 13800000000",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:13:26.134Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"text\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:13:56.136Z",
+            "durationMs": 30002
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "fill",
+            "description": "填写 input[type=\"password\"]: 123456",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:13:56.136Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"password\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:14:26.136Z",
+            "durationMs": 30000
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:14:26.137Z",
+            "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button[type=\"submit\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:14:56.138Z",
+            "durationMs": 30001
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "wait",
+            "description": "等待 URL: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T03:14:56.138Z",
+            "finishedAt": "2026-04-14T03:14:56.140Z",
+            "durationMs": 2
+          }
+        ],
+        "totalSteps": 4,
+        "passedSteps": 1,
+        "failedSteps": 3,
+        "finishedAt": "2026-04-14T03:14:56.140Z",
+        "durationMs": 90006
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "baseURL": "http://192.168.1.73:3303/",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/",
+    "finishedAt": "2026-04-14T03:14:56.201Z",
+    "durationMs": 90206
+  },
+  {
+    "id": "run_1776136494659",
+    "runId": "run_1776136494659",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T03:14:54.659Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-14T03:14:54.813Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "fill",
+            "description": "填写 input[type=\"text\"]: 13800000000",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:14:54.813Z",
+            "error": "page.fill: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"text\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:14:56.143Z",
+            "durationMs": 1330
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "fill",
+            "description": "填写 input[type=\"password\"]: 123456",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:14:56.143Z",
+            "error": "page.fill: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-14T03:14:56.144Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:14:56.144Z",
+            "error": "page.click: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-14T03:14:56.145Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "wait",
+            "description": "等待 URL: undefined",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:14:56.145Z",
+            "error": "page.waitForTimeout: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-14T03:14:56.146Z",
+            "durationMs": 1
+          }
+        ],
+        "totalSteps": 4,
+        "passedSteps": 0,
+        "failedSteps": 4,
+        "finishedAt": "2026-04-14T03:14:56.146Z",
+        "durationMs": 1333
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "baseURL": "http://192.168.1.73:3303/",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/",
+    "finishedAt": "2026-04-14T03:14:56.155Z",
+    "durationMs": 1496
+  },
+  {
+    "id": "run_1776136404484",
+    "runId": "run_1776136404484",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T03:13:24.484Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-14T03:13:24.620Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "fill",
+            "description": "填写 input[type=\"text\"]: 13800000000",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:13:24.620Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"text\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:13:54.622Z",
+            "durationMs": 30002
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "fill",
+            "description": "填写 input[type=\"password\"]: 123456",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:13:54.622Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"password\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:14:24.625Z",
+            "durationMs": 30003
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:14:24.625Z",
+            "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button[type=\"submit\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:14:54.626Z",
+            "durationMs": 30001
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "wait",
+            "description": "等待 URL: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T03:14:54.627Z",
+            "finishedAt": "2026-04-14T03:14:54.630Z",
+            "durationMs": 3
+          }
+        ],
+        "totalSteps": 4,
+        "passedSteps": 1,
+        "failedSteps": 3,
+        "finishedAt": "2026-04-14T03:14:54.630Z",
+        "durationMs": 90010
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "baseURL": "http://192.168.1.73:3303/",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/",
+    "finishedAt": "2026-04-14T03:14:54.698Z",
+    "durationMs": 90214
+  },
+  {
+    "id": "run_1776136407499",
+    "runId": "run_1776136407499",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T03:13:27.499Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-14T03:13:27.640Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "fill",
+            "description": "填写 input[type=\"text\"]: 13800000000",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:13:27.640Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"text\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:13:57.641Z",
+            "durationMs": 30001
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "fill",
+            "description": "填写 input[type=\"password\"]: 123456",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:13:57.641Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"password\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:14:27.641Z",
+            "durationMs": 30000
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:14:27.642Z",
+            "error": "page.click: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('button[type=\"submit\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:14:54.635Z",
+            "durationMs": 26993
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "wait",
+            "description": "等待 URL: undefined",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:14:54.636Z",
+            "error": "page.waitForTimeout: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-14T03:14:54.638Z",
+            "durationMs": 2
+          }
+        ],
+        "totalSteps": 4,
+        "passedSteps": 0,
+        "failedSteps": 4,
+        "finishedAt": "2026-04-14T03:14:54.638Z",
+        "durationMs": 86998
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "baseURL": "http://192.168.1.73:3303/",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/",
+    "finishedAt": "2026-04-14T03:14:54.652Z",
+    "durationMs": 87153
+  },
+  {
+    "id": "run_1776135713582",
+    "runId": "run_1776135713582",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T03:01:53.582Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-14T03:01:53.732Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "fill",
+            "description": "填写 input[type=\"text\"]: 13800000000",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:01:53.732Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"text\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:02:23.732Z",
+            "durationMs": 30000
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "fill",
+            "description": "填写 input[type=\"password\"]: 123456",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:02:23.732Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"password\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:02:53.733Z",
+            "durationMs": 30001
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "failed",
+            "startedAt": "2026-04-14T03:02:53.733Z",
+            "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button[type=\"submit\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T03:03:23.736Z",
+            "durationMs": 30003
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "wait",
+            "description": "等待 URL: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T03:03:23.736Z",
+            "finishedAt": "2026-04-14T03:03:23.740Z",
+            "durationMs": 4
+          }
+        ],
+        "totalSteps": 4,
+        "passedSteps": 1,
+        "failedSteps": 3,
+        "finishedAt": "2026-04-14T03:03:23.740Z",
+        "durationMs": 90008
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "baseURL": "http://192.168.1.73:3303/",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/",
+    "finishedAt": "2026-04-14T03:03:23.795Z",
+    "durationMs": 90213
+  },
+  {
+    "id": "run_1776135084404",
+    "runId": "run_1776135084404",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T02:51:24.404Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-14T02:51:24.558Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "fill",
+            "description": "填写 input[type=\"text\"]: 13800000000",
+            "status": "failed",
+            "startedAt": "2026-04-14T02:51:24.558Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"text\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T02:51:54.563Z",
+            "durationMs": 30005
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "fill",
+            "description": "填写 input[type=\"password\"]: 123456",
+            "status": "failed",
+            "startedAt": "2026-04-14T02:51:54.563Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"password\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T02:52:24.563Z",
+            "durationMs": 30000
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T02:52:24.563Z",
+            "finishedAt": "2026-04-14T02:52:24.563Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T02:52:24.563Z",
+            "finishedAt": "2026-04-14T02:52:24.563Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "failed",
+            "startedAt": "2026-04-14T02:52:24.563Z",
+            "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button[type=\"submit\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T02:52:54.564Z",
+            "durationMs": 30001
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 URL: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T02:52:54.564Z",
+            "finishedAt": "2026-04-14T02:52:54.566Z",
+            "durationMs": 2
+          }
+        ],
+        "totalSteps": 6,
+        "passedSteps": 3,
+        "failedSteps": 3,
+        "finishedAt": "2026-04-14T02:52:54.566Z",
+        "durationMs": 90008
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "baseURL": "http://192.168.1.73:3303/",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/",
+    "finishedAt": "2026-04-14T02:52:54.618Z",
+    "durationMs": 90214
+  },
+  {
+    "id": "run_1776135124573",
+    "runId": "run_1776135124573",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T02:52:04.573Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-14T02:52:04.711Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "fill",
+            "description": "填写 input[type=\"text\"]: 13800000000",
+            "status": "failed",
+            "startedAt": "2026-04-14T02:52:04.711Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"text\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T02:52:34.712Z",
+            "durationMs": 30001
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "fill",
+            "description": "填写 input[type=\"password\"]: 123456",
+            "status": "failed",
+            "startedAt": "2026-04-14T02:52:34.712Z",
+            "error": "page.fill: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"password\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T02:52:54.571Z",
+            "durationMs": 19859
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T02:52:54.571Z",
+            "finishedAt": "2026-04-14T02:52:54.571Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T02:52:54.571Z",
+            "finishedAt": "2026-04-14T02:52:54.571Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "failed",
+            "startedAt": "2026-04-14T02:52:54.571Z",
+            "error": "page.click: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-14T02:52:54.571Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 URL: undefined",
+            "status": "failed",
+            "startedAt": "2026-04-14T02:52:54.571Z",
+            "error": "page.waitForTimeout: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-14T02:52:54.572Z",
+            "durationMs": 1
+          }
+        ],
+        "totalSteps": 6,
+        "passedSteps": 2,
+        "failedSteps": 4,
+        "finishedAt": "2026-04-14T02:52:54.572Z",
+        "durationMs": 49861
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "baseURL": "http://192.168.1.73:3303/",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/",
+    "finishedAt": "2026-04-14T02:52:54.582Z",
+    "durationMs": 50009
+  },
+  {
+    "id": "run_1776134793090",
+    "runId": "run_1776134793090",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T02:46:33.090Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-14T02:46:33.850Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "fill",
+            "description": "填写 input[type=\"text\"]: 13800000000",
+            "status": "failed",
+            "startedAt": "2026-04-14T02:46:33.850Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"text\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T02:47:03.851Z",
+            "durationMs": 30001
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "fill",
+            "description": "填写 input[type=\"password\"]: 123456",
+            "status": "failed",
+            "startedAt": "2026-04-14T02:47:03.851Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"password\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T02:47:33.852Z",
+            "durationMs": 30001
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T02:47:33.852Z",
+            "finishedAt": "2026-04-14T02:47:33.852Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T02:47:33.852Z",
+            "finishedAt": "2026-04-14T02:47:33.852Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "failed",
+            "startedAt": "2026-04-14T02:47:33.853Z",
+            "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button[type=\"submit\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-14T02:48:03.854Z",
+            "durationMs": 30001
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 URL: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T02:48:03.854Z",
+            "finishedAt": "2026-04-14T02:48:03.858Z",
+            "durationMs": 4
+          }
+        ],
+        "totalSteps": 6,
+        "passedSteps": 3,
+        "failedSteps": 3,
+        "finishedAt": "2026-04-14T02:48:03.858Z",
+        "durationMs": 90008
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "baseURL": "http://localhost:3000",
+      "baseURLEnabled": false,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://localhost:3000",
+    "finishedAt": "2026-04-14T02:48:03.913Z",
+    "durationMs": 90823
+  }
+]

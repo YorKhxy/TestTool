@@ -10,6 +10,23 @@ import { apiJson, safeParseJsonAny } from '@/utils/http';
 
 type ImportFormat = 'spec' | 'markdown' | 'auto';
 
+type ProgressEvent = {
+  type: 'case_start' | 'case_end' | 'step_start' | 'step_end' | 'complete' | 'error';
+  runId: string;
+  caseId?: string;
+  caseTitle?: string;
+  stepId?: string;
+  stepIndex?: number;
+  stepType?: string;
+  stepDescription?: string;
+  status?: 'passed' | 'failed' | 'running' | 'pending';
+  error?: string;
+  caseStatus?: 'passed' | 'failed' | 'running' | 'canceled' | 'skipped';
+  data?: Record<string, unknown>;
+};
+
+let eventSource: EventSource | null = null;
+
 type SettingsState = {
   browser: 'chromium' | 'firefox' | 'webkit';
   viewport: { width: number; height: number };
@@ -20,6 +37,17 @@ type SettingsState = {
   baseURL: string;
   baseURLEnabled: boolean;
   useCaseUrl: boolean;
+};
+
+type ProgressState = {
+  runId: string | null;
+  currentCaseId: string | null;
+  currentCaseTitle: string | null;
+  currentStepIndex: number | null;
+  currentStepType: string | null;
+  currentStepDescription: string | null;
+  caseStatuses: Record<string, 'pending' | 'running' | 'passed' | 'failed' | 'skipped' | 'canceled'>;
+  stepStatuses: Record<string, Record<number, 'pending' | 'running' | 'passed' | 'failed'>>;
 };
 
 type PlaywrightState = {
@@ -36,6 +64,7 @@ type PlaywrightState = {
   fileName: string | null;
   suiteName: string | null;
   error: string | null;
+  progressState: ProgressState;
 
   importCases: (file: File, format?: ImportFormat) => Promise<void>;
   importCasesFromContent: (content: string, fileName: string) => Promise<void>;
@@ -58,6 +87,9 @@ type PlaywrightState = {
   loadExecutionLogs: () => Promise<void>;
   getSelectedCases: () => PlaywrightCase[];
   getQueuedCases: () => PlaywrightCase[];
+  runCases: (caseIds: string[]) => Promise<void>;
+  connectSSE: () => void;
+  disconnectSSE: () => void;
 };
 
 const defaultSettings: SettingsState = {
@@ -86,10 +118,30 @@ export const usePlaywrightStore = create<PlaywrightState>((set, get) => ({
   fileName: null,
   suiteName: null,
   error: null,
+  progressState: {
+    runId: null,
+    currentCaseId: null,
+    currentCaseTitle: null,
+    currentStepIndex: null,
+    currentStepType: null,
+    currentStepDescription: null,
+    caseStatuses: {},
+    stepStatuses: {},
+  },
 
-  importCases: async (file: File, format: ImportFormat = 'auto') => {
+  importCases: async (file: File, _format?: ImportFormat) => {
+    set({
+      isLoading: true,
+      error: null,
+      loadedCases: [],
+      executionQueue: [],
+      selectedIds: {},
+      activeCaseId: null,
+      fileName: null,
+      suiteName: null,
+    });
+
     try {
-      set({ isLoading: true, error: null });
       const content = await file.text();
       const fileName = file.name;
       await get().importCasesFromContent(content, fileName);
@@ -294,5 +346,189 @@ export const usePlaywrightStore = create<PlaywrightState>((set, get) => ({
     return executionQueue
       .map((id) => loadedCases.find((c) => c.id === id))
       .filter((c): c is PlaywrightCase => c !== undefined);
+  },
+
+  runCases: async (caseIds: string[]) => {
+    const { loadedCases, settings, connectSSE } = get();
+    const casesToRun = loadedCases.filter((c) => caseIds.includes(c.id));
+
+    if (casesToRun.length === 0) {
+      set({ error: '没有可执行的用例' });
+      return;
+    }
+
+    const runId = `run_${Date.now()}`;
+    const initialStatuses: Record<string, 'pending' | 'running' | 'passed' | 'failed' | 'skipped' | 'canceled'> = {};
+    const initialStepStatuses: Record<string, Record<number, 'pending' | 'running' | 'passed' | 'failed'>> = {};
+
+    casesToRun.forEach((c) => {
+      initialStatuses[c.id] = 'pending';
+      initialStepStatuses[c.id] = {};
+      c.steps?.forEach((_, idx) => {
+        initialStepStatuses[c.id][idx] = 'pending';
+      });
+    });
+
+    set({
+      isExecuting: true,
+      error: null,
+      executingCaseId: caseIds[0] || null,
+      progressState: {
+        runId,
+        currentCaseId: casesToRun[0]?.id || null,
+        currentCaseTitle: casesToRun[0]?.title || null,
+        currentStepIndex: null,
+        currentStepType: null,
+        currentStepDescription: null,
+        caseStatuses: initialStatuses,
+        stepStatuses: initialStepStatuses,
+      },
+    });
+
+    connectSSE();
+
+    try {
+      const cases = casesToRun.map((c) => {
+        let url: string | undefined;
+        if (settings.useCaseUrl && c.url) {
+          url = c.url;
+        } else if (settings.baseURLEnabled) {
+          url = settings.baseURL;
+        }
+        return { ...c, url };
+      });
+
+      const r = await apiJson<{
+        success: boolean;
+        data?: PlaywrightExecutionLog;
+        error?: string;
+      }>('/api/playwright/run', {
+        method: 'POST',
+        body: JSON.stringify({ cases, settings }),
+      });
+
+      if (r.success && r.data) {
+        set({ currentExecutionLog: r.data });
+      } else {
+        set({ error: r.error || '执行失败' });
+      }
+    } catch (e) {
+      set({ error: e instanceof Error ? e.message : '执行失败' });
+    } finally {
+      set({ isExecuting: false, executingCaseId: null });
+    }
+  },
+
+  connectSSE: () => {
+    if (eventSource) {
+      eventSource.close();
+    }
+
+    const baseURL = typeof window !== 'undefined' ? window.location.origin : '';
+    eventSource = new EventSource(`${baseURL}/api/playwright/run/events`);
+
+    eventSource.addEventListener('progress', (e: MessageEvent) => {
+      try {
+        const event: ProgressEvent = JSON.parse(e.data);
+
+        switch (event.type) {
+          case 'case_start':
+            set((state) => ({
+              progressState: {
+                ...state.progressState,
+                currentCaseId: event.caseId || null,
+                currentCaseTitle: event.caseTitle || null,
+                caseStatuses: {
+                  ...state.progressState.caseStatuses,
+                  [event.caseId || '']: 'running',
+                },
+              },
+            }));
+            break;
+
+          case 'step_start':
+            set((state) => ({
+              progressState: {
+                ...state.progressState,
+                currentStepIndex: event.stepIndex ?? null,
+                currentStepType: event.stepType || null,
+                currentStepDescription: event.stepDescription || null,
+                stepStatuses: {
+                  ...state.progressState.stepStatuses,
+                  [event.caseId || '']: {
+                    ...state.progressState.stepStatuses[event.caseId || ''],
+                    [event.stepIndex ?? 0]: 'running',
+                  },
+                },
+              },
+            }));
+            break;
+
+          case 'step_end':
+            if (event.caseId && event.stepIndex !== undefined) {
+              set((state) => ({
+                progressState: {
+                  ...state.progressState,
+                  currentStepIndex: null,
+                  stepStatuses: {
+                    ...state.progressState.stepStatuses,
+                    [event.caseId]: {
+                      ...state.progressState.stepStatuses[event.caseId],
+                      [event.stepIndex]: event.status as 'passed' | 'failed',
+                    },
+                  },
+                },
+              }));
+            }
+            break;
+
+          case 'case_end':
+            if (event.caseId) {
+              set((state) => ({
+                progressState: {
+                  ...state.progressState,
+                  caseStatuses: {
+                    ...state.progressState.caseStatuses,
+                    [event.caseId]: event.caseStatus as 'passed' | 'failed' | 'skipped' | 'canceled',
+                  },
+                },
+              }));
+            }
+            break;
+
+          case 'complete':
+          case 'error':
+            set({
+              isExecuting: false,
+              executingCaseId: null,
+            });
+            break;
+        }
+      } catch {
+      }
+    });
+
+    eventSource.addEventListener('error', () => {
+      eventSource?.close();
+      eventSource = null;
+    });
+  },
+
+  disconnectSSE: () => {
+    if (eventSource) {
+      eventSource.close();
+      eventSource = null;
+    }
+  },
+
+  cancelRun: async () => {
+    try {
+      await apiJson('/api/playwright/run/cancel', {
+        method: 'POST',
+      });
+      set({ isExecuting: false, executingCaseId: null, error: '已取消执行' });
+    } catch {
+      set({ isExecuting: false, executingCaseId: null });
+    }
   },
 }));

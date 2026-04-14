@@ -29,6 +29,9 @@ export default function PlaywrightWorkbench() {
     reorderCases,
     deleteCase,
     clearCases,
+    runCases,
+    cancelRun,
+    progressState,
   } = usePlaywrightStore();
 
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
@@ -40,8 +43,7 @@ export default function PlaywrightWorkbench() {
   const selectedCount = Object.values(selectedIds).filter(Boolean).length;
 
   const handleRunSingle = (id: string) => {
-    setCaseStatuses((prev) => ({ ...prev, [id]: 'running' }));
-    console.log('Running single case:', id);
+    runCases([id]);
   };
 
   const handleDelete = (id: string) => {
@@ -182,6 +184,8 @@ export default function PlaywrightWorkbench() {
         isRunning={isExecuting}
         isOpen={isTerminalOpen}
         onToggle={() => setIsTerminalOpen(!isTerminalOpen)}
+        onCancel={cancelRun}
+        progressState={progressState}
       />
     </div>
   );

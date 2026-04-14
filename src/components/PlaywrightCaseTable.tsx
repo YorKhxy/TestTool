@@ -313,10 +313,10 @@ export default function PlaywrightCaseTable({
                         isCurrentlyRunning
                           ? 'border-emerald-500/50 bg-emerald-500/20 text-emerald-300'
                           : 'border-zinc-700 bg-zinc-800 text-zinc-200 hover:bg-zinc-700',
-                        isExecuting && !isCurrentlyRunning && 'pointer-events-none opacity-50',
+                        isExecuting && 'pointer-events-none opacity-50',
                       )}
                       onClick={() => onRunSingle(c.id)}
-                      disabled={isExecuting && !isCurrentlyRunning}
+                      disabled={isExecuting}
                     >
                       {isCurrentlyRunning ? (
                         <>

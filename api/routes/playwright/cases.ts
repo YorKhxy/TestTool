@@ -160,135 +160,91 @@ function parseSpecToCases(content: string, fileName: string): ImportResult {
   const warnings: string[] = [];
   const cases: PlaywrightCase[] = [];
 
-  const testCaseRegex = /test\s*\(\s*`\[(\w+)\]\s*(\w+)\s*-\s*(.+?)`,\s*(?:async\s*)?\(\s*(?:\{\s*page\s*\})?\s*=>\s*\{/g;
+  const testRegex = /test\s*\(\s*'([^']+)'\s*,/g;
   let match;
 
-  while ((match = testCaseRegex.exec(content)) !== null) {
-    const priority = match[1];
-    const id = match[2];
-    const title = match[3];
+  while ((match = testRegex.exec(content)) !== null) {
+    const title = match[1].trim();
 
-    const caseContent = content.slice(match.index, content.indexOf('});', match.index));
+    const caseStartIndex = match.index;
+    const nextTestMatch = content.indexOf("\n  test('", caseStartIndex + 5);
+    const nextTestDescribeMatch = content.indexOf("\ntest.describe('", caseStartIndex + 5);
+    const nextTestBeforeEachMatch = content.indexOf("\n  test.beforeEach(", caseStartIndex + 5);
+    const nextTestAfterEachMatch = content.indexOf("\n  test.afterEach(", caseStartIndex + 5);
+    let nextMatch = nextTestMatch;
+    if (nextTestDescribeMatch !== -1 && (nextMatch === -1 || nextTestDescribeMatch < nextMatch)) {
+      nextMatch = nextTestDescribeMatch;
+    }
+    if (nextTestBeforeEachMatch !== -1 && (nextMatch === -1 || nextTestBeforeEachMatch < nextMatch)) {
+      nextMatch = nextTestBeforeEachMatch;
+    }
+    if (nextTestAfterEachMatch !== -1 && (nextMatch === -1 || nextTestAfterEachMatch < nextMatch)) {
+      nextMatch = nextTestAfterEachMatch;
+    }
+    const caseEndIndex = nextMatch === -1 ? content.length : nextMatch;
+    let caseContent = content.slice(caseStartIndex, caseEndIndex);
+
+    // Remove beforeEach/afterEach blocks from case content to avoid parsing their steps
+    caseContent = caseContent.replace(/\n\s*test\.beforeEach\s*\([^)]*\)\s*\{[^}]*\}/g, '');
+    caseContent = caseContent.replace(/\n\s*test\.afterEach\s*\([^)]*\)\s*\{[^}]*\}/g, '');
+
     const steps: PlaywrightStep[] = [];
 
-    const stepRegex = /(?:await\s+)?(page\.(?:click|fill|selectOption|waitForSelector|wait|goto|evaluate|navigate|press|hover|type|check|uncheck)|expect\(|console\.log)/g;
-    let stepMatch;
+    const stepPatterns: Array<{
+      regex: RegExp;
+      type: PlaywrightStepType;
+      getSelector?: (m: RegExpMatchArray) => string;
+      getValue?: (m: RegExpMatchArray) => string;
+      getDesc?: (s?: string, v?: string) => string;
+    }> = [
+      { regex: /page\.goto\s*\(\s*`([^`]+)`/, type: 'navigate', getValue: (m) => m[1], getDesc: (v) => `导航到 ${v}` },
+      { regex: /page\.goto\s*\(\s*'([^']+)'/, type: 'navigate', getValue: (m) => m[1], getDesc: (v) => `导航到 ${v}` },
+      { regex: /page\.fill\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
+      { regex: /\.locator\s*\(\s*'([^']+)'\)\.first\(\)\.fill\s*\(\s*'([^']+)'/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
+      { regex: /\.locator\s*\(\s*'([^']+)'\)\.fill\s*\(\s*'([^']+)'/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
+      { regex: /page\.click\s*\(\s*'([^']+)'/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
+      { regex: /\.locator\s*\(\s*'([^']+)'\)\.first\(\)\.click\s*\(\)/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
+      { regex: /\.locator\s*\(\s*'([^']+)'\)\.click\s*\(\)/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
+      { regex: /\.first\(\)\.click\s*\(\)/, type: 'click', getDesc: () => `点击元素` },
+      { regex: /page\.selectOption\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/, type: 'select', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `选择 ${s}: ${v}` },
+      { regex: /page\.waitForSelector\s*\(\s*'([^']+)'/, type: 'waitForSelector', getSelector: (m) => m[1], getDesc: (s) => `等待元素 ${s}` },
+      { regex: /page\.waitForTimeout\s*\(\s*(\d+)/, type: 'wait', getValue: (m) => m[1], getDesc: (v) => `等待 ${v}ms` },
+      { regex: /page\.press\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/, type: 'press', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `按键 ${s}: ${v}` },
+      { regex: /page\.waitForURL\s*\(\s*'([^']+)'/, type: 'wait', getValue: (m) => m[1], getDesc: (v) => `等待 URL: ${v}` },
+      { regex: /page\.waitForLoadState\s*\(\s*'([^']+)'/, type: 'wait', getValue: (m) => m[1], getDesc: (v) => `等待加载状态: ${v}` },
+    ];
+
     let stepIndex = 0;
-
-    while ((stepMatch = stepRegex.exec(caseContent)) !== null) {
-      stepIndex++;
-      const stepText = stepMatch[0];
-      let stepType: PlaywrightStepType = 'click';
-      let selector = '';
-      let value = '';
-      let description = '';
-      const options: Record<string, unknown> = {};
-
-      if (stepText.includes('page.goto') || stepText.includes('navigate')) {
-        stepType = 'navigate';
-        const urlMatch = stepText.match(/goto\s*\(\s*['"`]([^'"`]+)['"`]/);
-        if (urlMatch) {
-          value = urlMatch[1];
-        }
-        description = `导航到 ${value}`;
-      } else if (stepText.includes('page.click')) {
-        stepType = 'click';
-        const selMatch = stepText.match(/click\s*\(\s*['"`]([^'"`]+)['"`]/);
-        if (selMatch) {
-          selector = selMatch[1];
-        }
-        description = `点击元素: ${selector}`;
-      } else if (stepText.includes('page.fill')) {
-        stepType = 'fill';
-        const selMatch = stepText.match(/fill\s*\(\s*['"`]([^'"`]+)['"`]/);
-        const valMatch = stepText.match(/,\s*['"`]([^'"`]+)['"`]/);
-        if (selMatch) {
-          selector = selMatch[1];
-        }
-        if (valMatch) {
-          value = valMatch[1];
-        }
-        description = `填写 ${selector}: ${value}`;
-      } else if (stepText.includes('page.selectOption')) {
-        stepType = 'select';
-        const selMatch = stepText.match(/selectOption\s*\(\s*['"`]([^'"`]+)['"`]/);
-        const valMatch = stepText.match(/,\s*['"`]([^'"`]+)['"`]/);
-        if (selMatch) {
-          selector = selMatch[1];
-        }
-        if (valMatch) {
-          value = valMatch[1];
-        }
-        description = `选择 ${selector}: ${value}`;
-      } else if (stepText.includes('page.waitForSelector')) {
-        stepType = 'waitForSelector';
-        const selMatch = stepText.match(/waitForSelector\s*\(\s*['"`]([^'"`]+)['"`]/);
-        if (selMatch) {
-          selector = selMatch[1];
-        }
-        description = `等待元素: ${selector}`;
-      } else if (stepText.includes('page.wait')) {
-        stepType = 'wait';
-        const timeMatch = stepText.match(/wait\s*\(\s*(\d+)/);
-        if (timeMatch) {
-          value = timeMatch[1];
-        }
-        description = `等待 ${value}ms`;
-      } else if (stepText.includes('expect')) {
-        stepType = 'assert';
-        const selMatch = stepText.match(/\(selector\)\.to(Contain|HaveText|HaveValue|BeVisible)/);
-        if (selMatch) {
-          selector = 'element';
-          const operatorMap: Record<string, string> = {
-            Contain: 'contains',
-            HaveText: '==',
-            HaveValue: '==',
-            BeVisible: 'contains',
-          };
-          options.operator = operatorMap[selMatch[1]] || 'contains';
-          options.expected = 'expected';
-        }
-        description = '断言验证';
-      } else {
-        continue;
+    for (const pattern of stepPatterns) {
+      const regex = new RegExp(pattern.regex.source, 'g');
+      let stepMatch;
+      while ((stepMatch = regex.exec(caseContent)) !== null) {
+        stepIndex++;
+        const step: PlaywrightStep = {
+          id: `step_${stepIndex}`,
+          type: pattern.type,
+          description: pattern.getDesc ? pattern.getDesc(pattern.getSelector?.(stepMatch), pattern.getValue?.(stepMatch)) : `Step ${stepIndex}`,
+        };
+        if (pattern.getSelector) step.selector = pattern.getSelector(stepMatch);
+        if (pattern.getValue) step.value = pattern.getValue(stepMatch);
+        steps.push(step);
       }
-
-      steps.push({
-        id: `${id}_step_${stepIndex}`,
-        type: stepType,
-        selector: selector || undefined,
-        value: value || undefined,
-        options: Object.keys(options).length > 0 ? options : undefined,
-        description,
-      });
     }
 
     if (steps.length === 0) {
-      warnings.push(`用例 ${id} 未能解析出有效步骤`);
+      warnings.push(`用例 "${title}" 未能解析出有效步骤`);
     }
+
+    const safeTitle = title.replace(/[^\w\u4e00-\u9fff]/g, '_').substring(0, 30);
+    const id = `TC_${safeTitle}`;
 
     cases.push({
       id,
       title,
-      priority: priority as PlaywrightCase['priority'],
+      priority: 'P1',
       enabled: true,
       steps,
     });
-  }
-
-  if (cases.length === 0) {
-    const simpleCaseRegex = /test\s*\(\s*['"]([^'"]+)['"]/g;
-    while ((match = simpleCaseRegex.exec(content)) !== null) {
-      const title = match[1];
-      const id = title.replace(/\s+/g, '_').toUpperCase();
-      cases.push({
-        id,
-        title,
-        priority: 'P1',
-        enabled: true,
-        steps: [],
-      });
-    }
   }
 
   if (cases.length === 0) {
@@ -297,7 +253,7 @@ function parseSpecToCases(content: string, fileName: string): ImportResult {
 
   const suite: PlaywrightSuite = {
     id: `suite_${Date.now()}`,
-    name: fileName.replace(/\.(md|spec\.ts)$/i, ''),
+    name: fileName.replace(/\.(spec\.)?ts$/i, ''),
     cases,
   };
 

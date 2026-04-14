@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { CheckCircle, XCircle, Clock, Loader } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, Loader, X } from 'lucide-react';
 import type {
   PlaywrightExecutionLog,
   CaseExecutionLog,
@@ -13,6 +13,13 @@ interface ExecutionTerminalProps {
   isRunning: boolean;
   isOpen: boolean;
   onToggle: () => void;
+  onCancel?: () => void;
+  progressState?: {
+    currentCaseId: string | null;
+    currentStepIndex: number | null;
+    caseStatuses: Record<string, string>;
+    stepStatuses: Record<string, Record<number, string>>;
+  };
 }
 
 function StatusIcon({ status }: { status: ExecutionStatus }) {
@@ -25,6 +32,8 @@ function StatusIcon({ status }: { status: ExecutionStatus }) {
       return <Loader className="h-4 w-4 text-blue-400 animate-spin" />;
     case 'skipped':
       return <span className="text-zinc-400">⏭️</span>;
+    case 'canceled':
+      return <span className="text-orange-400">🛑</span>;
     case 'pending':
       return <Clock className="h-4 w-4 text-zinc-500" />;
     default:
@@ -36,29 +45,36 @@ function StepCard({
   step,
   isExpanded,
   onToggle,
+  isCurrentlyRunning = false,
+  stepStatus = 'pending',
 }: {
   step: StepExecutionLog;
   isExpanded: boolean;
   onToggle: () => void;
+  isCurrentlyRunning?: boolean;
+  stepStatus?: string;
 }) {
   const statusColors: Record<string, string> = {
     passed: 'border-emerald-500/30 bg-emerald-500/5',
     failed: 'border-red-500/30 bg-red-500/5',
     running: 'border-blue-500/30 bg-blue-500/5',
     skipped: 'border-zinc-500/30 bg-zinc-500/5',
+    pending: 'border-zinc-700/30 bg-zinc-700/5',
   };
 
   return (
     <div
       className={cn(
         'rounded-lg border transition-all',
-        statusColors[step.status] || 'border-zinc-700',
+        statusColors[stepStatus] || 'border-zinc-700',
+        isCurrentlyRunning && 'animate-pulse',
       )}
     >
       <button onClick={onToggle} className="w-full flex items-center gap-3 p-3 text-left">
-        <StatusIcon status={step.status} />
+        <StatusIcon status={stepStatus as ExecutionStatus} />
         <div className="flex-1 min-w-0">
           <div className="text-sm text-zinc-200">
+            {isCurrentlyRunning && <Loader className="inline h-3 w-3 animate-spin mr-2 text-blue-400" />}
             <span className="text-zinc-400">[{step.stepType}]</span> {step.description}
           </div>
           {step.durationMs && (
@@ -147,18 +163,25 @@ function CaseCard({
   onToggle,
   expandedStepId,
   onToggleStep,
+  isCurrentlyRunning = false,
+  currentStepIndex = null,
+  stepStatuses = {},
 }: {
   caseLog: CaseExecutionLog;
   isExpanded: boolean;
   onToggle: () => void;
   expandedStepId: string | null;
   onToggleStep: (stepId: string) => void;
+  isCurrentlyRunning?: boolean;
+  currentStepIndex?: number | null;
+  stepStatuses?: Record<number, string>;
 }) {
   const statusColors: Record<string, string> = {
     passed: 'border-emerald-500/50 bg-emerald-500/10',
     failed: 'border-red-500/50 bg-red-500/10',
-    running: 'border-blue-500/50 bg-blue-500/10',
+    running: 'border-blue-500/50 bg-blue-500/10 animate-pulse',
     skipped: 'border-zinc-500/50 bg-zinc-500/10',
+    pending: 'border-zinc-600/50 bg-zinc-700/10',
   };
 
   return (
@@ -167,6 +190,7 @@ function CaseCard({
         <StatusIcon status={caseLog.status} />
         <div className="flex-1 min-w-0">
           <div className="text-sm font-medium text-zinc-200">
+            {isCurrentlyRunning && <Loader className="inline h-3 w-3 animate-spin mr-2 text-blue-400" />}
             {caseLog.caseId} - {caseLog.caseTitle}
           </div>
           <div className="text-xs text-zinc-500 mt-0.5">
@@ -178,12 +202,14 @@ function CaseCard({
 
       {isExpanded && (
         <div className="px-4 pb-3 space-y-2 border-t border-zinc-700/50 pt-3">
-          {caseLog.stepLogs.map((step) => (
+          {caseLog.stepLogs.map((step, idx) => (
             <StepCard
               key={step.stepId}
               step={step}
               isExpanded={expandedStepId === step.stepId}
               onToggle={() => onToggleStep(expandedStepId === step.stepId ? '' : step.stepId)}
+              isCurrentlyRunning={isCurrentlyRunning && currentStepIndex === idx}
+              stepStatus={stepStatuses[idx] || step.status}
             />
           ))}
           {caseLog.error && (
@@ -203,6 +229,8 @@ export default function ExecutionTerminal({
   isRunning,
   isOpen,
   onToggle,
+  onCancel,
+  progressState,
 }: ExecutionTerminalProps) {
   const [expandedCaseIds, setExpandedCaseIds] = useState<Set<string>>(new Set());
   const [expandedStepId, setExpandedStepId] = useState<string | null>(null);
@@ -247,12 +275,23 @@ export default function ExecutionTerminal({
             </div>
           )}
         </div>
-        <button
-          onClick={onToggle}
-          className="rounded-lg p-1 text-zinc-400 transition-colors hover:bg-zinc-700 hover:text-zinc-200"
-        >
-          <XCircle className="h-4 w-4" />
-        </button>
+        <div className="flex items-center gap-2">
+          {isRunning && onCancel && (
+            <button
+              onClick={onCancel}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-300 transition hover:bg-red-500/20"
+            >
+              <X className="h-3 w-3" />
+              停止
+            </button>
+          )}
+          <button
+            onClick={onToggle}
+            className="rounded-lg p-1 text-zinc-400 transition-colors hover:bg-zinc-700 hover:text-zinc-200"
+          >
+            <XCircle className="h-4 w-4" />
+          </button>
+        </div>
       </div>
 
       {executionLog && (
@@ -294,6 +333,9 @@ export default function ExecutionTerminal({
               }}
               expandedStepId={expandedStepId}
               onToggleStep={(stepId) => setExpandedStepId(stepId)}
+              isCurrentlyRunning={progressState?.currentCaseId === caseLog.caseId}
+              currentStepIndex={progressState?.currentCaseId === caseLog.caseId ? progressState?.currentStepIndex : null}
+              stepStatuses={progressState?.stepStatuses[caseLog.caseId] || {}}
             />
           ))
         ) : (

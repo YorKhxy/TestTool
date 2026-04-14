@@ -148,7 +148,11 @@ export default function CaseDetailPanel({
       <div className="flex items-center justify-between gap-2 border-t border-zinc-600 px-4 py-3">
         <button
           onClick={() => onDelete(caseData.id)}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-300 transition hover:bg-red-500/20"
+          disabled={isExecuting}
+          className={cn(
+            'inline-flex items-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-300 transition',
+            !isExecuting ? 'hover:bg-red-500/20' : 'opacity-50 cursor-not-allowed',
+          )}
         >
           <Trash2 className="h-3.5 w-3.5" />
           删除
