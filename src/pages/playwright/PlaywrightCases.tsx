@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { List, Upload, Play, PlayCircle, AlertCircle } from 'lucide-react';
+import { useState } from 'react';
+import { List, Upload, Play, AlertCircle, Pause, Square } from 'lucide-react';
 import { usePlaywrightStore } from '@/hooks/usePlaywrightStore';
 import PlaywrightCaseTable from '@/components/PlaywrightCaseTable';
 import PlaywrightCaseDetail from '@/components/PlaywrightCaseDetail';
@@ -15,6 +15,7 @@ export default function PlaywrightCases() {
     activeCaseId,
     isLoading,
     isExecuting,
+    isPaused,
     executingCaseId,
     currentExecutionLog,
     fileName,
@@ -31,6 +32,9 @@ export default function PlaywrightCases() {
     getSelectedCases,
     runCases,
     clearCases,
+    cancelRun,
+    pauseExecution,
+    resumeExecution,
   } = usePlaywrightStore();
 
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
@@ -43,7 +47,6 @@ export default function PlaywrightCases() {
 
   const handleRunSingle = (id: string) => {
     setCaseStatuses((prev) => ({ ...prev, [id]: 'running' }));
-    console.log('Running single case:', id);
   };
 
   const handleDelete = (id: string) => {
@@ -77,7 +80,6 @@ export default function PlaywrightCases() {
             </div>
           </div>
 
-          <div className="mt-4 flex items-center justify-between">
           <div className="flex items-center gap-4 text-sm text-zinc-400">
             {loadedCases.length > 0 && (
               <>
@@ -112,31 +114,54 @@ export default function PlaywrightCases() {
                 清空
               </button>
             )}
-            {selectedCount > 0 && (
+            {isExecuting ? (
+              isPaused ? (
+                <button
+                  onClick={() => void resumeExecution()}
+                  className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-green-500"
+                >
+                  <Play className="h-4 w-4" />
+                  继续
+                </button>
+              ) : (
+                <button
+                  onClick={() => void pauseExecution()}
+                  className="inline-flex items-center gap-2 rounded-lg bg-yellow-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-yellow-500"
+                >
+                  <Pause className="h-4 w-4" />
+                  暂停
+                </button>
+              )
+            ) : selectedCount > 0 ? (
               <button
                 onClick={() => {
                   const cases = getSelectedCases();
                   void runCases(cases.map((c) => c.id));
                 }}
-                disabled={isExecuting || selectedCount === 0}
-                className={cn(
-                  'inline-flex items-center gap-2 rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition',
-                  !isExecuting && selectedCount > 0 ? 'hover:bg-green-500' : 'opacity-50 cursor-not-allowed',
-                )}
+                className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-green-500"
               >
                 <Play className="h-4 w-4" />
                 执行已选中 ({selectedCount})
               </button>
+            ) : null}
+            {isExecuting && (
+              <button
+                onClick={() => void cancelRun()}
+                className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-500"
+              >
+                <Square className="h-4 w-4" />
+                停止
+              </button>
             )}
           </div>
-        </div>
 
-        {error && (
-          <div className="mt-3 flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-2">
-            <AlertCircle className="h-4 w-4 text-red-400 shrink-0" />
-            <span className="text-sm text-red-300">{error}</span>
-          </div>
-        )}
+          {error && (
+            <div className="mt-3 flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-2">
+              <AlertCircle className="h-4 w-4 text-red-400 shrink-0" />
+              <span className="text-sm text-red-300">{error}</span>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="mt-4 flex-1 overflow-hidden rounded-xl border-2 border-zinc-600 bg-zinc-900 p-4">

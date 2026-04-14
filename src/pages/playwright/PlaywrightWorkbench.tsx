@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { List, Upload, AlertCircle } from 'lucide-react';
+import { List, Upload, AlertCircle, Play, Pause, Square } from 'lucide-react';
 import { usePlaywrightStore } from '@/hooks/usePlaywrightStore';
 import PlaywrightCaseTable from '@/components/PlaywrightCaseTable';
 import PlaywrightCaseDetail from '@/components/PlaywrightCaseDetail';
@@ -15,6 +15,7 @@ export default function PlaywrightWorkbench() {
     activeCaseId,
     isLoading,
     isExecuting,
+    isPaused,
     executingCaseId,
     currentExecutionLog,
     fileName,
@@ -30,7 +31,10 @@ export default function PlaywrightWorkbench() {
     deleteCase,
     clearCases,
     runCases,
+    getSelectedCases,
     cancelRun,
+    pauseExecution,
+    resumeExecution,
     progressState,
   } = usePlaywrightStore();
 
@@ -105,6 +109,45 @@ export default function PlaywrightWorkbench() {
                 )}
               >
                 清空
+              </button>
+            )}
+            {isExecuting ? (
+              isPaused ? (
+                <button
+                  onClick={() => void resumeExecution()}
+                  className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-green-500"
+                >
+                  <Play className="h-4 w-4" />
+                  继续
+                </button>
+              ) : (
+                <button
+                  onClick={() => void pauseExecution()}
+                  className="inline-flex items-center gap-2 rounded-lg bg-yellow-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-yellow-500"
+                >
+                  <Pause className="h-4 w-4" />
+                  暂停
+                </button>
+              )
+            ) : selectedCount > 0 ? (
+              <button
+                onClick={() => {
+                  const cases = getSelectedCases();
+                  void runCases(cases.map((c) => c.id));
+                }}
+                className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-green-500"
+              >
+                <Play className="h-4 w-4" />
+                执行已选中 ({selectedCount})
+              </button>
+            ) : null}
+            {isExecuting && (
+              <button
+                onClick={() => void cancelRun()}
+                className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-500"
+              >
+                <Square className="h-4 w-4" />
+                停止
               </button>
             )}
           </div>

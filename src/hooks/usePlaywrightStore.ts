@@ -58,6 +58,7 @@ type PlaywrightState = {
   activeCaseId: string | null;
   isLoading: boolean;
   isExecuting: boolean;
+  isPaused: boolean;
   executingCaseId: string | null;
   executionLogs: PlaywrightExecutionLog[];
   currentExecutionLog: PlaywrightExecutionLog | null;
@@ -89,6 +90,8 @@ type PlaywrightState = {
   getSelectedCases: () => PlaywrightCase[];
   getQueuedCases: () => PlaywrightCase[];
   runCases: (caseIds: string[]) => Promise<void>;
+  pauseExecution: () => Promise<void>;
+  resumeExecution: () => Promise<void>;
   connectSSE: () => void;
   disconnectSSE: () => void;
 };
@@ -113,6 +116,7 @@ export const usePlaywrightStore = create<PlaywrightState>((set, get) => ({
   activeCaseId: null,
   isLoading: false,
   isExecuting: false,
+  isPaused: false,
   executingCaseId: null,
   executionLogs: [],
   currentExecutionLog: null,
@@ -352,7 +356,9 @@ export const usePlaywrightStore = create<PlaywrightState>((set, get) => ({
 
   runCases: async (caseIds: string[]) => {
     const { loadedCases, settings, connectSSE } = get();
-    const casesToRun = loadedCases.filter((c) => caseIds.includes(c.id));
+    const casesToRun = caseIds
+      .map((id) => loadedCases.find((c) => c.id === id))
+      .filter((c): c is PlaywrightCase => c !== undefined);
 
     if (casesToRun.length === 0) {
       set({ error: '没有可执行的用例' });
@@ -498,10 +504,19 @@ export const usePlaywrightStore = create<PlaywrightState>((set, get) => ({
             }
             break;
 
+          case 'paused':
+            set({ isPaused: true });
+            break;
+
+          case 'resumed':
+            set({ isPaused: false });
+            break;
+
           case 'complete':
           case 'error':
             set({
               isExecuting: false,
+              isPaused: false,
               executingCaseId: null,
             });
             void loadExecutionLogs();
@@ -529,9 +544,31 @@ export const usePlaywrightStore = create<PlaywrightState>((set, get) => ({
       await apiJson('/api/playwright/run/cancel', {
         method: 'POST',
       });
-      set({ isExecuting: false, executingCaseId: null, error: '已取消执行' });
+      set({ isExecuting: false, isPaused: false, executingCaseId: null, error: '已取消执行' });
     } catch {
-      set({ isExecuting: false, executingCaseId: null });
+      set({ isExecuting: false, isPaused: false, executingCaseId: null });
+    }
+  },
+
+  pauseExecution: async () => {
+    try {
+      await apiJson('/api/playwright/run/pause', {
+        method: 'POST',
+      });
+      set({ isPaused: true });
+    } catch {
+      console.error('Pause failed');
+    }
+  },
+
+  resumeExecution: async () => {
+    try {
+      await apiJson('/api/playwright/run/resume', {
+        method: 'POST',
+      });
+      set({ isPaused: false });
+    } catch {
+      console.error('Resume failed');
     }
   },
 }));

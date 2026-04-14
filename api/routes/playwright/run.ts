@@ -14,6 +14,7 @@ const router = Router();
 
 let currentBrowser: Browser | null = null;
 let isCancelled = false;
+let isPaused = false;
 let currentRunId: string | null = null;
 
 type ProgressEvent = {
@@ -137,6 +138,15 @@ async function executeStep(
         console.log(`[RUN] Fill completed`);
         break;
 
+      case 'press':
+        if (step.selector && step.value) {
+          console.log(`[RUN] Pressing ${step.value} on ${step.selector}`);
+          await page.press(step.selector, step.value);
+          await page.waitForTimeout(500);
+          console.log(`[RUN] Press completed`);
+        }
+        break;
+
       case 'select':
         if (step.selector && step.value) {
           await page.selectOption(step.selector, step.value);
@@ -251,6 +261,7 @@ async function executeStep(
 router.post('/', async (req: Request, res: Response) => {
   currentBrowser = null;
   isCancelled = false;
+  isPaused = false;
   currentRunId = null;
 
   try {
@@ -374,6 +385,11 @@ router.post('/', async (req: Request, res: Response) => {
         }
         const step = testCase.steps[i];
         console.log(`[RUN] Executing step ${i}: type=${step.type}, selector=${step.selector}, value=${step.value}`);
+
+        while (isPaused && !isCancelled) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+        if (isCancelled) break;
 
         const stepLog: StepExecutionLog = {
           stepId: step.id || `step_${i}`,
@@ -535,11 +551,24 @@ router.post('/', async (req: Request, res: Response) => {
 
 router.post('/cancel', (_req: Request, res: Response) => {
   isCancelled = true;
+  isPaused = false;
   if (currentBrowser) {
     currentBrowser.close().catch(() => {});
     currentBrowser = null;
   }
   res.json({ success: true, message: '取消执行' });
+});
+
+router.post('/pause', (_req: Request, res: Response) => {
+  isPaused = true;
+  sendSSEEvent({ type: 'paused' });
+  res.json({ success: true, message: '已暂停' });
+});
+
+router.post('/resume', (_req: Request, res: Response) => {
+  isPaused = false;
+  sendSSEEvent({ type: 'resumed' });
+  res.json({ success: true, message: '已恢复' });
 });
 
 router.patch('/:runId/cases/:caseId/status', (req: Request, res: Response) => {

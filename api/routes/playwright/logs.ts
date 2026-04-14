@@ -12,46 +12,43 @@ import type {
 
 const router = Router();
 
-const executionLogs: PlaywrightExecutionLog[] = [];
+function loadLogsFromFile(): PlaywrightExecutionLog[] {
+  try {
+    const filePath = path.join(process.cwd(), 'data', 'playwright_logs.json');
+    if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, 'utf-8');
+      return JSON.parse(data);
+    }
+  } catch (e) {
+    console.error('Failed to load logs:', e);
+  }
+  return [];
+}
 
-function saveLogsToFile(): void {
+function saveLogsToFile(logs: PlaywrightExecutionLog[]): void {
   try {
     const dataDir = path.join(process.cwd(), 'data');
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
     }
     const filePath = path.join(dataDir, 'playwright_logs.json');
-    fs.writeFileSync(filePath, JSON.stringify(executionLogs, null, 2));
+    fs.writeFileSync(filePath, JSON.stringify(logs, null, 2));
   } catch (e) {
     console.error('Failed to save logs:', e);
   }
 }
 
-function loadLogsFromFile(): void {
-  try {
-    const filePath = path.join(process.cwd(), 'data', 'playwright_logs.json');
-    if (fs.existsSync(filePath)) {
-      const data = fs.readFileSync(filePath, 'utf-8');
-      const parsed = JSON.parse(data);
-      executionLogs.length = 0;
-      executionLogs.push(...parsed);
-    }
-  } catch (e) {
-    console.error('Failed to load logs:', e);
-  }
-}
-
-loadLogsFromFile();
-
 router.get('/', (_req: Request, res: Response) => {
+  const logs = loadLogsFromFile();
   res.json({
     success: true,
-    data: executionLogs,
+    data: logs,
   });
 });
 
 router.get('/:id', (req: Request, res: Response) => {
-  const log = executionLogs.find((l) => l.id === req.params.id);
+  const logs = loadLogsFromFile();
+  const log = logs.find((l) => l.id === req.params.id);
   if (!log) {
     res.status(404).json({
       success: false,
@@ -133,11 +130,12 @@ router.post('/', (req: Request, res: Response) => {
       executionLog.caseLogs.push(caseLog);
     }
 
-    executionLogs.unshift(executionLog);
-    if (executionLogs.length > 100) {
-      executionLogs.pop();
+    const logs = loadLogsFromFile();
+    logs.unshift(executionLog);
+    if (logs.length > 100) {
+      logs.pop();
     }
-    saveLogsToFile();
+    saveLogsToFile(logs);
 
     res.json({
       success: true,
@@ -224,7 +222,8 @@ router.patch('/:runId/cases/:caseId/status', (req: Request, res: Response) => {
 });
 
 router.delete('/:id', (req: Request, res: Response) => {
-  const index = executionLogs.findIndex((l) => l.id === req.params.id);
+  const logs = loadLogsFromFile();
+  const index = logs.findIndex((l) => l.id === req.params.id);
   if (index === -1) {
     res.status(404).json({
       success: false,
@@ -238,8 +237,8 @@ router.delete('/:id', (req: Request, res: Response) => {
     fs.unlinkSync(mdFilePath);
   }
 
-  executionLogs.splice(index, 1);
-  saveLogsToFile();
+  logs.splice(index, 1);
+  saveLogsToFile(logs);
 
   res.json({
     success: true,
@@ -247,7 +246,8 @@ router.delete('/:id', (req: Request, res: Response) => {
 });
 
 router.get('/:id/markdown', (req: Request, res: Response) => {
-  const log = executionLogs.find((l) => l.id === req.params.id);
+  const logs = loadLogsFromFile();
+  const log = logs.find((l) => l.id === req.params.id);
   if (!log) {
     res.status(404).json({
       success: false,
