@@ -406,7 +406,6 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
 
   supplementCases: async () => {
     const { swaggerContent, uploadedDocuments, parsed } = get();
-    console.log('supplementCases called, parsed cases:', parsed?.cases?.length);
     if (!swaggerContent && uploadedDocuments.length === 0) {
       set({ error: '请先上传 Swagger 文件或用例文档压缩包' });
       return;
@@ -420,7 +419,6 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
       const existingCasesText = parsed.cases
         .map((c) => `${c.id} | ${c.title} | ${c.method} | ${c.path}`)
         .join('\n');
-      console.log('Sending request with existing cases count:', parsed.cases.length);
       const r = await apiJson<{ success: true; data: string }>('/api/generate/ai-generate', {
         method: 'POST',
         body: JSON.stringify({
@@ -429,16 +427,12 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
           existingCases: existingCasesText,
         }),
       });
-      console.log('AI response received, markdown length:', r.data.length);
       const newMarkdown = r.data;
-      console.log('New markdown preview:', r.data.substring(0, 200));
       const newParsed = await apiJson<{ success: true; data: ParsedTestPlan }>('/api/testplan/parse', {
         method: 'POST',
         body: JSON.stringify({ markdown: newMarkdown }),
       });
-      console.log('Parsed new cases count:', newParsed.data.cases.length);
       set((s) => {
-        console.log('Setting new cases, current cases:', s.parsed?.cases?.length, 'new cases:', newParsed.data.cases.length);
         const combinedMarkdown = s.markdownContent
           ? s.markdownContent + '\n\n' + newMarkdown
           : newMarkdown;
@@ -462,12 +456,10 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
       return;
     }
     try {
-      console.log('Saving markdown, length:', markdownContent.length);
       const r = await apiJson<{ success: boolean; path?: string; error?: string }>('/api/testplan/save', {
         method: 'POST',
         body: JSON.stringify({ filePath, markdown: markdownContent }),
       });
-      console.log('Save result:', r);
       if (!r.success) {
         set({ error: r.error || '保存失败' });
       }

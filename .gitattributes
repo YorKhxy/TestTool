@@ -1,0 +1,31 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Source files
+*.ts text encoding=utf-8
+*.tsx text encoding=utf-8
+*.js text encoding=utf-8
+*.jsx text encoding=utf-8
+
+# Data files
+*.json text encoding=utf-8
+*.md text encoding=utf-8
+*.yml text encoding=utf-8
+*.yaml text encoding=utf-8
+
+# Config files
+*.xml text encoding=utf-8
+*.config text encoding=utf-8
+
+# Export/Report files - keep as binary
+*.xlsx binary
+*.zip binary
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.svg binary
+*.pdf binary
+
+# Node modules
+node_modules/** -text
