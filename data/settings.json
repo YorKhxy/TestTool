@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://192.168.1.36:8999",
+  "baseUrl": "http://192.168.1.220:8889",
   "timeoutMs": 15000,
   "concurrency": 1,
   "continueOnFail": true,

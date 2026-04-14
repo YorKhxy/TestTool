@@ -1,5 +1,3674 @@
 [
   {
+    "id": "run_1776152287251",
+    "runId": "run_1776152287251",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T07:38:07.251Z",
+    "totalCases": 7,
+    "passedCases": 7,
+    "failedCases": 0,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_页面基本元素验证",
+        "caseTitle": "页面基本元素验证",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:38:07.541Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:07.541Z",
+            "finishedAt": "2026-04-14T07:38:08.475Z",
+            "durationMs": 934
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:08.475Z",
+            "finishedAt": "2026-04-14T07:38:08.475Z",
+            "durationMs": 0
+          }
+        ],
+        "totalSteps": 2,
+        "passedSteps": 2,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:38:08.475Z",
+        "durationMs": 934
+      },
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:38:08.475Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:08.475Z",
+            "finishedAt": "2026-04-14T07:38:09.203Z",
+            "durationMs": 728
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:09.204Z",
+            "finishedAt": "2026-04-14T07:38:09.205Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:09.205Z",
+            "finishedAt": "2026-04-14T07:38:09.434Z",
+            "durationMs": 229
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:09.434Z",
+            "finishedAt": "2026-04-14T07:38:09.434Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:09.434Z",
+            "finishedAt": "2026-04-14T07:38:09.654Z",
+            "durationMs": 220
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:09.654Z",
+            "finishedAt": "2026-04-14T07:38:09.654Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:09.654Z",
+            "finishedAt": "2026-04-14T07:38:10.205Z",
+            "durationMs": 551
+          },
+          {
+            "stepId": "step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:10.205Z",
+            "finishedAt": "2026-04-14T07:38:13.207Z",
+            "durationMs": 3002
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:38:13.207Z",
+        "durationMs": 4732
+      },
+      {
+        "caseId": "TC_登录___空手机号",
+        "caseTitle": "登录 - 空手机号",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:38:13.207Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:13.207Z",
+            "finishedAt": "2026-04-14T07:38:13.923Z",
+            "durationMs": 716
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:13.923Z",
+            "finishedAt": "2026-04-14T07:38:13.923Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:13.923Z",
+            "finishedAt": "2026-04-14T07:38:14.140Z",
+            "durationMs": 217
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:14.140Z",
+            "finishedAt": "2026-04-14T07:38:14.140Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:14.141Z",
+            "finishedAt": "2026-04-14T07:38:14.683Z",
+            "durationMs": 542
+          }
+        ],
+        "totalSteps": 5,
+        "passedSteps": 5,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:38:14.683Z",
+        "durationMs": 1476
+      },
+      {
+        "caseId": "TC_登录___空验证码",
+        "caseTitle": "登录 - 空验证码",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:38:14.683Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:14.684Z",
+            "finishedAt": "2026-04-14T07:38:15.395Z",
+            "durationMs": 711
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:15.395Z",
+            "finishedAt": "2026-04-14T07:38:15.395Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:15.395Z",
+            "finishedAt": "2026-04-14T07:38:15.616Z",
+            "durationMs": 221
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:15.617Z",
+            "finishedAt": "2026-04-14T07:38:15.617Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:15.617Z",
+            "finishedAt": "2026-04-14T07:38:16.167Z",
+            "durationMs": 550
+          }
+        ],
+        "totalSteps": 5,
+        "passedSteps": 5,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:38:16.167Z",
+        "durationMs": 1484
+      },
+      {
+        "caseId": "TC_登录___错误手机号格式",
+        "caseTitle": "登录 - 错误手机号格式",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:38:16.167Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:16.167Z",
+            "finishedAt": "2026-04-14T07:38:16.900Z",
+            "durationMs": 733
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:16.900Z",
+            "finishedAt": "2026-04-14T07:38:16.902Z",
+            "durationMs": 2
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 12345",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:16.902Z",
+            "finishedAt": "2026-04-14T07:38:17.125Z",
+            "durationMs": 223
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:17.125Z",
+            "finishedAt": "2026-04-14T07:38:17.125Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:17.125Z",
+            "finishedAt": "2026-04-14T07:38:17.345Z",
+            "durationMs": 220
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:17.345Z",
+            "finishedAt": "2026-04-14T07:38:17.345Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:17.345Z",
+            "finishedAt": "2026-04-14T07:38:17.889Z",
+            "durationMs": 544
+          }
+        ],
+        "totalSteps": 7,
+        "passedSteps": 7,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:38:17.890Z",
+        "durationMs": 1723
+      },
+      {
+        "caseId": "TC_登录___回车键提交",
+        "caseTitle": "登录 - 回车键提交",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:38:17.890Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:17.890Z",
+            "finishedAt": "2026-04-14T07:38:18.603Z",
+            "durationMs": 713
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:18.603Z",
+            "finishedAt": "2026-04-14T07:38:18.605Z",
+            "durationMs": 2
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:18.605Z",
+            "finishedAt": "2026-04-14T07:38:18.826Z",
+            "durationMs": 221
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:18.827Z",
+            "finishedAt": "2026-04-14T07:38:18.827Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:18.827Z",
+            "finishedAt": "2026-04-14T07:38:19.050Z",
+            "durationMs": 223
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:19.050Z",
+            "finishedAt": "2026-04-14T07:38:19.050Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "press",
+            "description": "按键 input[placeholder*=\"验证码\"]: Enter",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:19.050Z",
+            "finishedAt": "2026-04-14T07:38:19.568Z",
+            "durationMs": 518
+          }
+        ],
+        "totalSteps": 7,
+        "passedSteps": 7,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:38:19.568Z",
+        "durationMs": 1678
+      },
+      {
+        "caseId": "TC_登录成功___检查跳转页面元素",
+        "caseTitle": "登录成功 - 检查跳转页面元素",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:38:19.568Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:19.568Z",
+            "finishedAt": "2026-04-14T07:38:20.304Z",
+            "durationMs": 736
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:20.304Z",
+            "finishedAt": "2026-04-14T07:38:20.305Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:20.305Z",
+            "finishedAt": "2026-04-14T07:38:20.523Z",
+            "durationMs": 218
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:20.523Z",
+            "finishedAt": "2026-04-14T07:38:20.523Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:20.523Z",
+            "finishedAt": "2026-04-14T07:38:20.738Z",
+            "durationMs": 215
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:20.738Z",
+            "finishedAt": "2026-04-14T07:38:20.738Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:20.738Z",
+            "finishedAt": "2026-04-14T07:38:21.296Z",
+            "durationMs": 558
+          },
+          {
+            "stepId": "step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:38:21.296Z",
+            "finishedAt": "2026-04-14T07:38:24.297Z",
+            "durationMs": 3001
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:38:24.297Z",
+        "durationMs": 4729
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://192.168.1.73:3303/login",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/login",
+    "finishedAt": "2026-04-14T07:38:24.511Z",
+    "durationMs": 17260
+  },
+  {
+    "id": "run_1776152208109",
+    "runId": "run_1776152208109",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T07:36:48.109Z",
+    "totalCases": 7,
+    "passedCases": 7,
+    "failedCases": 0,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_页面基本元素验证",
+        "caseTitle": "页面基本元素验证",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:48.378Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:48.378Z",
+            "finishedAt": "2026-04-14T07:36:49.321Z",
+            "durationMs": 943
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:49.321Z",
+            "finishedAt": "2026-04-14T07:36:49.322Z",
+            "durationMs": 1
+          }
+        ],
+        "totalSteps": 2,
+        "passedSteps": 2,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:49.322Z",
+        "durationMs": 944
+      },
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:49.322Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:49.322Z",
+            "finishedAt": "2026-04-14T07:36:50.036Z",
+            "durationMs": 714
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:50.036Z",
+            "finishedAt": "2026-04-14T07:36:50.036Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:50.036Z",
+            "finishedAt": "2026-04-14T07:36:50.265Z",
+            "durationMs": 229
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:50.265Z",
+            "finishedAt": "2026-04-14T07:36:50.265Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:50.265Z",
+            "finishedAt": "2026-04-14T07:36:50.495Z",
+            "durationMs": 230
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:50.496Z",
+            "finishedAt": "2026-04-14T07:36:50.496Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:50.496Z",
+            "finishedAt": "2026-04-14T07:36:51.061Z",
+            "durationMs": 565
+          },
+          {
+            "stepId": "step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:51.061Z",
+            "finishedAt": "2026-04-14T07:36:54.063Z",
+            "durationMs": 3002
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:54.063Z",
+        "durationMs": 4741
+      },
+      {
+        "caseId": "TC_登录___空手机号",
+        "caseTitle": "登录 - 空手机号",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:54.063Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:54.063Z",
+            "finishedAt": "2026-04-14T07:36:54.786Z",
+            "durationMs": 723
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:54.786Z",
+            "finishedAt": "2026-04-14T07:36:54.789Z",
+            "durationMs": 3
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:54.789Z",
+            "finishedAt": "2026-04-14T07:36:55.008Z",
+            "durationMs": 219
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:55.008Z",
+            "finishedAt": "2026-04-14T07:36:55.008Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:55.008Z",
+            "finishedAt": "2026-04-14T07:36:55.551Z",
+            "durationMs": 543
+          }
+        ],
+        "totalSteps": 5,
+        "passedSteps": 5,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:55.551Z",
+        "durationMs": 1488
+      },
+      {
+        "caseId": "TC_登录___空验证码",
+        "caseTitle": "登录 - 空验证码",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:55.551Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:55.551Z",
+            "finishedAt": "2026-04-14T07:36:56.264Z",
+            "durationMs": 713
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:56.264Z",
+            "finishedAt": "2026-04-14T07:36:56.265Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:56.265Z",
+            "finishedAt": "2026-04-14T07:36:56.486Z",
+            "durationMs": 221
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:56.487Z",
+            "finishedAt": "2026-04-14T07:36:56.487Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:56.487Z",
+            "finishedAt": "2026-04-14T07:36:57.035Z",
+            "durationMs": 548
+          }
+        ],
+        "totalSteps": 5,
+        "passedSteps": 5,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:57.035Z",
+        "durationMs": 1484
+      },
+      {
+        "caseId": "TC_登录___错误手机号格式",
+        "caseTitle": "登录 - 错误手机号格式",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:57.035Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:57.035Z",
+            "finishedAt": "2026-04-14T07:36:57.759Z",
+            "durationMs": 724
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:57.760Z",
+            "finishedAt": "2026-04-14T07:36:57.761Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 12345",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:57.761Z",
+            "finishedAt": "2026-04-14T07:36:57.983Z",
+            "durationMs": 222
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:57.983Z",
+            "finishedAt": "2026-04-14T07:36:57.983Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:57.983Z",
+            "finishedAt": "2026-04-14T07:36:58.195Z",
+            "durationMs": 212
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:58.196Z",
+            "finishedAt": "2026-04-14T07:36:58.196Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:58.196Z",
+            "finishedAt": "2026-04-14T07:36:58.738Z",
+            "durationMs": 542
+          }
+        ],
+        "totalSteps": 7,
+        "passedSteps": 7,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:58.739Z",
+        "durationMs": 1704
+      },
+      {
+        "caseId": "TC_登录___回车键提交",
+        "caseTitle": "登录 - 回车键提交",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:58.739Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:58.739Z",
+            "finishedAt": "2026-04-14T07:36:59.450Z",
+            "durationMs": 711
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:59.450Z",
+            "finishedAt": "2026-04-14T07:36:59.451Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:59.451Z",
+            "finishedAt": "2026-04-14T07:36:59.672Z",
+            "durationMs": 221
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:59.672Z",
+            "finishedAt": "2026-04-14T07:36:59.672Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:59.672Z",
+            "finishedAt": "2026-04-14T07:36:59.888Z",
+            "durationMs": 216
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:59.888Z",
+            "finishedAt": "2026-04-14T07:36:59.888Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "press",
+            "description": "按键 input[placeholder*=\"验证码\"]: Enter",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:59.888Z",
+            "finishedAt": "2026-04-14T07:37:00.416Z",
+            "durationMs": 528
+          }
+        ],
+        "totalSteps": 7,
+        "passedSteps": 7,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:37:00.416Z",
+        "durationMs": 1677
+      },
+      {
+        "caseId": "TC_登录成功___检查跳转页面元素",
+        "caseTitle": "登录成功 - 检查跳转页面元素",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:37:00.416Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:37:00.416Z",
+            "finishedAt": "2026-04-14T07:37:01.133Z",
+            "durationMs": 717
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:37:01.133Z",
+            "finishedAt": "2026-04-14T07:37:01.133Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:37:01.133Z",
+            "finishedAt": "2026-04-14T07:37:01.349Z",
+            "durationMs": 216
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:37:01.349Z",
+            "finishedAt": "2026-04-14T07:37:01.349Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:37:01.349Z",
+            "finishedAt": "2026-04-14T07:37:01.575Z",
+            "durationMs": 226
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:37:01.576Z",
+            "finishedAt": "2026-04-14T07:37:01.576Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:37:01.576Z",
+            "finishedAt": "2026-04-14T07:37:02.127Z",
+            "durationMs": 551
+          },
+          {
+            "stepId": "step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:37:02.127Z",
+            "finishedAt": "2026-04-14T07:37:05.130Z",
+            "durationMs": 3003
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:37:05.130Z",
+        "durationMs": 4714
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://192.168.1.73:3303/login",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/login",
+    "finishedAt": "2026-04-14T07:37:05.345Z",
+    "durationMs": 17236
+  },
+  {
+    "id": "run_1776152177768",
+    "runId": "run_1776152177768",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T07:36:17.768Z",
+    "totalCases": 7,
+    "passedCases": 7,
+    "failedCases": 0,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_页面基本元素验证",
+        "caseTitle": "页面基本元素验证",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:18.039Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:18.040Z",
+            "finishedAt": "2026-04-14T07:36:20.095Z",
+            "durationMs": 2055
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:20.096Z",
+            "finishedAt": "2026-04-14T07:36:20.096Z",
+            "durationMs": 0
+          }
+        ],
+        "totalSteps": 2,
+        "passedSteps": 2,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:20.096Z",
+        "durationMs": 2057
+      },
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:20.096Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:20.096Z",
+            "finishedAt": "2026-04-14T07:36:20.849Z",
+            "durationMs": 753
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:20.849Z",
+            "finishedAt": "2026-04-14T07:36:20.850Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:20.850Z",
+            "finishedAt": "2026-04-14T07:36:21.099Z",
+            "durationMs": 249
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:21.099Z",
+            "finishedAt": "2026-04-14T07:36:21.099Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:21.099Z",
+            "finishedAt": "2026-04-14T07:36:21.323Z",
+            "durationMs": 224
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:21.323Z",
+            "finishedAt": "2026-04-14T07:36:21.323Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:21.323Z",
+            "finishedAt": "2026-04-14T07:36:21.865Z",
+            "durationMs": 542
+          },
+          {
+            "stepId": "step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:21.865Z",
+            "finishedAt": "2026-04-14T07:36:24.867Z",
+            "durationMs": 3002
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:24.867Z",
+        "durationMs": 4771
+      },
+      {
+        "caseId": "TC_登录___空手机号",
+        "caseTitle": "登录 - 空手机号",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:24.867Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:24.867Z",
+            "finishedAt": "2026-04-14T07:36:25.579Z",
+            "durationMs": 712
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:25.579Z",
+            "finishedAt": "2026-04-14T07:36:25.580Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:25.580Z",
+            "finishedAt": "2026-04-14T07:36:25.797Z",
+            "durationMs": 217
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:25.797Z",
+            "finishedAt": "2026-04-14T07:36:25.797Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:25.798Z",
+            "finishedAt": "2026-04-14T07:36:26.344Z",
+            "durationMs": 546
+          }
+        ],
+        "totalSteps": 5,
+        "passedSteps": 5,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:26.344Z",
+        "durationMs": 1477
+      },
+      {
+        "caseId": "TC_登录___空验证码",
+        "caseTitle": "登录 - 空验证码",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:26.344Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:26.344Z",
+            "finishedAt": "2026-04-14T07:36:27.068Z",
+            "durationMs": 724
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:27.068Z",
+            "finishedAt": "2026-04-14T07:36:27.069Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:27.069Z",
+            "finishedAt": "2026-04-14T07:36:27.285Z",
+            "durationMs": 216
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:27.285Z",
+            "finishedAt": "2026-04-14T07:36:27.285Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:27.285Z",
+            "finishedAt": "2026-04-14T07:36:27.828Z",
+            "durationMs": 543
+          }
+        ],
+        "totalSteps": 5,
+        "passedSteps": 5,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:27.828Z",
+        "durationMs": 1484
+      },
+      {
+        "caseId": "TC_登录___错误手机号格式",
+        "caseTitle": "登录 - 错误手机号格式",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:27.828Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:27.828Z",
+            "finishedAt": "2026-04-14T07:36:28.559Z",
+            "durationMs": 731
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:28.559Z",
+            "finishedAt": "2026-04-14T07:36:28.560Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 12345",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:28.560Z",
+            "finishedAt": "2026-04-14T07:36:28.783Z",
+            "durationMs": 223
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:28.784Z",
+            "finishedAt": "2026-04-14T07:36:28.784Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:28.784Z",
+            "finishedAt": "2026-04-14T07:36:29.007Z",
+            "durationMs": 223
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:29.007Z",
+            "finishedAt": "2026-04-14T07:36:29.007Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:29.007Z",
+            "finishedAt": "2026-04-14T07:36:29.550Z",
+            "durationMs": 543
+          }
+        ],
+        "totalSteps": 7,
+        "passedSteps": 7,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:29.550Z",
+        "durationMs": 1722
+      },
+      {
+        "caseId": "TC_登录___回车键提交",
+        "caseTitle": "登录 - 回车键提交",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:29.550Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:29.550Z",
+            "finishedAt": "2026-04-14T07:36:30.273Z",
+            "durationMs": 723
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:30.273Z",
+            "finishedAt": "2026-04-14T07:36:30.273Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:30.274Z",
+            "finishedAt": "2026-04-14T07:36:30.494Z",
+            "durationMs": 220
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:30.494Z",
+            "finishedAt": "2026-04-14T07:36:30.494Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:30.494Z",
+            "finishedAt": "2026-04-14T07:36:30.707Z",
+            "durationMs": 213
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:30.707Z",
+            "finishedAt": "2026-04-14T07:36:30.707Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "press",
+            "description": "按键 input[placeholder*=\"验证码\"]: Enter",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:30.707Z",
+            "finishedAt": "2026-04-14T07:36:31.228Z",
+            "durationMs": 521
+          }
+        ],
+        "totalSteps": 7,
+        "passedSteps": 7,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:31.228Z",
+        "durationMs": 1678
+      },
+      {
+        "caseId": "TC_登录成功___检查跳转页面元素",
+        "caseTitle": "登录成功 - 检查跳转页面元素",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:31.228Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:31.228Z",
+            "finishedAt": "2026-04-14T07:36:31.948Z",
+            "durationMs": 720
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:31.949Z",
+            "finishedAt": "2026-04-14T07:36:31.950Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:31.950Z",
+            "finishedAt": "2026-04-14T07:36:32.172Z",
+            "durationMs": 222
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:32.172Z",
+            "finishedAt": "2026-04-14T07:36:32.172Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:32.172Z",
+            "finishedAt": "2026-04-14T07:36:32.387Z",
+            "durationMs": 215
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:32.387Z",
+            "finishedAt": "2026-04-14T07:36:32.387Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:32.387Z",
+            "finishedAt": "2026-04-14T07:36:32.935Z",
+            "durationMs": 548
+          },
+          {
+            "stepId": "step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:32.935Z",
+            "finishedAt": "2026-04-14T07:36:35.938Z",
+            "durationMs": 3003
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:35.938Z",
+        "durationMs": 4710
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://192.168.1.73:3303/login",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/login",
+    "finishedAt": "2026-04-14T07:36:36.151Z",
+    "durationMs": 18383
+  },
+  {
+    "id": "run_1776152151570",
+    "runId": "run_1776152151570",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T07:35:51.570Z",
+    "totalCases": 7,
+    "passedCases": 7,
+    "failedCases": 0,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_页面基本元素验证",
+        "caseTitle": "页面基本元素验证",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:35:51.844Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:51.844Z",
+            "finishedAt": "2026-04-14T07:35:52.792Z",
+            "durationMs": 948
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:52.792Z",
+            "finishedAt": "2026-04-14T07:35:52.793Z",
+            "durationMs": 1
+          }
+        ],
+        "totalSteps": 2,
+        "passedSteps": 2,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:35:52.794Z",
+        "durationMs": 950
+      },
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:35:52.794Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:52.794Z",
+            "finishedAt": "2026-04-14T07:35:53.523Z",
+            "durationMs": 729
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:53.523Z",
+            "finishedAt": "2026-04-14T07:35:53.524Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:53.524Z",
+            "finishedAt": "2026-04-14T07:35:53.754Z",
+            "durationMs": 230
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:53.754Z",
+            "finishedAt": "2026-04-14T07:35:53.754Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:53.754Z",
+            "finishedAt": "2026-04-14T07:35:53.984Z",
+            "durationMs": 230
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:53.984Z",
+            "finishedAt": "2026-04-14T07:35:53.984Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:53.984Z",
+            "finishedAt": "2026-04-14T07:35:54.545Z",
+            "durationMs": 561
+          },
+          {
+            "stepId": "step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:54.545Z",
+            "finishedAt": "2026-04-14T07:35:57.547Z",
+            "durationMs": 3002
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:35:57.547Z",
+        "durationMs": 4753
+      },
+      {
+        "caseId": "TC_登录___空手机号",
+        "caseTitle": "登录 - 空手机号",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:35:57.547Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:57.548Z",
+            "finishedAt": "2026-04-14T07:35:58.279Z",
+            "durationMs": 731
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:58.279Z",
+            "finishedAt": "2026-04-14T07:35:58.279Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:58.280Z",
+            "finishedAt": "2026-04-14T07:35:58.497Z",
+            "durationMs": 217
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:58.497Z",
+            "finishedAt": "2026-04-14T07:35:58.497Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:58.497Z",
+            "finishedAt": "2026-04-14T07:35:59.037Z",
+            "durationMs": 540
+          }
+        ],
+        "totalSteps": 5,
+        "passedSteps": 5,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:35:59.038Z",
+        "durationMs": 1491
+      },
+      {
+        "caseId": "TC_登录___空验证码",
+        "caseTitle": "登录 - 空验证码",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:35:59.038Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:59.038Z",
+            "finishedAt": "2026-04-14T07:35:59.744Z",
+            "durationMs": 706
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:59.744Z",
+            "finishedAt": "2026-04-14T07:35:59.744Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:59.744Z",
+            "finishedAt": "2026-04-14T07:35:59.963Z",
+            "durationMs": 219
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:59.963Z",
+            "finishedAt": "2026-04-14T07:35:59.963Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:59.963Z",
+            "finishedAt": "2026-04-14T07:36:00.514Z",
+            "durationMs": 551
+          }
+        ],
+        "totalSteps": 5,
+        "passedSteps": 5,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:00.514Z",
+        "durationMs": 1476
+      },
+      {
+        "caseId": "TC_登录___错误手机号格式",
+        "caseTitle": "登录 - 错误手机号格式",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:00.514Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:00.514Z",
+            "finishedAt": "2026-04-14T07:36:01.238Z",
+            "durationMs": 724
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:01.238Z",
+            "finishedAt": "2026-04-14T07:36:01.239Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 12345",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:01.239Z",
+            "finishedAt": "2026-04-14T07:36:01.460Z",
+            "durationMs": 221
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:01.460Z",
+            "finishedAt": "2026-04-14T07:36:01.460Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:01.460Z",
+            "finishedAt": "2026-04-14T07:36:01.675Z",
+            "durationMs": 215
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:01.676Z",
+            "finishedAt": "2026-04-14T07:36:01.676Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:01.676Z",
+            "finishedAt": "2026-04-14T07:36:02.229Z",
+            "durationMs": 553
+          }
+        ],
+        "totalSteps": 7,
+        "passedSteps": 7,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:02.229Z",
+        "durationMs": 1715
+      },
+      {
+        "caseId": "TC_登录___回车键提交",
+        "caseTitle": "登录 - 回车键提交",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:02.229Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:02.229Z",
+            "finishedAt": "2026-04-14T07:36:02.940Z",
+            "durationMs": 711
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:02.940Z",
+            "finishedAt": "2026-04-14T07:36:02.942Z",
+            "durationMs": 2
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:02.942Z",
+            "finishedAt": "2026-04-14T07:36:03.166Z",
+            "durationMs": 224
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:03.166Z",
+            "finishedAt": "2026-04-14T07:36:03.166Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:03.166Z",
+            "finishedAt": "2026-04-14T07:36:03.379Z",
+            "durationMs": 213
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:03.379Z",
+            "finishedAt": "2026-04-14T07:36:03.379Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "press",
+            "description": "按键 input[placeholder*=\"验证码\"]: Enter",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:03.379Z",
+            "finishedAt": "2026-04-14T07:36:03.899Z",
+            "durationMs": 520
+          }
+        ],
+        "totalSteps": 7,
+        "passedSteps": 7,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:03.900Z",
+        "durationMs": 1671
+      },
+      {
+        "caseId": "TC_登录成功___检查跳转页面元素",
+        "caseTitle": "登录成功 - 检查跳转页面元素",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:36:03.900Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:03.900Z",
+            "finishedAt": "2026-04-14T07:36:04.610Z",
+            "durationMs": 710
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:04.610Z",
+            "finishedAt": "2026-04-14T07:36:04.611Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:04.611Z",
+            "finishedAt": "2026-04-14T07:36:04.830Z",
+            "durationMs": 219
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:04.831Z",
+            "finishedAt": "2026-04-14T07:36:04.831Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:04.831Z",
+            "finishedAt": "2026-04-14T07:36:05.053Z",
+            "durationMs": 222
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:05.053Z",
+            "finishedAt": "2026-04-14T07:36:05.053Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:05.053Z",
+            "finishedAt": "2026-04-14T07:36:05.594Z",
+            "durationMs": 541
+          },
+          {
+            "stepId": "step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:36:05.594Z",
+            "finishedAt": "2026-04-14T07:36:08.597Z",
+            "durationMs": 3003
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:36:08.598Z",
+        "durationMs": 4698
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://192.168.1.73:3303/login",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/login",
+    "finishedAt": "2026-04-14T07:36:08.815Z",
+    "durationMs": 17245
+  },
+  {
+    "id": "run_1776152102741",
+    "runId": "run_1776152102741",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T07:35:02.741Z",
+    "totalCases": 7,
+    "passedCases": 7,
+    "failedCases": 0,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_页面基本元素验证",
+        "caseTitle": "页面基本元素验证",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:35:03.033Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:03.033Z",
+            "finishedAt": "2026-04-14T07:35:03.962Z",
+            "durationMs": 929
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:03.963Z",
+            "finishedAt": "2026-04-14T07:35:03.964Z",
+            "durationMs": 1
+          }
+        ],
+        "totalSteps": 2,
+        "passedSteps": 2,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:35:03.964Z",
+        "durationMs": 931
+      },
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:35:03.964Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:03.964Z",
+            "finishedAt": "2026-04-14T07:35:04.678Z",
+            "durationMs": 714
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:04.679Z",
+            "finishedAt": "2026-04-14T07:35:04.680Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:04.680Z",
+            "finishedAt": "2026-04-14T07:35:04.925Z",
+            "durationMs": 245
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:04.926Z",
+            "finishedAt": "2026-04-14T07:35:04.926Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:04.926Z",
+            "finishedAt": "2026-04-14T07:35:05.156Z",
+            "durationMs": 230
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:05.156Z",
+            "finishedAt": "2026-04-14T07:35:05.156Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:05.156Z",
+            "finishedAt": "2026-04-14T07:35:05.702Z",
+            "durationMs": 546
+          },
+          {
+            "stepId": "step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:05.703Z",
+            "finishedAt": "2026-04-14T07:35:08.707Z",
+            "durationMs": 3004
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:35:08.708Z",
+        "durationMs": 4744
+      },
+      {
+        "caseId": "TC_登录___空手机号",
+        "caseTitle": "登录 - 空手机号",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:35:08.708Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:08.708Z",
+            "finishedAt": "2026-04-14T07:35:09.427Z",
+            "durationMs": 719
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:09.427Z",
+            "finishedAt": "2026-04-14T07:35:09.428Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:09.428Z",
+            "finishedAt": "2026-04-14T07:35:09.644Z",
+            "durationMs": 216
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:09.644Z",
+            "finishedAt": "2026-04-14T07:35:09.644Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:09.644Z",
+            "finishedAt": "2026-04-14T07:35:10.179Z",
+            "durationMs": 535
+          }
+        ],
+        "totalSteps": 5,
+        "passedSteps": 5,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:35:10.180Z",
+        "durationMs": 1472
+      },
+      {
+        "caseId": "TC_登录___空验证码",
+        "caseTitle": "登录 - 空验证码",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:35:10.180Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:10.180Z",
+            "finishedAt": "2026-04-14T07:35:10.906Z",
+            "durationMs": 726
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:10.906Z",
+            "finishedAt": "2026-04-14T07:35:10.908Z",
+            "durationMs": 2
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:10.908Z",
+            "finishedAt": "2026-04-14T07:35:11.128Z",
+            "durationMs": 220
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:11.128Z",
+            "finishedAt": "2026-04-14T07:35:11.128Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:11.128Z",
+            "finishedAt": "2026-04-14T07:35:11.663Z",
+            "durationMs": 535
+          }
+        ],
+        "totalSteps": 5,
+        "passedSteps": 5,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:35:11.663Z",
+        "durationMs": 1483
+      },
+      {
+        "caseId": "TC_登录___错误手机号格式",
+        "caseTitle": "登录 - 错误手机号格式",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:35:11.663Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:11.663Z",
+            "finishedAt": "2026-04-14T07:35:12.374Z",
+            "durationMs": 711
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:12.374Z",
+            "finishedAt": "2026-04-14T07:35:12.376Z",
+            "durationMs": 2
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 12345",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:12.376Z",
+            "finishedAt": "2026-04-14T07:35:12.593Z",
+            "durationMs": 217
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:12.594Z",
+            "finishedAt": "2026-04-14T07:35:12.594Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:12.594Z",
+            "finishedAt": "2026-04-14T07:35:12.816Z",
+            "durationMs": 222
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:12.816Z",
+            "finishedAt": "2026-04-14T07:35:12.816Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:12.816Z",
+            "finishedAt": "2026-04-14T07:35:13.368Z",
+            "durationMs": 552
+          }
+        ],
+        "totalSteps": 7,
+        "passedSteps": 7,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:35:13.368Z",
+        "durationMs": 1705
+      },
+      {
+        "caseId": "TC_登录___回车键提交",
+        "caseTitle": "登录 - 回车键提交",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:35:13.368Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:13.368Z",
+            "finishedAt": "2026-04-14T07:35:14.114Z",
+            "durationMs": 746
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:14.114Z",
+            "finishedAt": "2026-04-14T07:35:14.115Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:14.115Z",
+            "finishedAt": "2026-04-14T07:35:14.337Z",
+            "durationMs": 222
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:14.337Z",
+            "finishedAt": "2026-04-14T07:35:14.337Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:14.337Z",
+            "finishedAt": "2026-04-14T07:35:14.557Z",
+            "durationMs": 220
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:14.558Z",
+            "finishedAt": "2026-04-14T07:35:14.558Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "press",
+            "description": "按键 input[placeholder*=\"验证码\"]: Enter",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:14.558Z",
+            "finishedAt": "2026-04-14T07:35:15.077Z",
+            "durationMs": 519
+          }
+        ],
+        "totalSteps": 7,
+        "passedSteps": 7,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:35:15.077Z",
+        "durationMs": 1709
+      },
+      {
+        "caseId": "TC_登录成功___检查跳转页面元素",
+        "caseTitle": "登录成功 - 检查跳转页面元素",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:35:15.077Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:15.077Z",
+            "finishedAt": "2026-04-14T07:35:15.937Z",
+            "durationMs": 860
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:15.937Z",
+            "finishedAt": "2026-04-14T07:35:15.938Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:15.938Z",
+            "finishedAt": "2026-04-14T07:35:16.160Z",
+            "durationMs": 222
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:16.160Z",
+            "finishedAt": "2026-04-14T07:35:16.160Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:16.160Z",
+            "finishedAt": "2026-04-14T07:35:16.373Z",
+            "durationMs": 213
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:16.373Z",
+            "finishedAt": "2026-04-14T07:35:16.373Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:16.373Z",
+            "finishedAt": "2026-04-14T07:35:16.921Z",
+            "durationMs": 548
+          },
+          {
+            "stepId": "step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:35:16.921Z",
+            "finishedAt": "2026-04-14T07:35:19.926Z",
+            "durationMs": 3005
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:35:19.927Z",
+        "durationMs": 4850
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://192.168.1.73:3303/login",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/login",
+    "finishedAt": "2026-04-14T07:35:20.138Z",
+    "durationMs": 17397
+  },
+  {
+    "id": "run_1776152066221",
+    "runId": "run_1776152066221",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T07:34:26.221Z",
+    "totalCases": 7,
+    "passedCases": 7,
+    "failedCases": 0,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_页面基本元素验证",
+        "caseTitle": "页面基本元素验证",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:34:26.515Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:26.515Z",
+            "finishedAt": "2026-04-14T07:34:27.446Z",
+            "durationMs": 931
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:27.446Z",
+            "finishedAt": "2026-04-14T07:34:27.446Z",
+            "durationMs": 0
+          }
+        ],
+        "totalSteps": 2,
+        "passedSteps": 2,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:34:27.446Z",
+        "durationMs": 931
+      },
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:34:27.446Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:27.446Z",
+            "finishedAt": "2026-04-14T07:34:28.179Z",
+            "durationMs": 733
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:28.179Z",
+            "finishedAt": "2026-04-14T07:34:28.181Z",
+            "durationMs": 2
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:28.181Z",
+            "finishedAt": "2026-04-14T07:34:28.417Z",
+            "durationMs": 236
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:28.417Z",
+            "finishedAt": "2026-04-14T07:34:28.417Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:28.418Z",
+            "finishedAt": "2026-04-14T07:34:28.642Z",
+            "durationMs": 224
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:28.642Z",
+            "finishedAt": "2026-04-14T07:34:28.642Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:28.642Z",
+            "finishedAt": "2026-04-14T07:34:29.190Z",
+            "durationMs": 548
+          },
+          {
+            "stepId": "step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:29.190Z",
+            "finishedAt": "2026-04-14T07:34:32.193Z",
+            "durationMs": 3003
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:34:32.193Z",
+        "durationMs": 4747
+      },
+      {
+        "caseId": "TC_登录___空手机号",
+        "caseTitle": "登录 - 空手机号",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:34:32.193Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:32.193Z",
+            "finishedAt": "2026-04-14T07:34:32.912Z",
+            "durationMs": 719
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:32.912Z",
+            "finishedAt": "2026-04-14T07:34:32.914Z",
+            "durationMs": 2
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:32.914Z",
+            "finishedAt": "2026-04-14T07:34:33.137Z",
+            "durationMs": 223
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:33.138Z",
+            "finishedAt": "2026-04-14T07:34:33.138Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:33.138Z",
+            "finishedAt": "2026-04-14T07:34:33.683Z",
+            "durationMs": 545
+          }
+        ],
+        "totalSteps": 5,
+        "passedSteps": 5,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:34:33.683Z",
+        "durationMs": 1490
+      },
+      {
+        "caseId": "TC_登录___空验证码",
+        "caseTitle": "登录 - 空验证码",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:34:33.683Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:33.683Z",
+            "finishedAt": "2026-04-14T07:34:34.389Z",
+            "durationMs": 706
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:34.389Z",
+            "finishedAt": "2026-04-14T07:34:34.390Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:34.390Z",
+            "finishedAt": "2026-04-14T07:34:34.613Z",
+            "durationMs": 223
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:34.613Z",
+            "finishedAt": "2026-04-14T07:34:34.614Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:34.614Z",
+            "finishedAt": "2026-04-14T07:34:35.154Z",
+            "durationMs": 540
+          }
+        ],
+        "totalSteps": 5,
+        "passedSteps": 5,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:34:35.154Z",
+        "durationMs": 1471
+      },
+      {
+        "caseId": "TC_登录___错误手机号格式",
+        "caseTitle": "登录 - 错误手机号格式",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:34:35.154Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:35.155Z",
+            "finishedAt": "2026-04-14T07:34:35.870Z",
+            "durationMs": 715
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:35.870Z",
+            "finishedAt": "2026-04-14T07:34:35.872Z",
+            "durationMs": 2
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 12345",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:35.872Z",
+            "finishedAt": "2026-04-14T07:34:36.094Z",
+            "durationMs": 222
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:36.094Z",
+            "finishedAt": "2026-04-14T07:34:36.094Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:36.094Z",
+            "finishedAt": "2026-04-14T07:34:36.308Z",
+            "durationMs": 214
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:36.308Z",
+            "finishedAt": "2026-04-14T07:34:36.308Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:36.308Z",
+            "finishedAt": "2026-04-14T07:34:36.854Z",
+            "durationMs": 546
+          }
+        ],
+        "totalSteps": 7,
+        "passedSteps": 7,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:34:36.854Z",
+        "durationMs": 1700
+      },
+      {
+        "caseId": "TC_登录___回车键提交",
+        "caseTitle": "登录 - 回车键提交",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:34:36.854Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:36.854Z",
+            "finishedAt": "2026-04-14T07:34:37.574Z",
+            "durationMs": 720
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:37.574Z",
+            "finishedAt": "2026-04-14T07:34:37.575Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:37.575Z",
+            "finishedAt": "2026-04-14T07:34:37.793Z",
+            "durationMs": 218
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:37.793Z",
+            "finishedAt": "2026-04-14T07:34:37.793Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:37.793Z",
+            "finishedAt": "2026-04-14T07:34:38.004Z",
+            "durationMs": 211
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:38.004Z",
+            "finishedAt": "2026-04-14T07:34:38.004Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "press",
+            "description": "按键 input[placeholder*=\"验证码\"]: Enter",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:38.004Z",
+            "finishedAt": "2026-04-14T07:34:38.532Z",
+            "durationMs": 528
+          }
+        ],
+        "totalSteps": 7,
+        "passedSteps": 7,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:34:38.532Z",
+        "durationMs": 1678
+      },
+      {
+        "caseId": "TC_登录成功___检查跳转页面元素",
+        "caseTitle": "登录成功 - 检查跳转页面元素",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:34:38.532Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:38.532Z",
+            "finishedAt": "2026-04-14T07:34:39.239Z",
+            "durationMs": 707
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:39.239Z",
+            "finishedAt": "2026-04-14T07:34:39.240Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:39.240Z",
+            "finishedAt": "2026-04-14T07:34:39.456Z",
+            "durationMs": 216
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:39.456Z",
+            "finishedAt": "2026-04-14T07:34:39.456Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:39.456Z",
+            "finishedAt": "2026-04-14T07:34:39.668Z",
+            "durationMs": 212
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:39.668Z",
+            "finishedAt": "2026-04-14T07:34:39.668Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:39.668Z",
+            "finishedAt": "2026-04-14T07:34:40.207Z",
+            "durationMs": 539
+          },
+          {
+            "stepId": "step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:40.207Z",
+            "finishedAt": "2026-04-14T07:34:43.209Z",
+            "durationMs": 3002
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:34:43.209Z",
+        "durationMs": 4677
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://192.168.1.73:3303/login",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/login",
+    "finishedAt": "2026-04-14T07:34:43.407Z",
+    "durationMs": 17186
+  },
+  {
+    "id": "run_1776152046518",
+    "runId": "run_1776152046518",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T07:34:06.518Z",
+    "totalCases": 1,
+    "passedCases": 1,
+    "failedCases": 0,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:34:06.816Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:06.816Z",
+            "finishedAt": "2026-04-14T07:34:07.758Z",
+            "durationMs": 942
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:16.793Z",
+            "finishedAt": "2026-04-14T07:34:16.794Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:16.794Z",
+            "finishedAt": "2026-04-14T07:34:17.026Z",
+            "durationMs": 232
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:17.026Z",
+            "finishedAt": "2026-04-14T07:34:17.026Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:17.026Z",
+            "finishedAt": "2026-04-14T07:34:17.244Z",
+            "durationMs": 218
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:17.244Z",
+            "finishedAt": "2026-04-14T07:34:17.244Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:17.244Z",
+            "finishedAt": "2026-04-14T07:34:17.802Z",
+            "durationMs": 558
+          },
+          {
+            "stepId": "step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:34:17.802Z",
+            "finishedAt": "2026-04-14T07:34:20.804Z",
+            "durationMs": 3002
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:34:20.804Z",
+        "durationMs": 13988
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://192.168.1.73:3303/login",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/login",
+    "finishedAt": "2026-04-14T07:34:20.994Z",
+    "durationMs": 14476
+  },
+  {
+    "id": "run_1776152036041",
+    "runId": "run_1776152036041",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T07:33:56.041Z",
+    "totalCases": 1,
+    "passedCases": 1,
+    "failedCases": 0,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:33:56.449Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:56.450Z",
+            "finishedAt": "2026-04-14T07:33:57.403Z",
+            "durationMs": 953
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:57.403Z",
+            "finishedAt": "2026-04-14T07:33:57.405Z",
+            "durationMs": 2
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:57.406Z",
+            "finishedAt": "2026-04-14T07:33:57.654Z",
+            "durationMs": 248
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:57.654Z",
+            "finishedAt": "2026-04-14T07:33:57.654Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:57.654Z",
+            "finishedAt": "2026-04-14T07:33:57.880Z",
+            "durationMs": 226
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:57.881Z",
+            "finishedAt": "2026-04-14T07:33:57.881Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:57.881Z",
+            "finishedAt": "2026-04-14T07:33:58.430Z",
+            "durationMs": 549
+          },
+          {
+            "stepId": "step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:58.430Z",
+            "finishedAt": "2026-04-14T07:34:01.432Z",
+            "durationMs": 3002
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:34:01.433Z",
+        "durationMs": 4984
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://192.168.1.73:3303/login",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/login",
+    "finishedAt": "2026-04-14T07:34:01.675Z",
+    "durationMs": 5634
+  },
+  {
+    "id": "run_1776152008701",
+    "runId": "run_1776152008701",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-14T07:33:28.701Z",
+    "totalCases": 1,
+    "passedCases": 1,
+    "failedCases": 0,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_正常登录流程___成功登录",
+        "caseTitle": "正常登录流程 - 成功登录",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-14T07:33:28.897Z",
+        "stepLogs": [
+          {
+            "stepId": "step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:28.898Z",
+            "finishedAt": "2026-04-14T07:33:29.868Z",
+            "durationMs": 970
+          },
+          {
+            "stepId": "step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: undefined",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:29.869Z",
+            "finishedAt": "2026-04-14T07:33:29.871Z",
+            "durationMs": 2
+          },
+          {
+            "stepId": "step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"手机\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:29.872Z",
+            "finishedAt": "2026-04-14T07:33:30.114Z",
+            "durationMs": 242
+          },
+          {
+            "stepId": "step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"手机\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:30.114Z",
+            "finishedAt": "2026-04-14T07:33:30.114Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"验证码\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:30.114Z",
+            "finishedAt": "2026-04-14T07:33:30.333Z",
+            "durationMs": 219
+          },
+          {
+            "stepId": "step_6",
+            "stepIndex": 5,
+            "stepType": "fill",
+            "description": "填写 未知: input[placeholder*=\"验证码\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:30.334Z",
+            "finishedAt": "2026-04-14T07:33:30.334Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "step_7",
+            "stepIndex": 6,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:30.334Z",
+            "finishedAt": "2026-04-14T07:33:30.893Z",
+            "durationMs": 559
+          },
+          {
+            "stepId": "step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待 undefinedms",
+            "status": "passed",
+            "startedAt": "2026-04-14T07:33:30.893Z",
+            "finishedAt": "2026-04-14T07:33:33.896Z",
+            "durationMs": 3003
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-14T07:33:33.896Z",
+        "durationMs": 4999
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "headless": true,
+      "baseURL": "http://192.168.1.73:3303/login",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://192.168.1.73:3303/login",
+    "finishedAt": "2026-04-14T07:33:33.957Z",
+    "durationMs": 5256
+  },
+  {
     "id": "run_1776150771643",
     "runId": "run_1776150771643",
     "suiteName": "Playwright Test Suite",

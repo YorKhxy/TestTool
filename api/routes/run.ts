@@ -154,7 +154,7 @@ function shouldPassByBody(responseJson: unknown): boolean | null {
   if (!('code' in responseJson)) return null;
   const code = responseJson.code;
   if (typeof code !== 'number') return null;
-  return code === 0;
+  return code === 200;
 }
 
 function extractValueByPath(obj: unknown, pathStr: string): unknown {
@@ -220,7 +220,7 @@ async function runOneCase(c: CaseRequest, config: RunConfig, token: string | nul
         if (typeof v === 'string') headers[k] = v;
       }
     }
-    const needsAuth = c.requiresAuth !== false;
+    const needsAuth = c.requiresAuth === true;
     if (needsAuth && token && !headers['authorization'] && !headers['Authorization']) {
       headers.authorization = `Bearer ${token}`;
     }
@@ -352,7 +352,7 @@ async function runAll(cases: CaseRequest[], config: RunConfig, initialVars?: Ext
   const startedAt = nowIso();
   const runId = makeRunId();
 
-  const needAuth = cases.some((c) => c.requiresAuth !== false);
+  const needAuth = cases.some((c) => c.requiresAuth === true);
   const token = needAuth && config.auth ? await login(config.baseUrl, config.auth, config.timeoutMs) : null;
 
   const results: CaseResult[] = [];

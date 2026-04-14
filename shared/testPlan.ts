@@ -91,13 +91,7 @@ function guessRequiresAuth(path: string, group?: string) {
   if (p.includes('/client/') || p.includes('/front/')) return false;
   const g = (group ?? '').toLowerCase();
   if (g.includes('客户端') || g.includes('系统')) return false;
-  if (p.includes('/admin/auth/v1/login/password')) return false;
-  if (p.includes('/admin/')) return true;
-  if (p.includes('/user/admin/')) return true;
-  if (p.includes('/order/admin/')) return true;
-  if (p.includes('/stats/admin/')) return true;
-  if (p.includes('/withdraw/admin/')) return true;
-  if (p.includes('/invite/admin/')) return true;
+  if (p.includes('/auth/login') || p.includes('/auth/sendCode')) return false;
   return false;
 }
 
