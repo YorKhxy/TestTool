@@ -49,9 +49,9 @@
 | TC-AUTH-009 | 退出登录 | POST | /api/admin/auth/logout | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-AUTH-010 | 获取当前用户信息 | GET | /api/admin/auth/userinfo | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
 | TC-AUTH-011 | 获取当前用户菜单权限 | GET | /api/admin/auth/menus | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
-| TC-AUTH-012 | 获取用户信息-无Token | GET | /api/admin/auth/userinfo | - | - | - | P0 | HTTP 200; code:10006; message:Token无效 | - |
-| TC-AUTH-013 | 获取用户信息-Token无效 | GET | /api/admin/auth/userinfo | Authorization: Bearer invalid_token | - | - | P0 | HTTP 200; code:10006; message:Token无效 | - |
-| TC-AUTH-014 | 获取菜单-无Token | GET | /api/admin/auth/menus | - | - | - | P0 | HTTP 200; code:10006; message:Token无效 | - |
+| TC-AUTH-012 | 获取用户信息-无Token | GET | /api/admin/auth/userinfo | - | - | - | P0 | HTTP 401 | - |
+| TC-AUTH-013 | 获取用户信息-Token无效 | GET | /api/admin/auth/userinfo | Authorization: Bearer invalid_token | - | - | P0 | HTTP 401 | - |
+| TC-AUTH-014 | 获取菜单-无Token | GET | /api/admin/auth/menus | - | - | - | P0 | HTTP 401 | - |
 
 ---
 
