@@ -11,7 +11,7 @@ import { apiJson, safeParseJsonAny } from '@/utils/http';
 type ImportFormat = 'spec' | 'markdown' | 'auto';
 
 type ProgressEvent = {
-  type: 'case_start' | 'case_end' | 'step_start' | 'step_end' | 'complete' | 'error';
+  type: 'case_start' | 'case_end' | 'step_start' | 'step_end' | 'complete' | 'error' | 'paused' | 'resumed';
   runId: string;
   caseId?: string;
   caseTitle?: string;
@@ -60,6 +60,7 @@ type PlaywrightState = {
   isExecuting: boolean;
   isPaused: boolean;
   executingCaseId: string | null;
+  caseStatuses: Record<string, 'pending' | 'running' | 'passed' | 'failed' | 'skipped' | 'canceled'>;
   executionLogs: PlaywrightExecutionLog[];
   currentExecutionLog: PlaywrightExecutionLog | null;
   settings: SettingsState;
@@ -90,6 +91,7 @@ type PlaywrightState = {
   getSelectedCases: () => PlaywrightCase[];
   getQueuedCases: () => PlaywrightCase[];
   runCases: (caseIds: string[]) => Promise<void>;
+  cancelRun: () => Promise<void>;
   pauseExecution: () => Promise<void>;
   resumeExecution: () => Promise<void>;
   connectSSE: () => void;
@@ -118,6 +120,7 @@ export const usePlaywrightStore = create<PlaywrightState>((set, get) => ({
   isExecuting: false,
   isPaused: false,
   executingCaseId: null,
+  caseStatuses: {},
   executionLogs: [],
   currentExecutionLog: null,
   settings: defaultSettings,
@@ -340,11 +343,14 @@ export const usePlaywrightStore = create<PlaywrightState>((set, get) => ({
   },
 
   getSelectedCases: () => {
-    const { loadedCases, selectedIds } = get();
+    const { loadedCases, executionQueue, selectedIds } = get();
     const selectedCaseIds = Object.entries(selectedIds)
       .filter(([, v]) => v)
       .map(([k]) => k);
-    return loadedCases.filter((c) => selectedCaseIds.includes(c.id));
+    return executionQueue
+      .filter((id) => selectedCaseIds.includes(id))
+      .map((id) => loadedCases.find((c) => c.id === id))
+      .filter((c): c is PlaywrightCase => c !== undefined);
   },
 
   getQueuedCases: () => {
@@ -381,6 +387,7 @@ export const usePlaywrightStore = create<PlaywrightState>((set, get) => ({
       isExecuting: true,
       error: null,
       executingCaseId: caseIds[0] || null,
+      caseStatuses: initialStatuses,
       progressState: {
         runId,
         currentCaseId: casesToRun[0]?.id || null,
@@ -451,6 +458,10 @@ export const usePlaywrightStore = create<PlaywrightState>((set, get) => ({
                   [event.caseId || '']: 'running',
                 },
               },
+              caseStatuses: {
+                ...state.caseStatuses,
+                [event.caseId || '']: 'running',
+              },
             }));
             break;
 
@@ -500,6 +511,11 @@ export const usePlaywrightStore = create<PlaywrightState>((set, get) => ({
                     [event.caseId]: event.caseStatus as 'passed' | 'failed' | 'skipped' | 'canceled',
                   },
                 },
+                caseStatuses: {
+                  ...state.caseStatuses,
+                  [event.caseId]: event.caseStatus as 'passed' | 'failed' | 'skipped' | 'canceled',
+                },
+                executingCaseId: state.executingCaseId === event.caseId ? null : state.executingCaseId,
               }));
             }
             break;
@@ -519,7 +535,7 @@ export const usePlaywrightStore = create<PlaywrightState>((set, get) => ({
               isPaused: false,
               executingCaseId: null,
             });
-            void loadExecutionLogs();
+            void get().loadExecutionLogs();
             break;
         }
       } catch {

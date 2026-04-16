@@ -115,6 +115,7 @@ export type CaseExecutionLog = {
   totalSteps: number;
   passedSteps: number;
   failedSteps: number;
+  screenshotPath?: string;
 };
 
 export type PlaywrightExecutionLog = {

@@ -1,4 +1,5 @@
 import { Router, type Request, type Response } from 'express';
+// nodemon trigger
 import type {
   PlaywrightSuite,
   PlaywrightCase,
@@ -157,201 +158,370 @@ function parseMarkdownToCases(content: string, fileName: string): ImportResult {
 }
 
 function parseSpecToCases(content: string, fileName: string): ImportResult {
-  const errors: string[] = [];
-  const warnings: string[] = [];
-  const cases: PlaywrightCase[] = [];
+    const errors: string[] = [];
+    const warnings: string[] = [];
+    const cases: PlaywrightCase[] = [];
 
-  const constants: Record<string, string> = {};
-  const constRegex = /const\s+(\w+)\s*=\s*['"`]([^'"`]+)['"`]/g;
-  let constMatch;
-  while ((constMatch = constRegex.exec(content)) !== null) {
-    constants[constMatch[1]] = constMatch[2];
-  }
-
-  function expandTemplate(text: string): string {
-    return text.replace(/\$\{(\w+)\}/g, (match, varName) => {
-      return constants[varName] !== undefined ? constants[varName] : match;
-    });
-  }
-
-  function expandValue(text: string): string {
-    if (text.includes('${')) {
-      return expandTemplate(text);
+    const constants: Record<string, string> = {};
+    const constRegex = /const\s+(\w+)\s*=\s*['"`]([^'"`]+)['"`]/g;
+    let constMatch;
+    while ((constMatch = constRegex.exec(content)) !== null) {
+      constants[constMatch[1]] = constMatch[2];
     }
-    return text;
-  }
 
-  const locatorVars: Record<string, string> = {};
-  const locatorVarRegex = /const\s+(\w+)\s*=\s*(?:page\.)?locator\s*\(\s*'([^']+)'\s*\)/g;
-  let varMatch;
-  while ((varMatch = locatorVarRegex.exec(content)) !== null) {
-    locatorVars[varMatch[1]] = varMatch[2];
-  }
+    function expandTemplate(text: string): string {
+      return text.replace(/\$\{(\w+)\}/g, (match, varName) => {
+        if (constants[varName] !== undefined) {
+          return constants[varName];
+        }
+        if (varName === 'ADMIN_BASE_URL') {
+          return process.env.ADMIN_BASE_URL || 'http://172.0.0.218:36007';
+        }
+        if (varName === 'BASE_URL') {
+          return process.env.BASE_URL || 'http://172.0.0.218:36007';
+        }
+        if (varName === 'MERCHANT_BASE_URL') {
+          return process.env.MERCHANT_BASE_URL || 'http://172.0.0.218:36007';
+        }
+        return match;
+      });
+    }
 
-  const locatorVarFirstRegex = /const\s+(\w+)\s*=\s*(?:page\.)?locator\s*\(\s*'([^']+)'\s*\)\.first\(\)/g;
-  while ((varMatch = locatorVarFirstRegex.exec(content)) !== null) {
-    locatorVars[varMatch[1]] = varMatch[2];
-  }
+    function expandValue(text: string): string {
+      if (text.includes('${')) {
+        return expandTemplate(text);
+      }
+      return text;
+    }
 
-  const stepPatterns: Array<{
-    regex: RegExp;
-    type: PlaywrightStepType;
-    getSelector?: (m: RegExpMatchArray, line: string) => string | undefined;
-    getValue?: (m: RegExpMatchArray) => string;
-    getDesc?: (s?: string, v?: string) => string;
-  }> = [
-    { regex: /page\.goto\s*\(\s*`([^`]+)`/, type: 'navigate', getValue: (m) => m[1], getDesc: (v) => `导航到 ${v}` },
-    { regex: /page\.goto\s*\(\s*'([^']+)'/, type: 'navigate', getValue: (m) => m[1], getDesc: (v) => `导航到 ${v}` },
-    { regex: /page\.fill\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
-    { regex: /\.locator\s*\(\s*'([^']+)'\)\.first\(\)\.fill\s*\(\s*'([^']+)'/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
-    { regex: /\.locator\s*\(\s*'([^']+)'\)\.fill\s*\(\s*'([^']+)'/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
-    { regex: /\.fill\s*\(\s*'([^']+)'/, type: 'fill', getSelector: (m, line) => {
-      const varName = line.match(/(?:await\s+)?(\w+)\.fill/)?.[1];
-      if (varName && locatorVars[varName]) return locatorVars[varName];
-      return undefined;
-    }, getValue: (m) => m[1], getDesc: (s, v) => `填写 ${s || '未知'}: ${v}` },
-    { regex: /page\.click\s*\(\s*'([^']+)'/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
-    { regex: /\.click\s*\(\s*\)/, type: 'click', getSelector: (m, line) => {
-      const varName = line.match(/(?:await\s+)?(\w+)\.click/)?.[1];
-      if (varName && locatorVars[varName]) return locatorVars[varName];
-      return undefined;
-    }, getDesc: (s) => s ? `点击 ${s}` : `点击元素` },
-    { regex: /\.locator\s*\(\s*'([^']+)'\)\.first\(\)\.click\s*\(\)/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
-    { regex: /\.locator\s*\(\s*'([^']+)'\)\.click\s*\(\)/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
-    { regex: /page\.selectOption\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/, type: 'select', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `选择 ${s}: ${v}` },
-    { regex: /page\.waitForSelector\s*\(\s*'([^']+)'/, type: 'waitForSelector', getSelector: (m) => m[1], getDesc: (s) => `等待元素 ${s}` },
-    { regex: /page\.waitForTimeout\s*\(\s*(\d+)/, type: 'wait', getValue: (m) => m[1], getDesc: (v) => `等待 ${v}ms` },
-    { regex: /page\.press\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/, type: 'press', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `按键 ${s}: ${v}` },
-    { regex: /page\.waitForURL\s*\(\s*'([^']+)'/, type: 'waitForURL', getValue: (m) => m[1], getDesc: (v) => `等待 URL: ${v}` },
-    { regex: /page\.waitForLoadState\s*\(\s*'([^']+)'/, type: 'wait', getValue: (m) => m[1], getDesc: (v) => `等待加载状态: ${v}` },
-  ];
+    const stepPatterns: Array<{
+      regex: RegExp;
+      type: PlaywrightStepType;
+      getSelector?: (m: RegExpMatchArray, line: string) => string | undefined;
+      getValue?: (m: RegExpMatchArray) => string;
+      getDesc?: (s?: string, v?: string) => string;
+      getOptions?: (m: RegExpMatchArray) => Record<string, unknown>;
+    }> = [
+      { regex: /(?:await\s+)?page\.goto\s*\(\s*`([^`]+)`/, type: 'navigate', getValue: (m) => m[1], getDesc: (v) => `导航到 ${v}` },
+      { regex: /(?:await\s+)?page\.goto\s*\(\s*'([^']+)'/, type: 'navigate', getValue: (m) => m[1], getDesc: (v) => `导航到 ${v}` },
+      { regex: /(?:await\s+)?page\.goto\s*\(\s*"([^"]+)"/, type: 'navigate', getValue: (m) => m[1], getDesc: (v) => `导航到 ${v}` },
+      { regex: /(?:await\s+)?page\.fill\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
+      { regex: /(?:await\s+)?page\.fill\s*\(\s*"([^"]+)"\s*,\s*"([^"]+)"/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
+      { regex: /(?:await\s+)?page\.click\s*\(\s*'([^']+)'/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
+      { regex: /(?:await\s+)?page\.click\s*\(\s*"([^"]+)"\s*\)/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
+      { regex: /(?:await\s+)?page\.fill\s*\(\s*"([^"]+)"\s*,\s*"([^"]+)"\s*\)/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
+      { regex: /\.locator\s*\(\s*'([^']+)'\)\.first\(\)\.click\s*\(\)/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
+      { regex: /\.locator\s*\(\s*'([^']+)'\)\.click\s*\(\)/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击 ${s}` },
+      { regex: /await\s+(\w+)\.locator\s*\(\s*'([^']+)'\)\.first\(\)\.click\s*\(\)/, type: 'click', getSelector: (m) => m[2], getDesc: (s) => `点击 ${s}` },
+      { regex: /await\s+(\w+)\.locator\s*\(\s*'([^']+)'\)\.click\s*\(\)/, type: 'click', getSelector: (m) => m[2], getDesc: (s) => `点击 ${s}` },
+      { regex: /page\.waitForLoadState\s*\(\s*'([^']+)'/, type: 'wait', getValue: (m) => m[1], getDesc: (v) => `等待加载状态: ${v}` },
+      { regex: /await\s+(\w+)\.locator\s*\(\s*'([^']+)'\)\.first\(\)/, type: 'click', getSelector: (m) => m[2], getDesc: (s) => `点击元素 ${s}` },
+      { regex: /await\s+(\w+)\.click\s*\(\)/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击元素 ${s}` },
+      { regex: /await\s+(\w+)\.first\(\)\.click\s*\(\)/, type: 'click', getSelector: (m) => m[1], getDesc: (s) => `点击元素 ${s}` },
+      { regex: /expect\s*\(\s*page\.url\(\)\s*\)\.not\.toContain\s*\(\s*'([^']+)'\s*\)/, type: 'assert', getDesc: (v) => `验证 URL 不包含: ${v}`, getOptions: (m) => ({ expected: m[1], operator: 'notContains', negate: true }) },
+      { regex: /expect\s*\(\s*page\.url\(\)\s*\)\.toContain\s*\(\s*'([^']+)'\s*\)/, type: 'assert', getDesc: (v) => `验证 URL 包含: ${v}`, getOptions: (m) => ({ expected: m[1], operator: 'contains' }) },
+      { regex: /expect\s*\(\s*page\.locator\s*\(\s*'([^']+)'\)\s*\)\.toBeVisible\s*\(\s*(?:\{[^}]*\})?\s*\)(?!\s*\.)/, type: 'assert', getSelector: (m) => m[1], getDesc: (s) => `验证元素可见: ${s}`, getOptions: () => ({ expected: 'visible', operator: 'toBeVisible' }) },
+      { regex: /expect\s*\(\s*page\.locator\s*\(\s*'([^']+)'\)\.first\(\)\s*\)\.toBeVisible\s*\(\s*(?:\{[^}]*\})?\s*\)(?!\s*\.)/, type: 'assert', getSelector: (m) => m[1], getDesc: (s) => `验证元素可见: ${s}`, getOptions: () => ({ expected: 'visible', operator: 'toBeVisible' }) },
+      { regex: /expect\s*\(\s*page\.locator\s*\(\s*'text=\/([^"]+)\/i?'\s*\)\s*\)\.toBeVisible\s*\(\s*(?:\{[^}]*\})?\s*\)(?!\s*\.)/, type: 'assert', getSelector: (m) => `text=/${m[1]}/i`, getDesc: (s) => `验证文本匹配: ${s}`, getOptions: () => ({ expected: 'visible', operator: 'toBeVisible' }) },
+      { regex: /expect\s*\(\s*page\.locator\s*\(\s*text=\/([^"]+)\/i?\s*\)\.first\(\)\s*\)\.toBeVisible\s*\(\s*(?:\{[^}]*\})?\s*\)(?!\s*\.)/, type: 'assert', getSelector: (m) => `text=/${m[1]}/i`, getDesc: (s) => `验证文本匹配: ${s}`, getOptions: () => ({ expected: 'visible', operator: 'toBeVisible' }) },
+      { regex: /expect\s*\(\s*page\.locator\s*\(\s*'([^']+)'\)\s*\)\.toContainText\s*\(\s*'([^']+)'\s*\)/, type: 'assert', getSelector: (m) => m[1], getDesc: (s, v) => `验证元素包含文本: ${v}`, getOptions: (m) => ({ expected: m[2], operator: 'contains' }) },
+      { regex: /expect\s*\(\s*page\.locator\s*\(\s*'([^']+)'\)\s*\)\.toHaveText\s*\(\s*'([^']+)'\s*\)/, type: 'assert', getSelector: (m) => m[1], getDesc: (s, v) => `验证元素文本为: ${v}`, getOptions: (m) => ({ expected: m[2], operator: '==' }) },
+      { regex: /expect\s*\(\s*page\.locator\s*\(\s*'([^']+)'\)\s*\)\.toBeEnabled\s*\(\s*\)/, type: 'assert', getSelector: (m) => m[1], getDesc: (s) => `验证元素可用: ${s}`, getOptions: () => ({ expected: 'enabled', operator: 'toBeEnabled' }) },
+      { regex: /expect\s*\(\s*(\w+)\.first\(\)\s*\)\.toBeVisible\s*\(\s*(?:\{[^}]*\})?\s*\)/, type: 'assert', getSelector: (m, line) => {
+        const match = line.match(/(\w+)\.first\(\)/);
+        return match ? match[1] : undefined;
+      }, getDesc: () => `验证元素可见`, getOptions: () => ({ expected: 'visible', operator: 'toBeVisible' }) },
+      { regex: /expect\s*\(\s*(\w+)\.first\(\)\s*\)\.toBeEnabled\s*\(\s*\)/, type: 'assert', getSelector: (m, line) => {
+        const match = line.match(/(\w+)\.first\(\)/);
+        return match ? match[1] : undefined;
+      }, getDesc: () => `验证元素可用`, getOptions: () => ({ expected: 'enabled', operator: 'toBeEnabled' }) },
+      { regex: /expect\s*\(\s*page\s*\)\.toHaveTitle\s*\(\s*\/([^/]+)\/\s*\)/, type: 'assert', getDesc: (v) => `验证页面标题: ${v}`, getOptions: (m) => ({ expected: m[1], operator: 'hasTitle' }) },
+      { regex: /expect\s*\(\s*(\w+)\s*\)\.toBeVisible\s*\(\s*(?:\{[^}]*\})?\s*\)/, type: 'assert', getSelector: (m, line) => {
+        const locatorMatch = line.match(/locator\s*\(\s*'([^']+)'\s*\)/);
+        return locatorMatch ? locatorMatch[1] : undefined;
+      }, getDesc: () => `验证元素可见`, getOptions: () => ({ expected: 'visible', operator: 'toBeVisible' }) },
+      { regex: /expect\s*\(\s*(\w+)\.first\(\)\s*\)\.toHaveCount\s*\(\s*(\d+)\s*\)/, type: 'assert', getDesc: (s, v) => `验证元素数量为: ${v}`, getOptions: (m) => ({ expected: m[2], operator: 'count' }) },
+      { regex: /expect\s*\(\s*(\w+)\s*\)\.not\.toContain\s*\(\s*'([^']+)'\s*\)/, type: 'assert', getDesc: (v) => `验证值不包含: ${v}`, getOptions: (m) => ({ expected: m[2], operator: 'notContains' }) },
+      { regex: /expect\s*\(\s*(\w+)\s*\)\.toContain\s*\(\s*'([^']+)'\s*\)/, type: 'assert', getDesc: (v) => `验证值包含: ${v}`, getOptions: (m) => ({ expected: m[2], operator: 'contains' }) },
+      { regex: /expect\s*\(\s*(\w+)\s*\)\.toContainText\s*\(\s*'([^']+)'\s*\)/, type: 'assert', getDesc: (s, v) => `验证包含文本: ${v}`, getOptions: (m) => ({ expected: m[2], operator: 'contains' }) },
+      { regex: /expect\s*\(\s*(\w+)\s*\)\.toHaveText\s*\(\s*'([^']+)'\s*\)/, type: 'assert', getDesc: (s, v) => `验证文本为: ${v}`, getOptions: (m) => ({ expected: m[2], operator: '==' }) },
+      { regex: /expect\s*\(\s*(\w+)\s*\)\.toBeTruthy\s*\(\s*\)/, type: 'assert', getDesc: () => `验证值为 truthy`, getOptions: () => ({ expected: 'truthy', operator: 'toBeTruthy' }) },
+      { regex: /expect\s*\(\s*(\w+)\s*\)\.toBeFalsy\s*\(\s*\)/, type: 'assert', getDesc: () => `验证值为 falsy`, getOptions: () => ({ expected: 'falsy', operator: 'toBeFalsy' }) },
+      { regex: /expect\s*\(\s*(\w+)\s*\)\.toBeNull\s*\(\s*\)/, type: 'assert', getDesc: () => `验证值为 null`, getOptions: () => ({ expected: 'null', operator: 'toBeNull' }) },
+      { regex: /expect\s*\(\s*(\w+)\s*\)\.not\.toBeNull\s*\(\s*\)/, type: 'assert', getDesc: () => `验证值不为 null`, getOptions: () => ({ expected: 'notNull', operator: 'notNull' }) },
+      { regex: /if\s*\(\s*await\s+(\w+)\.count\(\)\s*>\s*0\s*\)/, type: 'assert', getDesc: (s) => `验证元素存在`, getOptions: () => ({ expected: '>0', operator: 'count' }) },
+      { regex: /await\s+(\w+)\.count\(\)\s*>\s*0/, type: 'assert', getDesc: (s) => `检查元素存在`, getOptions: () => ({ expected: '>0', operator: 'count' }) },
+      { regex: /await\s+(\w+)\.count\(\)/, type: 'assert', getDesc: (s) => `获取元素数量`, getOptions: () => ({ expected: 'count', operator: 'count' }) },
+      { regex: /await\s+(\w+)\.waitForTimeout\s*\(\s*(\d+)/, type: 'wait', getValue: (m) => m[2], getDesc: (v) => `等待 ${v}ms` },
+      { regex: /expect\s*\(\s*(\w+)\s*\)\.toBeGreaterThanOrEqual\s*\(\s*(\d+)\s*\)/, type: 'assert', getDesc: (s, v) => `验证值 >= ${v}`, getOptions: (m) => ({ expected: m[2], operator: '>=', type: 'number' }) },
+      { regex: /expect\s*\(\s*(\w+)\s*\)\.toBeLessThanOrEqual\s*\(\s*(\d+)\s*\)/, type: 'assert', getDesc: (s, v) => `验证值 <= ${v}`, getOptions: (m) => ({ expected: m[2], operator: '<=', type: 'number' }) },
+      { regex: /expect\s*\(\s*(\w+)\s*\)\.toBeGreaterThan\s*\(\s*(\d+)\s*\)/, type: 'assert', getDesc: (s, v) => `验证值 > ${v}`, getOptions: (m) => ({ expected: m[2], operator: '>', type: 'number' }) },
+      { regex: /expect\s*\(\s*(\w+)\s*\)\.toBeLessThan\s*\(\s*(\d+)\s*\)/, type: 'assert', getDesc: (s, v) => `验证值 < ${v}`, getOptions: (m) => ({ expected: m[2], operator: '<', type: 'number' }) },
+      { regex: /expect\s*\(\s*(\w+)\s*\)\.toEqual\s*\(\s*(\d+)\s*\)/, type: 'assert', getDesc: (s, v) => `验证值 == ${v}`, getOptions: (m) => ({ expected: m[2], operator: '==', type: 'number' }) },
+      { regex: /await\s+(\w+)\.fill\s*\(\s*'([^']+)'\s*\)/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
+      { regex: /await\s+(\w+)\.first\(\)\.fill\s*\(\s*'([^']+)'\s*\)/, type: 'fill', getSelector: (m) => m[1], getValue: (m) => m[2], getDesc: (s, v) => `填写 ${s}: ${v}` },
+      { regex: /await\s+(\w+)\.getAttribute\s*\(\s*'([^']+)'/, type: 'assert', getDesc: (s, v) => `获取属性: ${v}`, getOptions: (m) => ({ expected: m[2], operator: 'getAttribute' }) },
+      { regex: /expect\s*\(\s*page\s*\)\.toHaveURL\s*\(\s*\/([^/]+)\/\s*\)/, type: 'assert', getDesc: (v) => `验证 URL 匹配: ${v}`, getOptions: (m) => ({ expected: m[1], operator: 'match' }) },
+      { regex: /expect\s*\(\s*(\w+)\s*\)\.toMatch\s*\(\s*\/([^/]+)\/\s*\)/, type: 'assert', getDesc: (v) => `验证匹配: ${v}`, getOptions: (m) => ({ expected: m[1], operator: 'match' }) },
+      { regex: /await\s+(\w+)\.allTextContents\s*\(\)/, type: 'assert', getDesc: () => `获取所有文本内容`, getOptions: () => ({ expected: 'allTextContents', operator: '==' }) },
+      { regex: /expect\s*\(\s*(\w+)\.count\(\)\s*\)\.toBeGreaterThan\s*\(\s*(\d+)\s*\)/, type: 'assert', getDesc: (s, v) => `验证数量 > ${v}`, getOptions: (m) => ({ expected: m[2], operator: 'count>' }) },
+    ];
 
-  function extractSteps(text: string): PlaywrightStep[] {
-    const steps: PlaywrightStep[] = [];
-    let stepIndex = 0;
-    const lines = text.split('\n');
+    function extractSteps(text: string): PlaywrightStep[] {
+      const steps: PlaywrightStep[] = [];
+      let stepIndex = 0;
 
-    for (const line of lines) {
-      const trimmedLine = line.trim();
+      const processedText = text
+        .replace(/\.catch\s*\(\s*\(\)\s*=>\s*\{([^}]*)\}/g, (match, catchContent) => {
+          return '\n' + catchContent.trim() + '\n';
+        })
+        .replace(/\.catch\s*\(\s*\(\)\s*=>\s*\{\s*\}/g, '');
 
-      for (const pattern of stepPatterns) {
-        const regex = new RegExp(pattern.regex.source, 'g');
-        let stepMatch;
-        while ((stepMatch = regex.exec(trimmedLine)) !== null) {
-          stepIndex++;
-          const step: PlaywrightStep = {
-            id: `step_${stepIndex}`,
-            type: pattern.type,
-            description: pattern.getDesc ? pattern.getDesc(pattern.getSelector?.(stepMatch, trimmedLine), pattern.getValue?.(stepMatch)) : `Step ${stepIndex}`,
-          };
-          if (pattern.getSelector) {
-            const selector = pattern.getSelector(stepMatch, trimmedLine);
-            if (selector) step.selector = expandValue(selector);
+      const lines = processedText.split('\n');
+      console.log(`[DEBUG] extractSteps: input length=${text.length}, lines=${lines.length}, processedText=${JSON.stringify(processedText.substring(0, 100))}`);
+
+      for (const line of lines) {
+        const trimmedLine = line.trim();
+        if (!trimmedLine) continue;
+        for (const pattern of stepPatterns) {
+          const match = trimmedLine.match(pattern.regex);
+          if (match) {
+            stepIndex++;
+            console.log(`[DEBUG] extractSteps: matched line="${trimmedLine.substring(0, 50)}" type=${pattern.type}`);
+            const step: PlaywrightStep = {
+              id: `step_${stepIndex}`,
+              type: pattern.type,
+              description: pattern.getDesc ? pattern.getDesc(pattern.getValue?.(match), pattern.getSelector?.(match, trimmedLine)) : `Step ${stepIndex}`,
+            };
+            if (pattern.getSelector) {
+              const selector = pattern.getSelector(match, trimmedLine);
+              if (selector) step.selector = expandValue(selector);
+            }
+            if (pattern.getValue) step.value = expandValue(pattern.getValue(match));
+            if (pattern.getOptions) step.options = pattern.getOptions(match);
+            steps.push(step);
           }
-          if (pattern.getValue) step.value = expandValue(pattern.getValue(stepMatch));
-          steps.push(step);
         }
       }
+      console.log(`[DEBUG] extractSteps: returning ${steps.length} steps`);
+      return steps;
     }
-    return steps;
-  }
 
-  const beforeEachBlockMatch = content.match(/test\.beforeEach\s*\(\s*(?:async\s*)?\([^)]*\)\s*=>?\s*\{([\s\S]*?)\n  \}/);
-  let beforeEachSteps: PlaywrightStep[] = [];
-  if (beforeEachBlockMatch) {
-    const beforeEachContent = beforeEachBlockMatch[1].trim();
-    beforeEachSteps = extractSteps(beforeEachContent);
-  }
+    function extractBeforeEachSteps(blockContent: string): PlaywrightStep[] {
+      const beforeEachRegex = /test\.beforeEach\s*\(\s*(?:async\s*)?\([^)]*\)\s*=>?\s*\{/;
+      const beforeEachMatch = beforeEachRegex.exec(blockContent);
 
-  const testRegex = /test\s*\(\s*'([^']+)'\s*,/g;
-  let match;
+      if (!beforeEachMatch) {
+        return [];
+      }
 
-  while ((match = testRegex.exec(content)) !== null) {
-    const title = match[1].trim();
+      const startIndex = beforeEachMatch.index + beforeEachMatch[0].length;
+      let braceCount = 1;
+      let endIndex = startIndex;
 
-    const caseStartIndex = match.index;
-    const nextTestMatch = content.indexOf("\n  test('", caseStartIndex + 5);
-    const nextTestDescribeMatch = content.indexOf("\ntest.describe('", caseStartIndex + 5);
-    const nextTestBeforeEachMatch = content.indexOf("\n  test.beforeEach(", caseStartIndex + 5);
-    const nextTestAfterEachMatch = content.indexOf("\n  test.afterEach(", caseStartIndex + 5);
-    let nextMatch = nextTestMatch;
-    if (nextTestDescribeMatch !== -1 && (nextMatch === -1 || nextTestDescribeMatch < nextMatch)) {
-      nextMatch = nextTestDescribeMatch;
-    }
-    if (nextTestBeforeEachMatch !== -1 && (nextMatch === -1 || nextTestBeforeEachMatch < nextMatch)) {
-      nextMatch = nextTestBeforeEachMatch;
-    }
-    if (nextTestAfterEachMatch !== -1 && (nextMatch === -1 || nextTestAfterEachMatch < nextMatch)) {
-      nextMatch = nextTestAfterEachMatch;
-    }
-    const caseEndIndex = nextMatch === -1 ? content.length : nextMatch;
-    let caseContent = content.slice(caseStartIndex, caseEndIndex);
-
-    caseContent = caseContent.replace(/\n\s*test\.beforeEach\s*\([^)]*\)\s*\{[^}]*\}/g, '');
-    caseContent = caseContent.replace(/\n\s*test\.afterEach\s*\([^)]*\)\s*\{[^}]*\}/g, '');
-
-    const steps: PlaywrightStep[] = [...beforeEachSteps];
-
-    let stepIndex = steps.length;
-    const lines = caseContent.split('\n');
-
-    for (const line of lines) {
-      const trimmedLine = line.trim();
-
-      for (const pattern of stepPatterns) {
-        const regex = new RegExp(pattern.regex.source, 'g');
-        let stepMatch;
-        while ((stepMatch = regex.exec(trimmedLine)) !== null) {
-          stepIndex++;
-          const step: PlaywrightStep = {
-            id: `step_${stepIndex}`,
-            type: pattern.type,
-            description: pattern.getDesc ? pattern.getDesc(pattern.getSelector?.(stepMatch, trimmedLine), pattern.getValue?.(stepMatch)) : `Step ${stepIndex}`,
-          };
-          if (pattern.getSelector) {
-            const selector = pattern.getSelector(stepMatch, trimmedLine);
-            if (selector) step.selector = expandValue(selector);
-          }
-          if (pattern.getValue) step.value = expandValue(pattern.getValue(stepMatch));
-          steps.push(step);
+      for (let i = startIndex; i < blockContent.length && braceCount > 0; i++) {
+        if (blockContent[i] === '{') braceCount++;
+        else if (blockContent[i] === '}') braceCount--;
+        if (braceCount === 0) {
+          endIndex = i;
+          break;
         }
+      }
+
+      const beforeEachContent = blockContent.substring(startIndex, endIndex);
+      console.log(`[DEBUG] beforeEachContent length=${beforeEachContent.length}, content=${JSON.stringify(beforeEachContent.substring(0, 200))}`);
+      return extractSteps(beforeEachContent);
+    }
+
+    function extractAfterEachSteps(blockContent: string): PlaywrightStep[] {
+      const afterEachRegex = /test\.afterEach\s*\(\s*(?:async\s*)?\([^)]*\)\s*=>?\s*\{/;
+      const afterEachMatch = afterEachRegex.exec(blockContent);
+
+      if (!afterEachMatch) {
+        return [];
+      }
+
+      const startIndex = afterEachMatch.index + afterEachMatch[0].length;
+      let braceCount = 1;
+      let endIndex = startIndex;
+
+      for (let i = startIndex; i < blockContent.length && braceCount > 0; i++) {
+        if (blockContent[i] === '{') braceCount++;
+        else if (blockContent[i] === '}') braceCount--;
+        if (braceCount === 0) {
+          endIndex = i;
+          break;
+        }
+      }
+
+      const afterEachContent = blockContent.substring(startIndex, endIndex);
+      const screenshotSteps: PlaywrightStep[] = [];
+
+      const screenshotRegex = /takeScreenshot\s*\(\s*page\s*,\s*(?:testInfo|caseInfo)/g;
+      let screenshotMatch;
+      while ((screenshotMatch = screenshotRegex.exec(afterEachContent)) !== null) {
+        screenshotSteps.push({
+          id: `step_screenshot_${screenshotSteps.length + 1}`,
+          type: 'screenshot',
+          description: '用例执行后截图',
+        });
+      }
+
+      return screenshotSteps;
+    }
+
+    function splitDescribeBlocks(content: string): Array<{ name: string; content: string; start: number; end: number }> {
+      const blocks: Array<{ name: string; content: string; start: number; end: number }> = [];
+      const describeRegex = /test\.describe\s*\(\s*['"]([^'"]+)['"]\s*,/g;
+
+      let match;
+      while ((match = describeRegex.exec(content)) !== null) {
+        const name = match[1];
+        const blockStart = match.index;
+        const openBracePos = content.indexOf('{', match.index + match[0].length);
+
+        if (openBracePos === -1) continue;
+
+        let braceCount = 1;
+        let pos = openBracePos + 1;
+        while (pos < content.length && braceCount > 0) {
+          if (content[pos] === '{') braceCount++;
+          else if (content[pos] === '}') braceCount--;
+          pos++;
+        }
+
+        const blockEnd = pos;
+        blocks.push({
+          name,
+          content: content.substring(blockStart, blockEnd),
+          start: blockStart,
+          end: blockEnd,
+        });
+      }
+
+      return blocks;
+    }
+
+    const describeBlocks = splitDescribeBlocks(content);
+
+    for (const block of describeBlocks) {
+      const beforeEachSteps = extractBeforeEachSteps(block.content);
+
+      const testRegex = /test\s*\(\s*['"]([^'"]+)['"]\s*,/g;
+      let match;
+
+      const allTestMatches: { title: string; start: number; end: number }[] = [];
+      while ((match = testRegex.exec(block.content)) !== null) {
+        const title = match[1].trim();
+        const testStartIndex = match.index;
+
+        const nextTestMatch = block.content.indexOf("\n  test('", testStartIndex + 1);
+        const nextDescribeMatch = block.content.indexOf("\ntest.describe('", testStartIndex + 1);
+
+        let caseEndIndex = block.content.length;
+        if (nextTestMatch !== -1) caseEndIndex = nextTestMatch;
+        if (nextDescribeMatch !== -1 && nextDescribeMatch < caseEndIndex) {
+          caseEndIndex = nextDescribeMatch;
+        }
+
+        allTestMatches.push({ title, start: testStartIndex, end: caseEndIndex });
+      }
+
+      for (let i = 0; i < allTestMatches.length; i++) {
+        const { title, start: caseStartIndex, end: caseEndIndex } = allTestMatches[i];
+
+        const prevTestEnd = i > 0 ? allTestMatches[i - 1].end : -1;
+        let caseContentStart: number;
+
+        if (prevTestEnd > 0) {
+          caseContentStart = prevTestEnd;
+        } else {
+          const beforeEachRegex = /test\.beforeEach\s*\(\s*(?:async\s*)?\([^)]*\)\s*=>?\s*\{/;
+          const beforeEachMatch = beforeEachRegex.exec(block.content);
+          if (beforeEachMatch) {
+            const beStart = beforeEachMatch.index + beforeEachMatch[0].length;
+            let braceCount = 1;
+            let beEnd = beStart;
+            for (let j = beStart; j < block.content.length && braceCount > 0; j++) {
+              if (block.content[j] === '{') braceCount++;
+              else if (block.content[j] === '}') { braceCount--; if (braceCount === 0) beEnd = j; }
+            }
+            caseContentStart = beEnd + 3;
+          } else {
+            caseContentStart = caseStartIndex;
+          }
+        }
+
+        let caseContent = block.content.substring(caseContentStart, caseEndIndex);
+
+        // Helper function to remove a block using brace counting
+        function removeBlock(content: string, pattern: RegExp): string {
+          const match = pattern.exec(content);
+          if (!match) return content;
+          
+          const startIdx = match.index;
+          const bracePos = content.indexOf('{', startIdx);
+          if (bracePos === -1) return content;
+          
+          let braceCount = 1;
+          let i = bracePos + 1;
+          while (i < content.length && braceCount > 0) {
+            if (content[i] === '{') braceCount++;
+            else if (content[i] === '}') braceCount--;
+            i++;
+          }
+          
+          return content.substring(0, startIdx) + content.substring(i);
+        }
+
+        // Remove beforeEach blocks using brace counting
+        caseContent = removeBlock(caseContent, /\n\s*test\.beforeEach\s*\(\s*(?:async\s*)?\([^)]*\)\s*=>?\s*\{/);
+        // Remove afterEach blocks using brace counting
+        caseContent = removeBlock(caseContent, /\n\s*test\.afterEach\s*\(\s*(?:async\s*)?\([^)]*\)\s*=>?\s*\{/);
+
+        const steps: PlaywrightStep[] = [...beforeEachSteps];
+        const caseSteps = extractSteps(caseContent);
+        console.log(`[DEBUG] case "${title}": beforeEachSteps=${beforeEachSteps.length}, caseSteps=${caseSteps.length}, total=${steps.length + caseSteps.length}`);
+        steps.push(...caseSteps);
+
+        const afterEachSteps = extractAfterEachSteps(block.content);
+        steps.push(...afterEachSteps);
+
+        if (steps.length === 0) {
+          warnings.push(`用例 "${title}" 未能解析出有效步骤`);
+        }
+
+        const safeTitle = title.replace(/[^\w\u4e00-\u9fff]/g, '_').substring(0, 30);
+        const id = `TC_${safeTitle}`;
+
+        cases.push({
+          id,
+          title,
+          priority: 'P1',
+          enabled: true,
+          steps,
+        });
       }
     }
 
-    if (steps.length === 0) {
-      warnings.push(`用例 "${title}" 未能解析出有效步骤`);
+    if (cases.length === 0) {
+      errors.push('未能从 .spec.ts 文件中解析出任何测试用例');
     }
 
-    const safeTitle = title.replace(/[^\w\u4e00-\u9fff]/g, '_').substring(0, 30);
-    const id = `TC_${safeTitle}`;
+    const suite: PlaywrightSuite = {
+      id: `suite_${Date.now()}`,
+      name: fileName.replace(/\.(spec\.)?ts$/i, ''),
+      cases,
+    };
 
-    cases.push({
-      id,
-      title,
-      priority: 'P1',
-      enabled: true,
-      steps,
-    });
+    return {
+      success: cases.length > 0,
+      suite,
+      cases,
+      errors: errors.length > 0 ? errors : undefined,
+      warnings: warnings.length > 0 ? warnings : undefined,
+    };
   }
-
-  if (cases.length === 0) {
-    errors.push('未能从 .spec.ts 文件中解析出任何测试用例');
-  }
-
-  const suite: PlaywrightSuite = {
-    id: `suite_${Date.now()}`,
-    name: fileName.replace(/\.(spec\.)?ts$/i, ''),
-    cases,
-  };
-
-  return {
-    success: cases.length > 0,
-    suite,
-    cases,
-    errors: errors.length > 0 ? errors : undefined,
-    warnings: warnings.length > 0 ? warnings : undefined,
-  };
-}
 
 router.post('/parse', (req: Request, res: Response) => {
   try {

@@ -1,8 +1,23 @@
 import { test, expect } from '@playwright/test';
+import fs from 'fs';
+import path from 'path';
 
 const BASE_URL = 'http://192.168.1.73:3303';
+const SCREENSHOT_DIR = path.join(process.cwd(), 'screenshots');
+
+if (!fs.existsSync(SCREENSHOT_DIR)) {
+  fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
+}
 
 test.describe('开放平台管理端 - 登录功能', () => {
+
+  test.afterEach(async ({ page }, testInfo) => {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const screenshotName = `${testInfo.title.replace(/[^\w\u4e00-\u9fa5]/g, '_')}_${timestamp}.png`;
+    const screenshotPath = path.join(SCREENSHOT_DIR, screenshotName);
+    await page.screenshot({ path: screenshotPath, fullPage: true });
+    console.log(`Screenshot saved: ${screenshotPath}`);
+  });
 
   test.beforeEach(async ({ page }) => {
     await page.goto(`${BASE_URL}`);

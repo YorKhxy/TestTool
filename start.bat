@@ -5,12 +5,16 @@ echo ================================
 
 echo.
 echo Cleaning up ports...
-netstat -ano | findstr :3001 | findstr LISTENING
-netstat -ano | findstr :5173 | findstr LISTENING
 
-echo.
-echo Killing existing processes...
-taskkill /F /IM node.exe 2>nul
+for /f "tokens=5" %%a in ('netstat -ano ^| findstr :3001 ^| findstr LISTENING') do (
+    echo Killing process on port 3001: %%a
+    taskkill /F /PID %%a 2>nul
+)
+
+for /f "tokens=5" %%a in ('netstat -ano ^| findstr :5173 ^| findstr LISTENING') do (
+    echo Killing process on port 5173: %%a
+    taskkill /F /PID %%a 2>nul
+)
 
 echo.
 echo Waiting for ports to be released...

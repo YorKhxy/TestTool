@@ -17,6 +17,7 @@ export default function PlaywrightWorkbench() {
     isExecuting,
     isPaused,
     executingCaseId,
+    caseStatuses,
     currentExecutionLog,
     fileName,
     error,
@@ -41,7 +42,6 @@ export default function PlaywrightWorkbench() {
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isTerminalOpen, setIsTerminalOpen] = useState(true);
-  const [caseStatuses, setCaseStatuses] = useState<Record<string, 'pending' | 'running' | 'passed' | 'failed' | 'skipped'>>({});
 
   const activeCase = loadedCases.find((c) => c.id === activeCaseId) || null;
   const selectedCount = Object.values(selectedIds).filter(Boolean).length;
