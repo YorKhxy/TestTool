@@ -358,6 +358,8 @@ export default function Home() {
                   updateOverride(activeCase.id, patch);
                 }}
                 report={lastReport}
+                onRun={(id) => void runSingle(id)}
+                disabled={isRunning}
               />
             </div>
             <div className="shrink-0">
