@@ -11,8 +11,8 @@ export default function CaseDetailPanel({
   report,
 }: {
   testCase: TestCase | null;
-  override: { requiresAuth?: boolean; headersText: string; queryText: string; bodyText: string } | null;
-  onChange: (patch: Partial<{ requiresAuth?: boolean; headersText: string; queryText: string; bodyText: string }>) => void;
+  override: { requiresAuth?: boolean; headersText: string; queryText: string; bodyText: string; expectedResult?: string; path?: string } | null;
+  onChange: (patch: Partial<{ requiresAuth?: boolean; headersText: string; queryText: string; bodyText: string; expectedResult?: string; path?: string }>) => void;
   report: RunReport | null;
 }) {
   if (!testCase) {
@@ -33,7 +33,7 @@ export default function CaseDetailPanel({
           <div>
             <div className="font-mono text-xs text-zinc-400">{testCase.id}</div>
             <div className="mt-1 text-sm font-semibold text-zinc-100">{testCase.title || '-'}</div>
-            <div className="mt-1 font-mono text-xs text-zinc-500">{testCase.method} {testCase.path}</div>
+            <div className="mt-1 text-xs text-zinc-500">{testCase.method}</div>
           </div>
           <div className="mt-1">{r?.status ? <StatusBadge status={r.status} /> : null}</div>
         </div>
@@ -48,16 +48,12 @@ export default function CaseDetailPanel({
           </label>
           <span className="text-zinc-600">优先级 {testCase.priority || '-'}</span>
         </div>
-        {testCase.expectedResult ? (
-          <div className="mx-4 mt-3 rounded-lg border border-zinc-700/50 bg-zinc-800/20 p-3">
-            <div className="text-xs font-medium text-zinc-300">预期结果</div>
-            <div className="mt-1 text-xs text-zinc-400 whitespace-pre-wrap">{testCase.expectedResult}</div>
-          </div>
-        ) : null}
       </div>
 
       <div className="flex-1 overflow-auto p-4">
         <div className="grid gap-3">
+          <Field label="路径 (path)" value={o?.path ?? testCase.path} onChange={(v) => onChange({ path: v })} rows={1} />
+          <Field label="预期结果 (expectedResult)" value={o?.expectedResult ?? testCase.expectedResult ?? ''} onChange={(v) => onChange({ expectedResult: v })} rows={2} />
           <Field label="headers（JSON对象）" value={o?.headersText ?? '{}'} onChange={(v) => onChange({ headersText: v })} rows={4} />
           <Field label="query（JSON对象）" value={o?.queryText ?? '{}'} onChange={(v) => onChange({ queryText: v })} rows={3} />
           <Field label="body（JSON，POST/PUT 用）" value={o?.bodyText ?? ''} onChange={(v) => onChange({ bodyText: v })} rows={6} />

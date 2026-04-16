@@ -1,6 +1,7 @@
 import { Play, Square, Check } from 'lucide-react';
 import type { TestCase } from '../../shared/testPlan.js';
 import type { RunReport } from '../../shared/runTypes.js';
+import type { CaseOverride } from '../../hooks/useRunnerStore.js';
 import StatusBadge from '@/components/StatusBadge';
 import { cn } from '@/lib/utils';
 
@@ -16,6 +17,7 @@ export default function CaseTable({
   runningCaseId,
   report,
   filterText,
+  overrides,
 }: {
   cases: TestCase[];
   selectedIds: Record<string, boolean>;
@@ -28,10 +30,15 @@ export default function CaseTable({
   runningCaseId?: string | null;
   report: RunReport | null;
   filterText: string;
+  overrides?: Record<string, CaseOverride>;
 }) {
   const lowered = filterText.trim().toLowerCase();
   const filtered = lowered
-    ? cases.filter((c) => `${c.id} ${c.title} ${c.group ?? ''} ${c.path}`.toLowerCase().includes(lowered))
+    ? cases.filter((c) => {
+        const override = overrides?.[c.id];
+        const searchText = `${c.id} ${c.title} ${c.group ?? ''} ${override?.path ?? c.path}`.toLowerCase();
+        return searchText.includes(lowered);
+      })
     : cases;
 
   const ids = filtered.map((c) => c.id);
@@ -144,7 +151,7 @@ export default function CaseTable({
                     </span>
                   </td>
                   <td className="px-2 py-2">
-                    <div className="font-mono text-xs text-zinc-400 transition-colors">{c.path}</div>
+                    <div className="font-mono text-xs text-zinc-400 transition-colors">{overrides?.[c.id]?.path ?? c.path}</div>
                   </td>
                   <td className="px-2 py-2">
                     {status ? (
@@ -154,8 +161,8 @@ export default function CaseTable({
                     )}
                   </td>
                   <td className="px-2 py-2">
-                    <div className="max-w-48 truncate text-xs text-zinc-400" title={c.expectedResult || '-'}>
-                      {c.expectedResult || '-'}
+                    <div className="max-w-48 truncate text-xs text-zinc-400" title={overrides?.[c.id]?.expectedResult ?? c.expectedResult ?? '-'}>
+                      {overrides?.[c.id]?.expectedResult ?? c.expectedResult ?? '-'}
                     </div>
                   </td>
                   <td className="px-2 py-2" onClick={(e) => e.stopPropagation()}>

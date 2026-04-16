@@ -9,6 +9,7 @@
 | Base URL | /api/admin |
 | 认证方式 | Bearer Token |
 | 文档日期 | 2026-04-14 |
+| 数据来源 | G:\api文档-管理(1)\api文档-管理 |
 
 ---
 
@@ -34,41 +35,62 @@
 
 ---
 
+## 预期结果编写规则
+
+| 场景 | HTTP状态码 | code | message | 说明 |
+|------|-----------|------|---------|------|
+| 成功 | 200 | 200 | success | - |
+| 参数错误 | 200 | 10001 | 参数错误 | - |
+| 短信验证码错误 | 200 | 10002 | 验证码错误 | - |
+| 账号不存在 | 200 | 10003 | 管理员账号不存在 | - |
+| 账号已存在 | 200 | 10005 | 账号已存在 | - |
+| Token无效/无Token | 401 | - | - | 响应body为"unauthorized"字符串，非JSON |
+| 权限不足 | 200 | 10007 | 权限不足 | - |
+| 资源不存在 | 200 | 10013 | 资源不存在 | - |
+
+---
+
 ## 登录认证模块
+
+> 基础路径：`/api/admin/auth`
 
 | 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
 |-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
-| TC-AUTH-001 | 发送短信验证码-正常 | POST | /api/admin/auth/sendCode | Content-Type: application/json | - | `{"phone": "13800000000"}` | P0 | HTTP 200; code:200; message:success | - |
-| TC-AUTH-002 | 发送短信验证码-手机号为空 | POST | /api/admin/auth/sendCode | Content-Type: application/json | - | `{"phone": ""}` | P1 | HTTP 200; code:200; message:success | - |
-| TC-AUTH-003 | 发送短信验证码-手机号格式错误 | POST | /api/admin/auth/sendCode | Content-Type: application/json | - | `{"phone": "12345"}` | P1 | HTTP 200; code:200; message:success | - |
+| TC-AUTH-001 | 发送短信验证码-正常 | POST | /api/admin/auth/sendCo | Content-Type: application/json | {} | `{"phone": "13800000000"}` | P0 | HTTP 200; code:200; message:success |  |
+| TC-AUTH-002 | 发送短信验证码-手机号为空 | POST | /api/admin/auth/sendCode | Content-Type: application/json | - | `{"phone": ""}` | P1 | HTTP 200; code:10001; message:参数错误 | - |
+| TC-AUTH-003 | 发送短信验证码-手机号格式错误 | POST | /api/admin/auth/sendCode | Content-Type: application/json | - | `{"phone": "12345"}` | P1 | HTTP 200; code:10001; message:参数错误 | - |
 | TC-AUTH-004 | 登录-正常 | POST | /api/admin/auth/login | Content-Type: application/json | - | `{"phone": "13800000000", "code": "123456"}` | P0 | HTTP 200; code:200; message:success | admin_token: data.token |
-| TC-AUTH-005 | 登录-手机号为空 | POST | /api/admin/auth/login | Content-Type: application/json | - | `{"phone": "", "code": "123456"}` | P1 | HTTP 200; code:10003; message:管理员账号不存在 | - |
-| TC-AUTH-006 | 登录-验证码为空 | POST | /api/admin/auth/login | Content-Type: application/json | - | `{"phone": "13800000000", "code": ""}` | P1 | HTTP 200; code:10002; message:验证码错误 | - |
+| TC-AUTH-005 | 登录-手机号为空 | POST | /api/admin/auth/login | Content-Type: application/json | - | `{"phone": "", "code": "123456"}` | P1 | HTTP 200; code:10001; message:参数错误 | - |
+| TC-AUTH-006 | 登录-验证码为空 | POST | /api/admin/auth/login | Content-Type: application/json | - | `{"phone": "13800000000", "code": ""}` | P1 | HTTP 200; code:10001; message:参数错误 | - |
 | TC-AUTH-007 | 登录-验证码错误 | POST | /api/admin/auth/login | Content-Type: application/json | - | `{"phone": "13800000000", "code": "000000"}` | P1 | HTTP 200; code:10002; message:验证码错误 | - |
 | TC-AUTH-008 | 登录-账号不存在 | POST | /api/admin/auth/login | Content-Type: application/json | - | `{"phone": "13900000000", "code": "123456"}` | P1 | HTTP 200; code:10003; message:管理员账号不存在 | - |
 | TC-AUTH-009 | 退出登录 | POST | /api/admin/auth/logout | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200; message:success | - |
-| TC-AUTH-010 | 获取当前用户信息 | GET | /api/admin/auth/userinfo | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
-| TC-AUTH-011 | 获取当前用户菜单权限 | GET | /api/admin/auth/menus | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
-| TC-AUTH-012 | 获取用户信息-无Token | GET | /api/admin/auth/userinfo | - | - | - | P0 | HTTP 401 | - |
-| TC-AUTH-013 | 获取用户信息-Token无效 | GET | /api/admin/auth/userinfo | Authorization: Bearer invalid_token | - | - | P0 | HTTP 401 | - |
-| TC-AUTH-014 | 获取菜单-无Token | GET | /api/admin/auth/menus | - | - | - | P0 | HTTP 401 | - |
+| TC-AUTH-010 | 获取当前用户信息 | GET | /api/admin/auth/userinfo | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
+| TC-AUTH-011 | 获取当前用户菜单权限 | GET | /api/admin/auth/menus | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
+| TC-AUTH-012 | 获取当前用户权限标识列表 | GET | /api/admin/auth/permissions | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
+| TC-AUTH-013 | 获取用户信息-无Token | GET | /api/admin/auth/userinfo | - | - | - | P0 | HTTP 401 | - |
+| TC-AUTH-014 | 获取用户信息-Token无效 | GET | /api/admin/auth/userinfo | Authorization: Bearer invalid_token | - | - | P0 | HTTP 401 | - |
+| TC-AUTH-015 | 获取菜单-无Token | GET | /api/admin/auth/menus | - | - | - | P0 | HTTP 401 | - |
+| TC-AUTH-016 | 获取权限标识-无Token | GET | /api/admin/auth/permissions | - | - | - | P0 | HTTP 401 | - |
 
 ---
 
 ## 商户管理模块
 
+> 基础路径：`/api/admin/merchant`
+
 ### 商户审批
 
 | 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
 |-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
-| TC-MCH-001 | 获取商户审批列表-正常 | GET | /api/admin/merchant/approval/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
-| TC-MCH-002 | 获取商户审批列表-带分页 | GET | /api/admin/merchant/approval/list | Authorization: Bearer ${admin_token} | pageNum=1&pageSize=10 | - | P1 | HTTP 200; code:200 | - |
-| TC-MCH-003 | 获取商户审批列表-关键词搜索 | GET | /api/admin/merchant/approval/list | Authorization: Bearer ${admin_token} | keyword=测试公司 | - | P1 | HTTP 200; code:200 | - |
-| TC-MCH-004 | 获取商户审批列表-状态筛选待审批 | GET | /api/admin/merchant/approval/list | Authorization: Bearer ${admin_token} | approvalStatus=PENDING | - | P1 | HTTP 200; code:200 | - |
-| TC-MCH-005 | 获取商户审批列表-状态筛选已通过 | GET | /api/admin/merchant/approval/list | Authorization: Bearer ${admin_token} | approvalStatus=APPROVED | - | P1 | HTTP 200; code:200 | - |
-| TC-MCH-006 | 获取商户审批列表-状态筛选已驳回 | GET | /api/admin/merchant/approval/list | Authorization: Bearer ${admin_token} | approvalStatus=REJECTED | - | P1 | HTTP 200; code:200 | - |
+| TC-MCH-001 | 获取商户审批列表-正常 | GET | /api/admin/merchant/approval/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
+| TC-MCH-002 | 获取商户审批列表-带分页 | GET | /api/admin/merchant/approval/list | Authorization: Bearer ${admin_token} | pageNum=1&pageSize=10 | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-MCH-003 | 获取商户审批列表-关键词搜索 | GET | /api/admin/merchant/approval/list | Authorization: Bearer ${admin_token} | keyword=测试公司 | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-MCH-004 | 获取商户审批列表-状态筛选待审批 | GET | /api/admin/merchant/approval/list | Authorization: Bearer ${admin_token} | approvalStatus=PENDING | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-MCH-005 | 获取商户审批列表-状态筛选已通过 | GET | /api/admin/merchant/approval/list | Authorization: Bearer ${admin_token} | approvalStatus=APPROVED | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-MCH-006 | 获取商户审批列表-状态筛选已驳回 | GET | /api/admin/merchant/approval/list | Authorization: Bearer ${admin_token} | approvalStatus=REJECTED | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-MCH-007 | 获取商户审批列表-无Token | GET | /api/admin/merchant/approval/list | - | - | - | P0 | HTTP 401 | - |
-| TC-MCH-008 | 获取商户审批详情-正常 | GET | /api/admin/merchant/approval/1 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
+| TC-MCH-008 | 获取商户审批详情-正常 | GET | /api/admin/merchant/approval/1 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
 | TC-MCH-009 | 获取商户审批详情-审批记录不存在 | GET | /api/admin/merchant/approval/999999 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10013; message:资源不存在 | - |
 | TC-MCH-010 | 审批商户-通过 | POST | /api/admin/merchant/approval/audit | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"id": 1, "approvalStatus": "APPROVED", "rejectReason": ""}` | P0 | HTTP 200; code:200; message:success | - |
 | TC-MCH-011 | 审批商户-驳回 | POST | /api/admin/merchant/approval/audit | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"id": 1, "approvalStatus": "REJECTED", "rejectReason": "资质不符合"}` | P0 | HTTP 200; code:200; message:success | - |
@@ -82,48 +104,50 @@
 
 | 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
 |-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
-| TC-MCH-021 | 获取商户审批记录列表-正常 | GET | /api/admin/merchant/approval/records | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200 | - |
-| TC-MCH-022 | 获取商户审批记录列表-关键词搜索 | GET | /api/admin/merchant/approval/records | Authorization: Bearer ${admin_token} | keyword=测试 | - | P2 | HTTP 200; code:200 | - |
-| TC-MCH-023 | 获取商户审批记录列表-状态筛选 | GET | /api/admin/merchant/approval/records | Authorization: Bearer ${admin_token} | approvalStatus=APPROVED | - | P2 | HTTP 200; code:200 | - |
+| TC-MCH-021 | 获取商户审批记录列表-正常 | GET | /api/admin/merchant/approval/records | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-MCH-022 | 获取商户审批记录列表-关键词搜索 | GET | /api/admin/merchant/approval/records | Authorization: Bearer ${admin_token} | keyword=测试 | - | P2 | HTTP 200; code:200; message:success | - |
+| TC-MCH-023 | 获取商户审批记录列表-状态筛选 | GET | /api/admin/merchant/approval/records | Authorization: Bearer ${admin_token} | approvalStatus=APPROVED | - | P2 | HTTP 200; code:200; message:success | - |
 
 ### 商户列表
 
 | 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
 |-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
-| TC-MCH-031 | 获取商户管理列表-正常 | GET | /api/admin/merchant/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
-| TC-MCH-032 | 获取商户管理列表-带分页 | GET | /api/admin/merchant/list | Authorization: Bearer ${admin_token} | pageNum=1&pageSize=10 | - | P1 | HTTP 200; code:200 | - |
-| TC-MCH-033 | 获取商户管理列表-关键词搜索 | GET | /api/admin/merchant/list | Authorization: Bearer ${admin_token} | keyword=测试公司 | - | P1 | HTTP 200; code:200 | - |
+| TC-MCH-031 | 获取商户管理列表-正常 | GET | /api/admin/merchant/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
+| TC-MCH-032 | 获取商户管理列表-带分页 | GET | /api/admin/merchant/list | Authorization: Bearer ${admin_token} | pageNum=1&pageSize=10 | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-MCH-033 | 获取商户管理列表-关键词搜索 | GET | /api/admin/merchant/list | Authorization: Bearer ${admin_token} | keyword=测试公司 | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-MCH-034 | 获取商户管理列表-无权限用户 | GET | /api/admin/merchant/list | Authorization: Bearer ${no_permission_token} | - | - | P0 | HTTP 200; code:10007; message:权限不足 | - |
 
 ### 商户详情
 
 | 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
 |-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
-| TC-MCH-041 | 获取商户基本信息-正常 | GET | /api/admin/merchant/1 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | merchant_id: data.id |
+| TC-MCH-041 | 获取商户基本信息-正常 | GET | /api/admin/merchant/1 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | merchant_id: data.id |
 | TC-MCH-042 | 获取商户基本信息-商户不存在 | GET | /api/admin/merchant/999999 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10013; message:资源不存在 | - |
-| TC-MCH-043 | 获取商户本月百分比数据-默认当月 | GET | /api/admin/merchant/1/monthly-distribution | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200 | - |
-| TC-MCH-044 | 获取商户本月百分比数据-指定月份 | GET | /api/admin/merchant/1/monthly-distribution | Authorization: Bearer ${admin_token} | month=2026-03 | - | P1 | HTTP 200; code:200 | - |
+| TC-MCH-043 | 获取商户本月百分比数据-默认当月 | GET | /api/admin/merchant/1/monthly-distribution | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-MCH-044 | 获取商户本月百分比数据-指定月份 | GET | /api/admin/merchant/1/monthly-distribution | Authorization: Bearer ${admin_token} | month=2026-03 | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-MCH-045 | 获取商户本月百分比数据-商户不存在 | GET | /api/admin/merchant/999999/monthly-distribution | Authorization: Bearer ${admin_token} | - | - | P2 | HTTP 200; code:10013; message:资源不存在 | - |
-| TC-MCH-046 | 获取商户每日数据-正常 | GET | /api/admin/merchant/1/daily-stats | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200 | - |
-| TC-MCH-047 | 获取商户每日数据-日期范围 | GET | /api/admin/merchant/1/daily-stats | Authorization: Bearer ${admin_token} | startDate=2026-03-01&endDate=2026-03-31 | - | P1 | HTTP 200; code:200 | - |
+| TC-MCH-046 | 获取商户每日数据-正常 | GET | /api/admin/merchant/1/daily-stats | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-MCH-047 | 获取商户每日数据-日期范围 | GET | /api/admin/merchant/1/daily-stats | Authorization: Bearer ${admin_token} | startDate=2026-03-01&endDate=2026-03-31 | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-MCH-048 | 获取商户每日数据-商户不存在 | GET | /api/admin/merchant/999999/daily-stats | Authorization: Bearer ${admin_token} | - | - | P2 | HTTP 200; code:10013; message:资源不存在 | - |
-| TC-MCH-049 | 获取商户关联应用列表-正常 | GET | /api/admin/merchant/1/apps | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200 | - |
-| TC-MCH-050 | 获取商户关联应用列表-关键词搜索 | GET | /api/admin/merchant/1/apps | Authorization: Bearer ${admin_token} | keyword=测试应用 | - | P2 | HTTP 200; code:200 | - |
+| TC-MCH-049 | 获取商户关联应用列表-正常 | GET | /api/admin/merchant/1/apps | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-MCH-050 | 获取商户关联应用列表-关键词搜索 | GET | /api/admin/merchant/1/apps | Authorization: Bearer ${admin_token} | keyword=测试应用 | - | P2 | HTTP 200; code:200; message:success | - |
 | TC-MCH-051 | 获取商户关联应用列表-商户不存在 | GET | /api/admin/merchant/999999/apps | Authorization: Bearer ${admin_token} | - | - | P2 | HTTP 200; code:10013; message:资源不存在 | - |
-| TC-MCH-052 | 获取商户关联应用详情-正常 | GET | /api/admin/merchant/1/apps/1 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200 | - |
+| TC-MCH-052 | 获取商户关联应用详情-正常 | GET | /api/admin/merchant/1/apps/1 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-MCH-053 | 获取商户关联应用详情-商户不存在 | GET | /api/admin/merchant/999999/apps/1 | Authorization: Bearer ${admin_token} | - | - | P2 | HTTP 200; code:10013; message:资源不存在 | - |
 
 ---
 
 ## 应用管理模块
 
+> 基础路径：`/api/admin/app`
+
 ### 应用待审批
 
 | 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
 |-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
-| TC-APP-001 | 获取应用待审批列表-正常 | GET | /api/admin/app/approval/pending/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
-| TC-APP-002 | 获取应用待审批列表-关键词搜索 | GET | /api/admin/app/approval/pending/list | Authorization: Bearer ${admin_token} | keyword=测试应用 | - | P1 | HTTP 200; code:200 | - |
-| TC-APP-003 | 获取应用待审批列表-带分页 | GET | /api/admin/app/approval/pending/list | Authorization: Bearer ${admin_token} | pageNum=1&pageSize=10 | - | P1 | HTTP 200; code:200 | - |
+| TC-APP-001 | 获取应用待审批列表-正常 | GET | /api/admin/app/approval/pending/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
+| TC-APP-002 | 获取应用待审批列表-关键词搜索 | GET | /api/admin/app/approval/pending/list | Authorization: Bearer ${admin_token} | keyword=测试应用 | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-APP-003 | 获取应用待审批列表-带分页 | GET | /api/admin/app/approval/pending/list | Authorization: Bearer ${admin_token} | pageNum=1&pageSize=10 | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-APP-004 | 获取应用待审批列表-无Token | GET | /api/admin/app/approval/pending/list | - | - | - | P0 | HTTP 401 | - |
 | TC-APP-005 | 审批应用-通过 | POST | /api/admin/app/approval/audit | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"id": 1, "approvalStatus": "APPROVED", "rejectReason": "", "reviewComment": "", "attachments": []}` | P0 | HTTP 200; code:200; message:success | - |
 | TC-APP-006 | 审批应用-驳回 | POST | /api/admin/app/approval/audit | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"id": 1, "approvalStatus": "REJECTED", "rejectReason": "应用描述不合规", "reviewComment": "", "attachments": []}` | P0 | HTTP 200; code:200; message:success | - |
@@ -137,16 +161,16 @@
 
 | 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
 |-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
-| TC-APP-021 | 获取应用审批记录列表-正常 | GET | /api/admin/app/approval/records/list | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200 | - |
-| TC-APP-022 | 获取应用审批记录列表-关键词搜索 | GET | /api/admin/app/approval/records/list | Authorization: Bearer ${admin_token} | keyword=测试 | - | P2 | HTTP 200; code:200 | - |
-| TC-APP-023 | 获取应用审批记录列表-状态筛选 | GET | /api/admin/app/approval/records/list | Authorization: Bearer ${admin_token} | approvalStatus=APPROVED | - | P2 | HTTP 200; code:200 | - |
+| TC-APP-021 | 获取应用审批记录列表-正常 | GET | /api/admin/app/approval/records/list | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-APP-022 | 获取应用审批记录列表-关键词搜索 | GET | /api/admin/app/approval/records/list | Authorization: Bearer ${admin_token} | keyword=测试 | - | P2 | HTTP 200; code:200; message:success | - |
+| TC-APP-023 | 获取应用审批记录列表-状态筛选 | GET | /api/admin/app/approval/records/list | Authorization: Bearer ${admin_token} | approvalStatus=APPROVED | - | P2 | HTTP 200; code:200; message:success | - |
 
 ### 应用待上架
 
 | 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
 |-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
-| TC-APP-031 | 获取应用待上架列表-正常 | GET | /api/admin/app/pending-publish/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
-| TC-APP-032 | 获取应用待上架列表-关键词搜索 | GET | /api/admin/app/pending-publish/list | Authorization: Bearer ${admin_token} | keyword=测试 | - | P1 | HTTP 200; code:200 | - |
+| TC-APP-031 | 获取应用待上架列表-正常 | GET | /api/admin/app/pending-publish/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
+| TC-APP-032 | 获取应用待上架列表-关键词搜索 | GET | /api/admin/app/pending-publish/list | Authorization: Bearer ${admin_token} | keyword=测试 | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-APP-033 | 获取应用待上架列表-无Token | GET | /api/admin/app/pending-publish/list | - | - | - | P0 | HTTP 401 | - |
 | TC-APP-034 | 应用上架-正常 | POST | /api/admin/app/publish/1 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | app_id: 1 |
 | TC-APP-035 | 应用上架-应用不存在 | POST | /api/admin/app/publish/999999 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10013; message:资源不存在 | - |
@@ -156,15 +180,15 @@
 
 | 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
 |-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
-| TC-APP-041 | 获取已上架应用列表-正常 | GET | /api/admin/app/published/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
-| TC-APP-042 | 获取已上架应用列表-关键词搜索 | GET | /api/admin/app/published/list | Authorization: Bearer ${admin_token} | keyword=测试 | - | P1 | HTTP 200; code:200 | - |
+| TC-APP-041 | 获取已上架应用列表-正常 | GET | /api/admin/app/published/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
+| TC-APP-042 | 获取已上架应用列表-关键词搜索 | GET | /api/admin/app/published/list | Authorization: Bearer ${admin_token} | keyword=测试 | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-APP-043 | 获取已上架应用列表-无Token | GET | /api/admin/app/published/list | - | - | - | P0 | HTTP 401 | - |
 
 ### 应用详情
 
 | 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
 |-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
-| TC-APP-051 | 获取应用详情-正常 | GET | /api/admin/app/1 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
+| TC-APP-051 | 获取应用详情-正常 | GET | /api/admin/app/1 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
 | TC-APP-052 | 获取应用详情-应用不存在 | GET | /api/admin/app/999999 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10013; message:资源不存在 | - |
 | TC-APP-053 | 获取应用详情-无Token | GET | /api/admin/app/1 | - | - | - | P0 | HTTP 401 | - |
 
@@ -172,14 +196,16 @@
 
 ## 财务管理模块
 
+> 基础路径：`/api/admin/finance`
+
 | 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
 |-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
-| TC-FIN-001 | 获取财务列表-正常 | GET | /api/admin/finance/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
-| TC-FIN-002 | 获取财务列表-关键词搜索 | GET | /api/admin/finance/list | Authorization: Bearer ${admin_token} | keyword=测试公司 | - | P1 | HTTP 200; code:200 | - |
-| TC-FIN-003 | 获取财务列表-带分页 | GET | /api/admin/finance/list | Authorization: Bearer ${admin_token} | pageNum=1&pageSize=10 | - | P1 | HTTP 200; code:200 | - |
+| TC-FIN-001 | 获取财务列表-正常 | GET | /api/admin/finance/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
+| TC-FIN-002 | 获取财务列表-关键词搜索 | GET | /api/admin/finance/list | Authorization: Bearer ${admin_token} | keyword=测试公司 | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-FIN-003 | 获取财务列表-带分页 | GET | /api/admin/finance/list | Authorization: Bearer ${admin_token} | pageNum=1&pageSize=10 | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-FIN-004 | 获取财务列表-无Token | GET | /api/admin/finance/list | - | - | - | P0 | HTTP 401 | - |
-| TC-FIN-005 | 获取商户财务应用统计-默认当月 | GET | /api/admin/finance/1/app-stats | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200 | - |
-| TC-FIN-006 | 获取商户财务应用统计-指定月份 | GET | /api/admin/finance/1/app-stats | Authorization: Bearer ${admin_token} | month=2026-03 | - | P1 | HTTP 200; code:200 | - |
+| TC-FIN-005 | 获取商户财务应用统计-默认当月 | GET | /api/admin/finance/1/app-stats | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-FIN-006 | 获取商户财务应用统计-指定月份 | GET | /api/admin/finance/1/app-stats | Authorization: Bearer ${admin_token} | month=2026-03 | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-FIN-007 | 获取商户财务应用统计-商户不存在 | GET | /api/admin/finance/999999/app-stats | Authorization: Bearer ${admin_token} | - | - | P2 | HTTP 200; code:10013; message:资源不存在 | - |
 | TC-FIN-008 | 获取商户财务应用统计-无Token | GET | /api/admin/finance/1/app-stats | - | - | - | P1 | HTTP 401 | - |
 | TC-FIN-009 | 导出商户财务统计-正常 | GET | /api/admin/finance/1/export | Authorization: Bearer ${admin_token} | month=2026-03 | - | P0 | HTTP 200 | - |
@@ -191,14 +217,16 @@
 
 ## 用户管理模块
 
+> 基础路径：`/api/admin/user`
+
 | 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
 |-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
-| TC-USER-001 | 获取用户列表-正常 | GET | /api/admin/user/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
-| TC-USER-002 | 获取用户列表-关键词搜索 | GET | /api/admin/user/list | Authorization: Bearer ${admin_token} | keyword=138 | - | P1 | HTTP 200; code:200 | - |
-| TC-USER-003 | 获取用户列表-状态筛选正常 | GET | /api/admin/user/list | Authorization: Bearer ${admin_token} | status=NORMAL | - | P1 | HTTP 200; code:200 | - |
-| TC-USER-004 | 获取用户列表-状态筛选停用 | GET | /api/admin/user/list | Authorization: Bearer ${admin_token} | status=DISABLED | - | P1 | HTTP 200; code:200 | - |
-| TC-USER-005 | 获取用户列表-角色筛选 | GET | /api/admin/user/list | Authorization: Bearer ${admin_token} | roleId=1 | - | P1 | HTTP 200; code:200 | - |
-| TC-USER-006 | 获取用户列表-带分页 | GET | /api/admin/user/list | Authorization: Bearer ${admin_token} | pageNum=1&pageSize=10 | - | P1 | HTTP 200; code:200 | - |
+| TC-USER-001 | 获取用户列表-正常 | GET | /api/admin/user/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
+| TC-USER-002 | 获取用户列表-关键词搜索 | GET | /api/admin/user/list | Authorization: Bearer ${admin_token} | keyword=138 | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-USER-003 | 获取用户列表-状态筛选正常 | GET | /api/admin/user/list | Authorization: Bearer ${admin_token} | status=NORMAL | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-USER-004 | 获取用户列表-状态筛选停用 | GET | /api/admin/user/list | Authorization: Bearer ${admin_token} | status=DISABLED | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-USER-005 | 获取用户列表-角色筛选 | GET | /api/admin/user/list | Authorization: Bearer ${admin_token} | roleId=1 | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-USER-006 | 获取用户列表-带分页 | GET | /api/admin/user/list | Authorization: Bearer ${admin_token} | pageNum=1&pageSize=10 | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-USER-007 | 获取用户列表-无Token | GET | /api/admin/user/list | - | - | - | P0 | HTTP 401 | - |
 | TC-USER-008 | 新增用户-正常 | POST | /api/admin/user | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"username": "testuser", "email": "test@example.com", "phone": "13800000001", "roleId": 1, "status": "NORMAL"}` | P0 | HTTP 200; code:200; message:success | new_user_id: data.id |
 | TC-USER-009 | 新增用户-用户名缺失 | POST | /api/admin/user | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"email": "test@example.com", "phone": "13800000001", "roleId": 1}` | P1 | HTTP 200; code:10001; message:参数错误 | - |
@@ -219,14 +247,16 @@
 
 ## 角色管理模块
 
+> 基础路径：`/api/admin/role`
+
 | 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
 |-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
-| TC-ROLE-001 | 获取角色列表-正常 | GET | /api/admin/role/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
-| TC-ROLE-002 | 获取角色列表-关键词搜索 | GET | /api/admin/role/list | Authorization: Bearer ${admin_token} | keyword=管理员 | - | P1 | HTTP 200; code:200 | - |
-| TC-ROLE-003 | 获取角色列表-状态筛选 | GET | /api/admin/role/list | Authorization: Bearer ${admin_token} | status=NORMAL | - | P1 | HTTP 200; code:200 | - |
-| TC-ROLE-004 | 获取角色列表-带分页 | GET | /api/admin/role/list | Authorization: Bearer ${admin_token} | pageNum=1&pageSize=10 | - | P1 | HTTP 200; code:200 | - |
+| TC-ROLE-001 | 获取角色列表-正常 | GET | /api/admin/role/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
+| TC-ROLE-002 | 获取角色列表-关键词搜索 | GET | /api/admin/role/list | Authorization: Bearer ${admin_token} | keyword=管理员 | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-ROLE-003 | 获取角色列表-状态筛选 | GET | /api/admin/role/list | Authorization: Bearer ${admin_token} | status=NORMAL | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-ROLE-004 | 获取角色列表-带分页 | GET | /api/admin/role/list | Authorization: Bearer ${admin_token} | pageNum=1&pageSize=10 | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-ROLE-005 | 获取角色列表-无Token | GET | /api/admin/role/list | - | - | - | P0 | HTTP 401 | - |
-| TC-ROLE-006 | 获取角色详情-正常 | GET | /api/admin/role/1 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
+| TC-ROLE-006 | 获取角色详情-正常 | GET | /api/admin/role/1 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
 | TC-ROLE-007 | 获取角色详情-角色不存在 | GET | /api/admin/role/999999 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10013; message:资源不存在 | - |
 | TC-ROLE-008 | 获取角色详情-无Token | GET | /api/admin/role/1 | - | - | - | P0 | HTTP 401 | - |
 | TC-ROLE-009 | 新增角色-正常 | POST | /api/admin/role | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"roleName": "测试角色", "roleKey": "test_role", "sort": 1, "menuIds": [1, 2, 3], "status": "NORMAL", "remark": "测试备注"}` | P0 | HTTP 200; code:200; message:success | new_role_id: data.id |
@@ -242,19 +272,21 @@
 | TC-ROLE-019 | 删除角色-角色不存在 | DELETE | /api/admin/role/999999 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10013; message:资源不存在 | - |
 | TC-ROLE-020 | 删除角色-超级管理员不可删除 | DELETE | /api/admin/role/1 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10001; message:参数错误 | - |
 | TC-ROLE-021 | 删除角色-无Token | DELETE | /api/admin/role/2 | - | - | - | P0 | HTTP 401 | - |
-| TC-ROLE-022 | 获取角色下拉列表-正常 | GET | /api/admin/role/options | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200 | - |
+| TC-ROLE-022 | 获取角色下拉列表-正常 | GET | /api/admin/role/options | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-ROLE-023 | 获取角色下拉列表-无Token | GET | /api/admin/role/options | - | - | - | P1 | HTTP 401 | - |
 
 ---
 
 ## 菜单管理模块
 
+> 基础路径：`/api/admin/menu`
+
 | 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
 |-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
-| TC-MENU-001 | 获取菜单树-正常 | GET | /api/admin/menu/tree | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200 | - |
-| TC-MENU-002 | 获取菜单树-关键词搜索 | GET | /api/admin/menu/tree | Authorization: Bearer ${admin_token} | keyword=用户 | - | P1 | HTTP 200; code:200 | - |
-| TC-MENU-003 | 获取菜单树-平台筛选管理端 | GET | /api/admin/menu/tree | Authorization: Bearer ${admin_token} | platform=管理端 | - | P1 | HTTP 200; code:200 | - |
-| TC-MENU-004 | 获取菜单树-平台筛选开放平台 | GET | /api/admin/menu/tree | Authorization: Bearer ${admin_token} | platform=开放平台 | - | P1 | HTTP 200; code:200 | - |
+| TC-MENU-001 | 获取菜单树-正常 | GET | /api/admin/menu/tree | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
+| TC-MENU-002 | 获取菜单树-关键词搜索 | GET | /api/admin/menu/tree | Authorization: Bearer ${admin_token} | keyword=用户 | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-MENU-003 | 获取菜单树-平台筛选管理端 | GET | /api/admin/menu/tree | Authorization: Bearer ${admin_token} | platform=管理端 | - | P1 | HTTP 200; code:200; message:success | - |
+| TC-MENU-004 | 获取菜单树-平台筛选开放平台 | GET | /api/admin/menu/tree | Authorization: Bearer ${admin_token} | platform=开放平台 | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-MENU-005 | 获取菜单树-无Token | GET | /api/admin/menu/tree | - | - | - | P0 | HTTP 401 | - |
 | TC-MENU-006 | 新增菜单-目录类型 | POST | /api/admin/menu | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"parentId": 0, "menuType": "DIR", "menuName": "测试目录", "sort": 1, "visible": true, "refresh": false}` | P0 | HTTP 200; code:200; message:success | new_menu_id: data.id |
 | TC-MENU-007 | 新增菜单-菜单类型 | POST | /api/admin/menu | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"parentId": 1, "menuType": "MENU", "menuName": "测试菜单", "sort": 1, "path": "/test", "permission": "test:menu", "visible": true, "refresh": false}` | P0 | HTTP 200; code:200; message:success | - |
@@ -285,6 +317,7 @@
 ### 通用枚举
 
 **审批状态 (approvalStatus)**
+
 | 值 | 说明 |
 |---|---|
 | PENDING | 待审批 |
@@ -292,6 +325,7 @@
 | REJECTED | 已驳回 |
 
 **应用上架状态 (publishStatus)**
+
 | 值 | 说明 |
 |---|---|
 | PENDING | 待上架 |
@@ -299,12 +333,14 @@
 | UNPUBLISHED | 已下架 |
 
 **用户/角色状态 (status)**
+
 | 值 | 说明 |
 |---|---|
 | NORMAL | 正常 |
 | DISABLED | 停用 |
 
 **菜单类型 (menuType)**
+
 | 值 | 说明 |
 |---|---|
 | DIR | 目录 |
@@ -313,15 +349,39 @@
 
 ---
 
+## 与API文档对照修改说明
+
+### 主要修改点
+
+1. **登录模块新增接口**
+   - 新增 `TC-AUTH-012`: 获取当前用户权限标识列表 `/api/admin/auth/permissions`
+   - 新增 `TC-AUTH-016`: 获取权限标识-无Token
+
+2. **错误信息修正**
+   - `TC-AUTH-002/003`: 发送短信验证码参数错误时，message 从 `success` 改为 `参数错误`
+   - `TC-AUTH-005/006`: 登录参数错误时，message 从 `管理员账号不存在/验证码错误` 改为 `参数错误`
+
+3. **预期结果格式统一**
+   - 所有成功响应：`HTTP 200; code:200; message:success`
+   - 无Token响应：`HTTP 401`（响应body为"unauthorized"字符串）
+
+### API文档中未明确的错误响应
+
+以下错误响应为推测值，实际API行为需验证：
+- 短信验证码相关错误（10002）的message定义
+- 账号不存在（10003）的message定义
+
+---
+
 ## 测试时间估算
 
 | 模块 | 用例数 | 预计时间(分钟) |
 |------|--------|--------------|
-| 登录认证 | 14 | 20 |
+| 登录认证 | 16 | 22 |
 | 商户管理 | 40 | 55 |
 | 应用管理 | 28 | 40 |
 | 财务管理 | 12 | 18 |
 | 用户管理 | 21 | 30 |
 | 角色管理 | 23 | 35 |
 | 菜单管理 | 19 | 28 |
-| **合计** | **157** | **226 (~3.8小时)** |
+| **合计** | **159** | **228 (~3.8小时)** |

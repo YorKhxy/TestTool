@@ -35,6 +35,7 @@ export type ParsedTestPlan = {
   meta: DocMeta;
   cases: TestCase[];
   warnings: string[];
+  rawMarkdown?: string;
 };
 
 type MdTable = {
@@ -263,5 +264,5 @@ export function parseTestPlanMarkdown(markdown: string): ParsedTestPlan {
 
   if (cases.length === 0) warnings.push('未解析到任何用例（未找到包含“用例ID/路径”的表格）');
 
-  return { meta, cases, warnings };
+  return { meta, cases, warnings, rawMarkdown: markdown };
 }
