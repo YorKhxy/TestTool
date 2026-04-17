@@ -8,7 +8,7 @@ import type {
   CaseExecutionLog,
   StepExecutionLog,
   ExecutionStatus,
-} from '../../shared/playwrightCase.js';
+} from '../../../shared/playwrightCase.ts';
 
 const router = Router();
 
@@ -153,8 +153,9 @@ router.patch('/:runId/cases/:caseId/status', (req: Request, res: Response) => {
   try {
     const { runId, caseId } = req.params;
     const { status, stepResults } = req.body;
+    const logs = loadLogsFromFile();
 
-    const log = executionLogs.find((l) => l.id === runId || l.runId === runId);
+    const log = logs.find((l) => l.id === runId || l.runId === runId);
     if (!log) {
       res.status(404).json({
         success: false,
@@ -207,7 +208,7 @@ router.patch('/:runId/cases/:caseId/status', (req: Request, res: Response) => {
       log.durationMs = new Date(log.finishedAt).getTime() - new Date(log.startedAt).getTime();
     }
 
-    saveLogsToFile();
+    saveLogsToFile(logs);
 
     res.json({
       success: true,

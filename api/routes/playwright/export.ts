@@ -1,7 +1,7 @@
 import { Router, type Request, type Response } from 'express';
 import fs from 'fs';
 import path from 'path';
-import type { PlaywrightExecutionLog } from '../../shared/playwrightCase.js';
+import type { PlaywrightExecutionLog } from '../../../shared/playwrightCase.ts';
 import * as XLSX from 'xlsx';
 
 const router = Router();

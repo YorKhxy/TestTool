@@ -225,6 +225,10 @@ function buildCaseRequests(
     }
     const finalBodyText = applyExtractedVariables(bodyText, extractedVars);
     const finalBody = safeParseJsonAny(finalBodyText);
+    if (!finalBody.ok) {
+      const parseError = 'error' in finalBody ? finalBody.error : '未知错误';
+      throw new Error(`${c.id} body解析失败: ${parseError}`);
+    }
 
     out.push({
       ...c,

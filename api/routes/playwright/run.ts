@@ -8,7 +8,7 @@ import type {
   PlaywrightExecutionLog,
   CaseExecutionLog,
   StepExecutionLog,
-} from '../../shared/playwrightCase.js';
+} from '../../../shared/playwrightCase.ts';
 
 const router = Router();
 
@@ -29,7 +29,7 @@ type ProgressEvent = {
   status?: 'passed' | 'failed' | 'running' | 'pending';
   error?: string;
   caseStatus?: 'passed' | 'failed' | 'running' | 'canceled' | 'skipped';
-  data?: Partial<CaseExecutionLog> | Partial<StepExecutionLog>;
+  data?: Partial<PlaywrightExecutionLog> | Partial<CaseExecutionLog> | Partial<StepExecutionLog>;
 };
 
 type SSEClient = {

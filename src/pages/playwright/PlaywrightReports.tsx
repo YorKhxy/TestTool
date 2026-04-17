@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FileText, Download, Trash2, Clock, CheckCircle, XCircle, Loader } from 'lucide-react';
-import type { PlaywrightExecutionLog } from '../../shared/playwrightCase';
+import type { PlaywrightExecutionLog } from '../../../shared/playwrightCase.ts';
 import { apiJson } from '@/utils/http';
 import { cn } from '@/lib/utils';
 

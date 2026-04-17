@@ -1,4 +1,4 @@
-import type { PlaywrightStepType, PlaywrightCase, PlaywrightSuite } from './playwrightCase.js';
+import type { PlaywrightStepType, PlaywrightCase, PlaywrightSuite } from './playwrightCase.ts';
 
 export type StepResultStatus = 'passed' | 'failed' | 'skipped' | 'running';
 
