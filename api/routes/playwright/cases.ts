@@ -194,9 +194,14 @@ export function parseSpecToCases(content: string, fileName: string): ImportResul
       return text;
     }
 
+    type HelperParam = {
+      name: string;
+      defaultValue?: string;
+    };
+
     type HelperDefinition = {
       name: string;
-      params: string[];
+      params: HelperParam[];
       body: string;
     };
 
@@ -242,6 +247,24 @@ export function parseSpecToCases(content: string, fileName: string): ImportResul
       return args;
     }
 
+    function normalizeParamPart(part: string): HelperParam {
+      const trimmedPart = part.trim();
+      if (!trimmedPart) {
+        return { name: '' };
+      }
+
+      const equalIndex = trimmedPart.indexOf('=');
+      const leftPart = equalIndex >= 0 ? trimmedPart.slice(0, equalIndex).trim() : trimmedPart;
+      const defaultValue = equalIndex >= 0 ? trimmedPart.slice(equalIndex + 1).trim() : undefined;
+      const colonIndex = leftPart.indexOf(':');
+      const name = (colonIndex >= 0 ? leftPart.slice(0, colonIndex) : leftPart).trim();
+
+      return {
+        name,
+        defaultValue,
+      };
+    }
+
     function extractHelperFunctions(source: string): Record<string, HelperDefinition> {
       const helpers: Record<string, HelperDefinition> = {};
       const helperRegex = /async\s+function\s+(\w+)\s*\(([^)]*)\)\s*(?::\s*[^{]+)?\s*\{/g;
@@ -249,11 +272,9 @@ export function parseSpecToCases(content: string, fileName: string): ImportResul
 
       while ((match = helperRegex.exec(source)) !== null) {
         const name = match[1];
-        const params = match[2]
-          .split(',')
-          .map((part) => part.trim())
-          .filter(Boolean)
-          .map((part) => part.replace(/:.+$/, '').replace(/\s*=.+$/, '').trim());
+        const params = splitArguments(match[2])
+          .map((part) => normalizeParamPart(part))
+          .filter((param) => Boolean(param.name));
 
         const bodyStart = helperRegex.lastIndex;
         let braceCount = 1;
@@ -462,9 +483,9 @@ export function parseSpecToCases(content: string, fileName: string): ImportResul
             let expandedBody = helper.body;
 
             helper.params.forEach((param, index) => {
-              const arg = rawArgs[index] ?? param;
+              const arg = rawArgs[index] ?? param.defaultValue ?? param.name;
               expandedBody = expandedBody.replace(
-                new RegExp(`\\b${param}\\b`, 'g'),
+                new RegExp(`\\b${param.name}\\b`, 'g'),
                 arg,
               );
             });
