@@ -31,35 +31,66 @@ async function loginAsAdmin(page: Page, phone: string = '13800000000', code: str
 }
 
 async function expectTableVisible(page: Page): Promise<void> {
-  await expect(page.locator('.ant-table, table').first()).toBeVisible({ timeout: 5000 });
+  await expect(page.locator('.ant-table:visible, table:visible').first()).toBeVisible({ timeout: 5000 });
 }
 
 async function fillFirstSearchInput(page: Page, value: string): Promise<void> {
-  const searchInput = page.locator('.ant-pro-table-search input, input[placeholder*="搜索"], input[placeholder*="公司"], input[placeholder*="应用"]').first();
+  const searchInput = page.locator('.ant-pro-table-search input:visible').first();
   if (await searchInput.count() > 0) {
     await searchInput.fill(value);
+    await page.waitForTimeout(300);
+    return;
+  }
+
+  const placeholderInput = page.locator('input[placeholder]:visible').first();
+  if (await placeholderInput.count() > 0) {
+    await placeholderInput.fill(value);
     await page.waitForTimeout(300);
   }
 }
 
 async function clickSearchButton(page: Page): Promise<void> {
-  const searchButton = page.locator('.ant-pro-table-search button, button:has-text("查询"), button:has-text("搜索")').first();
+  const searchButton = page.locator('.ant-pro-table-search button:visible').first();
   if (await searchButton.count() > 0) {
     await searchButton.click();
     await page.waitForTimeout(1000);
+    return;
+  }
+
+  const buttons = page.locator('button:visible');
+  const count = await buttons.count();
+  for (let i = 0; i < count; i++) {
+    const btn = buttons.nth(i);
+    const text = await btn.textContent();
+    if (text && (text.includes('查询') || text.includes('搜索'))) {
+      await btn.click();
+      await page.waitForTimeout(1000);
+      return;
+    }
   }
 }
 
 async function hasTableRows(page: Page): Promise<boolean> {
-  const rows = page.locator('.ant-table-tbody tr, table tbody tr');
+  const rows = page.locator('.ant-table-tbody tr:visible, table tbody tr:visible');
   return (await rows.count()) > 0;
 }
 
 async function openRowAction(page: Page, index: number = 0): Promise<boolean> {
-  const action = page.locator('.ant-table-tbody tr .ant-btn-link, table tbody tr .ant-btn-link').nth(index);
-  if (await action.count() === 0) {
+  await page.waitForTimeout(500);
+  const rows = page.locator('.ant-table-tbody tr:visible, table tbody tr:visible');
+  const rowCount = await rows.count();
+  if (rowCount === 0) {
     return false;
   }
+
+  const actions = page.locator('.ant-table-tbody tr:visible .ant-btn-link, table tbody tr:visible .ant-btn-link');
+  const actionCount = await actions.count();
+  if (actionCount === 0) {
+    return false;
+  }
+
+  const targetIndex = Math.min(index, actionCount - 1);
+  const action = actions.nth(targetIndex);
   await action.click();
   return true;
 }
@@ -428,7 +459,7 @@ test.describe('管理端 - 用户管理模块', () => {
   });
 
   test('SYS-USER-002 用户管理 - 新增用户按钮', async ({ page }) => {
-    const addButton = page.locator('.ant-pro-table-list-toolbar button, button:has-text("新增")').first();
+    const addButton = page.locator('.ant-pro-table-list-toolbar button').first();
     await expect(addButton).toBeVisible({ timeout: 3000 });
   });
 
@@ -464,7 +495,7 @@ test.describe('管理端 - 角色管理模块', () => {
   });
 
   test('SYS-ROLE-002 角色管理 - 新增角色弹窗', async ({ page }) => {
-    const addButton = page.locator('.ant-pro-table-list-toolbar button, button:has-text("新增")').first();
+    const addButton = page.locator('.ant-pro-table-list-toolbar button').first();
     if (await addButton.count() === 0) {
       test.skip();
     }
@@ -508,7 +539,7 @@ test.describe('管理端 - 菜单管理模块', () => {
   });
 
   test('SYS-MENU-002 菜单管理 - 新增菜单弹窗', async ({ page }) => {
-    const addButton = page.locator('.ant-pro-table-list-toolbar button, button:has-text("新增")').first();
+    const addButton = page.locator('.ant-pro-table-list-toolbar button').first();
     if (await addButton.count() === 0) {
       test.skip();
     }

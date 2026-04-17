@@ -3,6 +3,14 @@ import type { RunReport } from '../../shared/runTypes.js';
 import StatusBadge from '@/components/StatusBadge';
 import { Download, Play } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ResponseJsonPanel } from './ResponseJsonTree';
+
+type VariableExtractor = {
+  id: string;
+  name: string;
+  source: 'body' | 'header';
+  path: string;
+};
 
 export default function CaseDetailPanel({
   testCase,
@@ -10,13 +18,15 @@ export default function CaseDetailPanel({
   onChange,
   report,
   onRun,
+  onAddExtractor,
   disabled,
 }: {
   testCase: TestCase | null;
-  override: { requiresAuth?: boolean; headersText: string; queryText: string; bodyText: string; expectedResult?: string; path?: string } | null;
+  override: { requiresAuth?: boolean; headersText: string; queryText: string; bodyText: string; expectedResult?: string; path?: string; variableExtractors?: VariableExtractor[] } | null;
   onChange: (patch: Partial<{ requiresAuth?: boolean; headersText: string; queryText: string; bodyText: string; expectedResult?: string; path?: string }>) => void;
   report: RunReport | null;
   onRun?: (id: string) => void;
+  onAddExtractor?: (caseId: string, extractor: VariableExtractor) => void;
   disabled?: boolean;
 }) {
   if (!testCase) {
@@ -29,6 +39,7 @@ export default function CaseDetailPanel({
 
   const r = report?.results.find((x) => x.caseId === testCase.id);
   const o = override;
+  const variableExtractors = o?.variableExtractors ?? testCase.variableExtractors ?? [];
 
   return (
     <div className="flex h-full flex-col rounded-xl border-2 border-zinc-600 bg-zinc-900">
@@ -78,8 +89,16 @@ export default function CaseDetailPanel({
           <Field label="body（JSON，POST/PUT 用）" value={o?.bodyText ?? ''} onChange={(v) => onChange({ bodyText: v })} rows={6} disabled={disabled} />
 
           <div className={cn('rounded-lg border border-zinc-800 bg-zinc-950/40 p-3', !r && 'opacity-60')}>
-            <div className="flex items-center justify-between">
-              <div className="text-xs font-medium text-zinc-300">最近一次输出</div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <div className="text-xs font-medium text-zinc-300">最近一次输出</div>
+                {r?.httpStatus && (
+                  <span className="rounded bg-zinc-800 px-2 py-0.5 text-xs text-zinc-400">HTTP {r.httpStatus}</span>
+                )}
+                {r?.durationMs && (
+                  <span className="text-xs text-zinc-500">{r.durationMs} ms</span>
+                )}
+              </div>
               {r && report?.summary.runId && (
                 <button
                   className="inline-flex items-center gap-1 rounded border border-zinc-700 bg-zinc-800/40 px-2 py-1 text-xs text-zinc-300 transition hover:bg-zinc-700/60"
@@ -90,14 +109,17 @@ export default function CaseDetailPanel({
                 </button>
               )}
             </div>
-            <div className="mt-2 grid gap-2 text-xs text-zinc-400">
-              <div>HTTP：{r?.httpStatus ?? '-'}</div>
-              <div>耗时：{r?.durationMs ?? '-'} ms</div>
-              {r?.errorMessage ? <div className="text-rose-300">错误：{r.errorMessage}</div> : null}
-              <pre className="max-h-56 overflow-auto whitespace-pre-wrap rounded-md border border-zinc-800 bg-zinc-950/60 p-2 font-mono text-[11px] text-zinc-200">
-                {r?.responseBodyPreview ?? ''}
-              </pre>
-            </div>
+            {r?.errorMessage && (
+              <div className="mb-2 rounded border border-rose-800 bg-rose-950/40 p-2 text-xs text-rose-300">
+                {r.errorMessage}
+              </div>
+            )}
+            <ResponseJsonPanel
+              responseBody={r?.responseBody}
+              responseBodyPreview={r?.responseBodyPreview}
+              variableExtractors={variableExtractors}
+              onAddExtractor={onAddExtractor ? (extractor) => onAddExtractor(testCase.id, extractor) : undefined}
+            />
           </div>
         </div>
       </div>
@@ -132,4 +154,3 @@ function Field({
     </label>
   );
 }
-

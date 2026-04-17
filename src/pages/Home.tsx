@@ -45,6 +45,7 @@ export default function Home() {
     setSelectMany,
     clearSelection,
     updateOverride,
+    updateCaseExtractors,
     runSelected,
     runSingle,
     exportCases,
@@ -359,6 +360,13 @@ export default function Home() {
                 }}
                 report={lastReport}
                 onRun={(id) => void runSingle(id)}
+                onAddExtractor={(caseId, extractor) => {
+                  const currentExtractors = activeOverride?.variableExtractors ?? activeCase?.variableExtractors ?? [];
+                  const exists = currentExtractors.some((e) => e.id === extractor.id);
+                  if (!exists) {
+                    updateCaseExtractors(caseId, [...currentExtractors, extractor]);
+                  }
+                }}
                 disabled={isRunning}
               />
             </div>

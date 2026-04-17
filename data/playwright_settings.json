@@ -6,7 +6,7 @@
   },
   "slowMo": 0,
   "timeout": 30000,
-  "screenshotOnFailure": false,
+  "screenshotOnFailure": true,
   "recordVideo": false,
   "headless": false,
   "baseURL": "http://172.0.0.218:36007",

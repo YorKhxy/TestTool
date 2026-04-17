@@ -296,6 +296,7 @@ async function runOneCase(c: CaseRequest, config: RunConfig, token: string | nul
       durationMs,
       httpStatus: res.status,
       responseBodyPreview: safePreview(text),
+      responseBody: text,
       expectedResult: c.expectedResult,
       extractedVariables,
     };
@@ -311,6 +312,7 @@ async function runOneCase(c: CaseRequest, config: RunConfig, token: string | nul
       errorMessage: e instanceof Error ? e.message : 'Unknown error',
       expectedResult: c.expectedResult,
       extractedVariables: {},
+      responseBody: undefined,
     };
   }
 }

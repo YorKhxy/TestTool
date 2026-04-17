@@ -3,13 +3,14 @@ import type { ParsedTestPlan, TestCase } from '../../shared/testPlan.js';
 import type { CaseRequest, RunConfig, RunReport } from '../../shared/runTypes.js';
 import { apiJson, safeParseJsonAny } from '@/utils/http';
 
-type CaseOverride = {
+export type CaseOverride = {
   requiresAuth?: boolean;
   headersText: string;
   queryText: string;
   bodyText: string;
   expectedResult?: string;
   path?: string;
+  variableExtractors?: { id: string; name: string; source: 'body' | 'header'; path: string }[];
 };
 
 function parseBodyText(text: string): string {
@@ -129,6 +130,7 @@ type RunnerState = {
   setSelectMany: (ids: string[], selected: boolean) => void;
   clearSelection: () => void;
   updateOverride: (id: string, patch: Partial<CaseOverride>) => void;
+  updateCaseExtractors: (id: string, extractors: { id: string; name: string; source: 'body' | 'header'; path: string }[]) => void;
   setExtractedVariables: (vars: Record<string, string | number | boolean | object>) => void;
   clearExtractedVariables: () => void;
   runSelected: () => Promise<void>;
@@ -237,10 +239,11 @@ function buildCaseRequests(
       ...c,
       path: o?.path ?? c.path,
       expectedResult: o?.expectedResult ?? c.expectedResult,
-      requiresAuth: typeof o?.requiresAuth === 'boolean' ? o.requiresAuth : c.requiresAuth,
+      requiresAuth: typeof o?.requiresAuth === 'boolean' ? o?.requiresAuth : c.requiresAuth,
       headers: finalHeaders,
       query: finalQuery,
       body: finalBody.value,
+      variableExtractors: o?.variableExtractors ?? c.variableExtractors,
     });
   }
   return out;
@@ -552,6 +555,23 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
         overrides: {
           ...s.overrides,
           [id]: { ...base, ...patch },
+        },
+      };
+    }),
+
+  updateCaseExtractors: (id, extractors) =>
+    set((s) => {
+      const existing = s.overrides[id];
+      const markdownDefaults = s.parsed?.cases.find((c) => c.id === id);
+      const base = existing ?? {
+        headersText: markdownDefaults?.headersRaw ?? '{}',
+        queryText: markdownDefaults?.queryRaw ?? '{}',
+        bodyText: markdownDefaults?.bodyRaw ?? '',
+      };
+      return {
+        overrides: {
+          ...s.overrides,
+          [id]: { ...base, variableExtractors: extractors },
         },
       };
     }),

@@ -6,6 +6,7 @@ import { usePlaywrightStore } from '@/hooks/usePlaywrightStore';
 export default function PlaywrightSettings() {
   const { settings, setSettings, saveSettings, loadSettings } = usePlaywrightStore();
   const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   useEffect(() => {
     void loadSettings();
@@ -13,8 +14,11 @@ export default function PlaywrightSettings() {
 
   const handleSave = async () => {
     setIsSaving(true);
+    setSaveSuccess(false);
     await saveSettings(settings);
     setIsSaving(false);
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 3000);
   };
 
   return (
@@ -198,6 +202,9 @@ export default function PlaywrightSettings() {
             <Save className="h-4 w-4" />
             {isSaving ? '保存中...' : '保存设置'}
           </button>
+          {saveSuccess && (
+            <span className="text-sm text-emerald-400">保存成功</span>
+          )}
         </div>
       </div>
     </div>

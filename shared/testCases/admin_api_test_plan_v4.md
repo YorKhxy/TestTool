@@ -80,7 +80,7 @@
 | TC-AUTH-007 | 登录-验证码错误 | POST | /api/admin/auth/login | Content-Type: application/json | - | `{"phone": "13800000000", "code": "000000"}` | P1 | HTTP 200; code:10002; message:验证码错误 | - |
 | TC-AUTH-008 | 登录-账号不存在 | POST | /api/admin/auth/login | Content-Type: application/json | - | `{"phone": "13900000000", "code": "123456"}` | P1 | HTTP 200; code:10003; message:管理员账号不存在 | - |
 | TC-AUTH-009 | 退出登录 | POST | /api/admin/auth/logout | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200; message:success | - |
-| TC-AUTH-010 | 获取当前用户信息 | GET | /api/admin/auth/userinfo | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
+| TC-AUTH-010 | 获取当前用户信息 | GET | /api/admin/auth/userinfo | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | current_user_id: data.id |
 | TC-AUTH-011 | 获取当前用户菜单权限 | GET | /api/admin/auth/menus | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
 | TC-AUTH-012 | 获取当前用户权限标识列表 | GET | /api/admin/auth/permissions | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
 | TC-AUTH-013 | 获取用户信息-无Token | GET | /api/admin/auth/userinfo | - | - | - | P0 | HTTP 200; code:10006; message:无效的 token | - |
@@ -255,7 +255,7 @@
 | TC-USER-017 | 编辑用户-无Token | PUT | /api/admin/user/2 | Content-Type: application/json | - | `{"email": "newemail@example.com"}` | P0 | HTTP 200; code:10006; message:无效的 token | - |
 | TC-USER-018 | 删除用户-正常 | DELETE | /api/admin/user/2 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
 | TC-USER-019 | 删除用户-用户不存在 | DELETE | /api/admin/user/999999 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10013; message:用户不存在 | - |
-| TC-USER-020 | 删除用户-无法删除自己 | DELETE | /api/admin/user/1 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10001; message:请求参数错误 | - |
+| TC-USER-020 | 删除用户-无法删除自己 | DELETE | /api/admin/user/${current_user_id} | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10001; message:请求参数错误 | - |
 | TC-USER-021 | 删除用户-无Token | DELETE | /api/admin/user/2 | - | - | - | P0 | HTTP 200; code:10006; message:无效的 token | - |
 
 ---
