@@ -93,6 +93,20 @@ function saveLogsStorage(logs: PlaywrightExecutionLog[]): void {
   }
 }
 
+export function resolveProjectRoot(
+  cwd: string = process.cwd(),
+  envProjectRoot: string | undefined = process.env.PROJECT_ROOT,
+): string {
+  const normalizedEnvProjectRoot = envProjectRoot?.trim();
+  return normalizedEnvProjectRoot || cwd;
+}
+
+function getScreenshotDir(runId: string): string {
+  const projectRoot = resolveProjectRoot();
+  const runFolder = runId.replace(/[^a-zA-Z0-9\u4e00-\u9fff_-]/g, '_').substring(0, 50);
+  return path.join(projectRoot, 'screenshots', 'admin', runFolder);
+}
+
 async function executeStep(
   page: Page,
   step: PlaywrightCase['steps'][0],
@@ -176,9 +190,7 @@ async function executeStep(
       case 'screenshot':
         {
           try {
-            const projectRoot = process.env.PROJECT_ROOT || 'D:\\TestTool';
-            const runFolder = (runId || `run_${Date.now()}`).replace(/[^a-zA-Z0-9\u4e00-\u9fff_-]/g, '_').substring(0, 50);
-            const screenshotDir = path.join(projectRoot, 'screenshots', 'admin', runFolder);
+            const screenshotDir = getScreenshotDir(runId || `run_${Date.now()}`);
             if (!fs.existsSync(screenshotDir)) {
               fs.mkdirSync(screenshotDir, { recursive: true });
             }
@@ -512,13 +524,14 @@ router.post('/', async (req: Request, res: Response) => {
       }
 
       const caseFailed = caseLog.failedSteps > 0;
-      const shouldScreenshot = !config.screenshotOnFailure || caseFailed;
+      const hasExplicitScreenshotStep = testCase.steps.some(
+        (step) => step.type.toLowerCase() === 'screenshot'
+      );
+      const shouldScreenshot = !hasExplicitScreenshotStep && (!config.screenshotOnFailure || caseFailed);
 
       if (shouldScreenshot) {
         try {
-          const projectRoot = process.env.PROJECT_ROOT || 'D:\\TestTool';
-          const runFolder = runId.replace(/[^a-zA-Z0-9\u4e00-\u9fff_-]/g, '_').substring(0, 50);
-          const screenshotDir = path.join(projectRoot, 'screenshots', 'admin', runFolder);
+          const screenshotDir = getScreenshotDir(runId);
           if (!fs.existsSync(screenshotDir)) {
             fs.mkdirSync(screenshotDir, { recursive: true });
           }

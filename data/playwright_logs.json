@@ -1,5 +1,1102 @@
 [
   {
+    "id": "run_1776409171590",
+    "runId": "run_1776409171590",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-17T06:59:31.590Z",
+    "totalCases": 1,
+    "passedCases": 1,
+    "failedCases": 0,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_LOGIN_005_登录成功___首页卡片展示",
+        "caseTitle": "LOGIN-005 登录成功 - 首页卡片展示",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-17T06:59:31.923Z",
+        "stepLogs": [
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:59:31.923Z",
+            "finishedAt": "2026-04-17T06:59:32.695Z",
+            "durationMs": 772
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:59:32.695Z",
+            "finishedAt": "2026-04-17T06:59:32.696Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=0: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:59:32.696Z",
+            "finishedAt": "2026-04-17T06:59:32.927Z",
+            "durationMs": 231
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=1: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:59:32.928Z",
+            "finishedAt": "2026-04-17T06:59:33.141Z",
+            "durationMs": 213
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:59:33.141Z",
+            "finishedAt": "2026-04-17T06:59:33.692Z",
+            "durationMs": 551
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 2000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:59:33.692Z",
+            "finishedAt": "2026-04-17T06:59:35.692Z",
+            "durationMs": 2000
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_7",
+            "stepIndex": 6,
+            "stepType": "assert",
+            "description": "验证元素可见",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:59:35.692Z",
+            "finishedAt": "2026-04-17T06:59:35.692Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_screenshot_1",
+            "stepIndex": 7,
+            "stepType": "screenshot",
+            "description": "用例执行后截图",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:59:35.693Z",
+            "finishedAt": "2026-04-17T06:59:35.809Z",
+            "durationMs": 116
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-17T06:59:35.809Z",
+        "durationMs": 3886
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": false,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://172.0.0.218:36007",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://172.0.0.218:36007",
+    "finishedAt": "2026-04-17T06:59:36.052Z",
+    "durationMs": 4462
+  },
+  {
+    "id": "run_1776408660735",
+    "runId": "run_1776408660735",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-17T06:51:00.735Z",
+    "totalCases": 5,
+    "passedCases": 5,
+    "failedCases": 0,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_LOGIN_001_登录页面___页面元素完整性验证",
+        "caseTitle": "LOGIN-001 登录页面 - 页面元素完整性验证",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-17T06:51:01.074Z",
+        "stepLogs": [
+          {
+            "stepId": "TC_LOGIN_001_登录页面___页面元素完整性验证_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:01.074Z",
+            "finishedAt": "2026-04-17T06:51:01.840Z",
+            "durationMs": 766
+          },
+          {
+            "stepId": "TC_LOGIN_001_登录页面___页面元素完整性验证_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:01.840Z",
+            "finishedAt": "2026-04-17T06:51:01.841Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "TC_LOGIN_001_登录页面___页面元素完整性验证_step_3",
+            "stepIndex": 2,
+            "stepType": "assert",
+            "description": "验证元素可见: button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:01.841Z",
+            "finishedAt": "2026-04-17T06:51:01.861Z",
+            "durationMs": 20
+          },
+          {
+            "stepId": "TC_LOGIN_001_登录页面___页面元素完整性验证_step_4",
+            "stepIndex": 3,
+            "stepType": "assert",
+            "description": "获取元素数量",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:01.861Z",
+            "finishedAt": "2026-04-17T06:51:01.861Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_001_登录页面___页面元素完整性验证_step_5",
+            "stepIndex": 4,
+            "stepType": "assert",
+            "description": "验证值 >= 2",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:01.861Z",
+            "finishedAt": "2026-04-17T06:51:01.861Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_001_登录页面___页面元素完整性验证_step_screenshot_1",
+            "stepIndex": 5,
+            "stepType": "screenshot",
+            "description": "用例执行后截图",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:01.861Z",
+            "finishedAt": "2026-04-17T06:51:02.063Z",
+            "durationMs": 202
+          }
+        ],
+        "totalSteps": 6,
+        "passedSteps": 6,
+        "failedSteps": 0,
+        "screenshotPath": "D:\\TestTool\\screenshots\\admin\\run_1776408660735\\TC_LOGIN_001_登录页面___页面元素完整性验证_2026-04-17T06-51-02-063Z.png",
+        "finishedAt": "2026-04-17T06:51:02.246Z",
+        "durationMs": 1172
+      },
+      {
+        "caseId": "TC_LOGIN_002_登录___空手机号和验证码提示",
+        "caseTitle": "LOGIN-002 登录 - 空手机号和验证码提示",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-17T06:51:02.246Z",
+        "stepLogs": [
+          {
+            "stepId": "TC_LOGIN_002_登录___空手机号和验证码提示_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:02.246Z",
+            "finishedAt": "2026-04-17T06:51:02.811Z",
+            "durationMs": 565
+          },
+          {
+            "stepId": "TC_LOGIN_002_登录___空手机号和验证码提示_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:02.812Z",
+            "finishedAt": "2026-04-17T06:51:02.813Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "TC_LOGIN_002_登录___空手机号和验证码提示_step_3",
+            "stepIndex": 2,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:02.814Z",
+            "finishedAt": "2026-04-17T06:51:03.367Z",
+            "durationMs": 553
+          },
+          {
+            "stepId": "TC_LOGIN_002_登录___空手机号和验证码提示_step_4",
+            "stepIndex": 3,
+            "stepType": "wait",
+            "description": "等待 500ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:03.368Z",
+            "finishedAt": "2026-04-17T06:51:03.872Z",
+            "durationMs": 504
+          },
+          {
+            "stepId": "TC_LOGIN_002_登录___空手机号和验证码提示_step_5",
+            "stepIndex": 4,
+            "stepType": "assert",
+            "description": "检查元素存在",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:03.872Z",
+            "finishedAt": "2026-04-17T06:51:03.872Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_002_登录___空手机号和验证码提示_step_6",
+            "stepIndex": 5,
+            "stepType": "assert",
+            "description": "验证值为 truthy",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:03.872Z",
+            "finishedAt": "2026-04-17T06:51:03.872Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_002_登录___空手机号和验证码提示_step_screenshot_1",
+            "stepIndex": 6,
+            "stepType": "screenshot",
+            "description": "用例执行后截图",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:03.872Z",
+            "finishedAt": "2026-04-17T06:51:04.100Z",
+            "durationMs": 228
+          }
+        ],
+        "totalSteps": 7,
+        "passedSteps": 7,
+        "failedSteps": 0,
+        "screenshotPath": "D:\\TestTool\\screenshots\\admin\\run_1776408660735\\TC_LOGIN_002_登录___空手机号和验证码提示_2026-04-17T06-51-04-100Z.png",
+        "finishedAt": "2026-04-17T06:51:04.307Z",
+        "durationMs": 2061
+      },
+      {
+        "caseId": "TC_LOGIN_003_登录___错误验证码提示",
+        "caseTitle": "LOGIN-003 登录 - 错误验证码提示",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-17T06:51:04.307Z",
+        "stepLogs": [
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:04.307Z",
+            "finishedAt": "2026-04-17T06:51:04.859Z",
+            "durationMs": 552
+          },
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:04.859Z",
+            "finishedAt": "2026-04-17T06:51:04.860Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=0: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:04.860Z",
+            "finishedAt": "2026-04-17T06:51:05.087Z",
+            "durationMs": 227
+          },
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=1: 000000",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:05.087Z",
+            "finishedAt": "2026-04-17T06:51:05.314Z",
+            "durationMs": 227
+          },
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:05.314Z",
+            "finishedAt": "2026-04-17T06:51:05.882Z",
+            "durationMs": 568
+          },
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 1000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:05.882Z",
+            "finishedAt": "2026-04-17T06:51:06.885Z",
+            "durationMs": 1003
+          },
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_7",
+            "stepIndex": 6,
+            "stepType": "assert",
+            "description": "验证 URL 匹配: login",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:06.886Z",
+            "finishedAt": "2026-04-17T06:51:06.886Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_screenshot_1",
+            "stepIndex": 7,
+            "stepType": "screenshot",
+            "description": "用例执行后截图",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:06.886Z",
+            "finishedAt": "2026-04-17T06:51:07.068Z",
+            "durationMs": 182
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "screenshotPath": "D:\\TestTool\\screenshots\\admin\\run_1776408660735\\TC_LOGIN_003_登录___错误验证码提示_2026-04-17T06-51-07-068Z.png",
+        "finishedAt": "2026-04-17T06:51:07.255Z",
+        "durationMs": 2948
+      },
+      {
+        "caseId": "TC_LOGIN_004_登录成功___跳转首页",
+        "caseTitle": "LOGIN-004 登录成功 - 跳转首页",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-17T06:51:07.256Z",
+        "stepLogs": [
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:07.256Z",
+            "finishedAt": "2026-04-17T06:51:07.808Z",
+            "durationMs": 552
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:07.808Z",
+            "finishedAt": "2026-04-17T06:51:07.808Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=0: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:07.809Z",
+            "finishedAt": "2026-04-17T06:51:08.033Z",
+            "durationMs": 224
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=1: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:08.033Z",
+            "finishedAt": "2026-04-17T06:51:08.252Z",
+            "durationMs": 219
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:08.252Z",
+            "finishedAt": "2026-04-17T06:51:08.801Z",
+            "durationMs": 549
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 2000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:08.802Z",
+            "finishedAt": "2026-04-17T06:51:10.804Z",
+            "durationMs": 2002
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_7",
+            "stepIndex": 6,
+            "stepType": "assert",
+            "description": "验证值不包含: /login",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:10.804Z",
+            "finishedAt": "2026-04-17T06:51:10.804Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_8",
+            "stepIndex": 7,
+            "stepType": "assert",
+            "description": "验证值包含: /home/index",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:10.804Z",
+            "finishedAt": "2026-04-17T06:51:10.804Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_screenshot_1",
+            "stepIndex": 8,
+            "stepType": "screenshot",
+            "description": "用例执行后截图",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:10.804Z",
+            "finishedAt": "2026-04-17T06:51:10.939Z",
+            "durationMs": 135
+          }
+        ],
+        "totalSteps": 9,
+        "passedSteps": 9,
+        "failedSteps": 0,
+        "screenshotPath": "D:\\TestTool\\screenshots\\admin\\run_1776408660735\\TC_LOGIN_004_登录成功___跳转首页_2026-04-17T06-51-10-940Z.png",
+        "finishedAt": "2026-04-17T06:51:11.036Z",
+        "durationMs": 3780
+      },
+      {
+        "caseId": "TC_LOGIN_005_登录成功___首页卡片展示",
+        "caseTitle": "LOGIN-005 登录成功 - 首页卡片展示",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-17T06:51:11.036Z",
+        "stepLogs": [
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:11.036Z",
+            "finishedAt": "2026-04-17T06:51:11.622Z",
+            "durationMs": 586
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:11.622Z",
+            "finishedAt": "2026-04-17T06:51:11.625Z",
+            "durationMs": 3
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=0: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:11.625Z",
+            "finishedAt": "2026-04-17T06:51:11.851Z",
+            "durationMs": 226
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=1: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:11.852Z",
+            "finishedAt": "2026-04-17T06:51:12.076Z",
+            "durationMs": 224
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:12.076Z",
+            "finishedAt": "2026-04-17T06:51:12.615Z",
+            "durationMs": 539
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 2000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:12.615Z",
+            "finishedAt": "2026-04-17T06:51:14.617Z",
+            "durationMs": 2002
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_7",
+            "stepIndex": 6,
+            "stepType": "assert",
+            "description": "验证元素可见",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:14.617Z",
+            "finishedAt": "2026-04-17T06:51:14.617Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_screenshot_1",
+            "stepIndex": 7,
+            "stepType": "screenshot",
+            "description": "用例执行后截图",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:51:14.617Z",
+            "finishedAt": "2026-04-17T06:51:14.691Z",
+            "durationMs": 74
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "screenshotPath": "D:\\TestTool\\screenshots\\admin\\run_1776408660735\\TC_LOGIN_005_登录成功___首页卡片展示_2026-04-17T06-51-14-692Z.png",
+        "finishedAt": "2026-04-17T06:51:14.773Z",
+        "durationMs": 3737
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": false,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://172.0.0.218:36007",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://172.0.0.218:36007",
+    "finishedAt": "2026-04-17T06:51:15.160Z",
+    "durationMs": 14425
+  },
+  {
+    "id": "run_1776408584380",
+    "runId": "run_1776408584380",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-17T06:49:44.380Z",
+    "totalCases": 5,
+    "passedCases": 5,
+    "failedCases": 0,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_LOGIN_001_登录页面___页面元素完整性验证",
+        "caseTitle": "LOGIN-001 登录页面 - 页面元素完整性验证",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-17T06:49:44.858Z",
+        "stepLogs": [
+          {
+            "stepId": "TC_LOGIN_001_登录页面___页面元素完整性验证_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:44.859Z",
+            "finishedAt": "2026-04-17T06:49:45.689Z",
+            "durationMs": 830
+          },
+          {
+            "stepId": "TC_LOGIN_001_登录页面___页面元素完整性验证_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:45.689Z",
+            "finishedAt": "2026-04-17T06:49:45.691Z",
+            "durationMs": 2
+          },
+          {
+            "stepId": "TC_LOGIN_001_登录页面___页面元素完整性验证_step_3",
+            "stepIndex": 2,
+            "stepType": "assert",
+            "description": "验证元素可见: button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:45.691Z",
+            "finishedAt": "2026-04-17T06:49:45.709Z",
+            "durationMs": 18
+          },
+          {
+            "stepId": "TC_LOGIN_001_登录页面___页面元素完整性验证_step_4",
+            "stepIndex": 3,
+            "stepType": "assert",
+            "description": "获取元素数量",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:45.709Z",
+            "finishedAt": "2026-04-17T06:49:45.709Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_001_登录页面___页面元素完整性验证_step_5",
+            "stepIndex": 4,
+            "stepType": "assert",
+            "description": "验证值 >= 2",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:45.709Z",
+            "finishedAt": "2026-04-17T06:49:45.709Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_001_登录页面___页面元素完整性验证_step_screenshot_1",
+            "stepIndex": 5,
+            "stepType": "screenshot",
+            "description": "用例执行后截图",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:45.710Z",
+            "finishedAt": "2026-04-17T06:49:45.909Z",
+            "durationMs": 199
+          }
+        ],
+        "totalSteps": 6,
+        "passedSteps": 6,
+        "failedSteps": 0,
+        "screenshotPath": "D:\\TestTool\\screenshots\\admin\\run_1776408584380\\TC_LOGIN_001_登录页面___页面元素完整性验证_2026-04-17T06-49-45-909Z.png",
+        "finishedAt": "2026-04-17T06:49:46.082Z",
+        "durationMs": 1224
+      },
+      {
+        "caseId": "TC_LOGIN_002_登录___空手机号和验证码提示",
+        "caseTitle": "LOGIN-002 登录 - 空手机号和验证码提示",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-17T06:49:46.082Z",
+        "stepLogs": [
+          {
+            "stepId": "TC_LOGIN_002_登录___空手机号和验证码提示_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:46.082Z",
+            "finishedAt": "2026-04-17T06:49:46.657Z",
+            "durationMs": 575
+          },
+          {
+            "stepId": "TC_LOGIN_002_登录___空手机号和验证码提示_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:46.657Z",
+            "finishedAt": "2026-04-17T06:49:46.657Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_002_登录___空手机号和验证码提示_step_3",
+            "stepIndex": 2,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:46.658Z",
+            "finishedAt": "2026-04-17T06:49:47.204Z",
+            "durationMs": 546
+          },
+          {
+            "stepId": "TC_LOGIN_002_登录___空手机号和验证码提示_step_4",
+            "stepIndex": 3,
+            "stepType": "wait",
+            "description": "等待 500ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:47.204Z",
+            "finishedAt": "2026-04-17T06:49:47.707Z",
+            "durationMs": 503
+          },
+          {
+            "stepId": "TC_LOGIN_002_登录___空手机号和验证码提示_step_5",
+            "stepIndex": 4,
+            "stepType": "assert",
+            "description": "检查元素存在",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:47.707Z",
+            "finishedAt": "2026-04-17T06:49:47.707Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_002_登录___空手机号和验证码提示_step_6",
+            "stepIndex": 5,
+            "stepType": "assert",
+            "description": "验证值为 truthy",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:47.707Z",
+            "finishedAt": "2026-04-17T06:49:47.707Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_002_登录___空手机号和验证码提示_step_screenshot_1",
+            "stepIndex": 6,
+            "stepType": "screenshot",
+            "description": "用例执行后截图",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:47.707Z",
+            "finishedAt": "2026-04-17T06:49:47.900Z",
+            "durationMs": 193
+          }
+        ],
+        "totalSteps": 7,
+        "passedSteps": 7,
+        "failedSteps": 0,
+        "screenshotPath": "D:\\TestTool\\screenshots\\admin\\run_1776408584380\\TC_LOGIN_002_登录___空手机号和验证码提示_2026-04-17T06-49-47-900Z.png",
+        "finishedAt": "2026-04-17T06:49:48.097Z",
+        "durationMs": 2015
+      },
+      {
+        "caseId": "TC_LOGIN_003_登录___错误验证码提示",
+        "caseTitle": "LOGIN-003 登录 - 错误验证码提示",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-17T06:49:48.097Z",
+        "stepLogs": [
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:48.097Z",
+            "finishedAt": "2026-04-17T06:49:48.656Z",
+            "durationMs": 559
+          },
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:48.657Z",
+            "finishedAt": "2026-04-17T06:49:48.659Z",
+            "durationMs": 2
+          },
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=0: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:48.660Z",
+            "finishedAt": "2026-04-17T06:49:48.888Z",
+            "durationMs": 228
+          },
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=1: 000000",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:48.888Z",
+            "finishedAt": "2026-04-17T06:49:49.099Z",
+            "durationMs": 211
+          },
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:49.099Z",
+            "finishedAt": "2026-04-17T06:49:49.660Z",
+            "durationMs": 561
+          },
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 1000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:49.661Z",
+            "finishedAt": "2026-04-17T06:49:50.665Z",
+            "durationMs": 1004
+          },
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_7",
+            "stepIndex": 6,
+            "stepType": "assert",
+            "description": "验证 URL 匹配: login",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:50.665Z",
+            "finishedAt": "2026-04-17T06:49:50.665Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_003_登录___错误验证码提示_step_screenshot_1",
+            "stepIndex": 7,
+            "stepType": "screenshot",
+            "description": "用例执行后截图",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:50.665Z",
+            "finishedAt": "2026-04-17T06:49:50.865Z",
+            "durationMs": 200
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "screenshotPath": "D:\\TestTool\\screenshots\\admin\\run_1776408584380\\TC_LOGIN_003_登录___错误验证码提示_2026-04-17T06-49-50-865Z.png",
+        "finishedAt": "2026-04-17T06:49:51.048Z",
+        "durationMs": 2951
+      },
+      {
+        "caseId": "TC_LOGIN_004_登录成功___跳转首页",
+        "caseTitle": "LOGIN-004 登录成功 - 跳转首页",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-17T06:49:51.048Z",
+        "stepLogs": [
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:51.048Z",
+            "finishedAt": "2026-04-17T06:49:51.599Z",
+            "durationMs": 551
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:51.599Z",
+            "finishedAt": "2026-04-17T06:49:51.599Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=0: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:51.600Z",
+            "finishedAt": "2026-04-17T06:49:51.818Z",
+            "durationMs": 218
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=1: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:51.818Z",
+            "finishedAt": "2026-04-17T06:49:52.035Z",
+            "durationMs": 217
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:52.035Z",
+            "finishedAt": "2026-04-17T06:49:52.585Z",
+            "durationMs": 550
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 2000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:52.585Z",
+            "finishedAt": "2026-04-17T06:49:54.586Z",
+            "durationMs": 2001
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_7",
+            "stepIndex": 6,
+            "stepType": "assert",
+            "description": "验证值不包含: /login",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:54.586Z",
+            "finishedAt": "2026-04-17T06:49:54.586Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_8",
+            "stepIndex": 7,
+            "stepType": "assert",
+            "description": "验证值包含: /home/index",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:54.586Z",
+            "finishedAt": "2026-04-17T06:49:54.586Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_004_登录成功___跳转首页_step_screenshot_1",
+            "stepIndex": 8,
+            "stepType": "screenshot",
+            "description": "用例执行后截图",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:54.586Z",
+            "finishedAt": "2026-04-17T06:49:54.717Z",
+            "durationMs": 131
+          }
+        ],
+        "totalSteps": 9,
+        "passedSteps": 9,
+        "failedSteps": 0,
+        "screenshotPath": "D:\\TestTool\\screenshots\\admin\\run_1776408584380\\TC_LOGIN_004_登录成功___跳转首页_2026-04-17T06-49-54-717Z.png",
+        "finishedAt": "2026-04-17T06:49:54.801Z",
+        "durationMs": 3753
+      },
+      {
+        "caseId": "TC_LOGIN_005_登录成功___首页卡片展示",
+        "caseTitle": "LOGIN-005 登录成功 - 首页卡片展示",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-17T06:49:54.801Z",
+        "stepLogs": [
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:54.801Z",
+            "finishedAt": "2026-04-17T06:49:55.386Z",
+            "durationMs": 585
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:55.387Z",
+            "finishedAt": "2026-04-17T06:49:55.387Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=0: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:55.387Z",
+            "finishedAt": "2026-04-17T06:49:55.607Z",
+            "durationMs": 220
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=1: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:55.608Z",
+            "finishedAt": "2026-04-17T06:49:55.832Z",
+            "durationMs": 224
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:55.832Z",
+            "finishedAt": "2026-04-17T06:49:56.372Z",
+            "durationMs": 540
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 2000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:56.372Z",
+            "finishedAt": "2026-04-17T06:49:58.373Z",
+            "durationMs": 2001
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_7",
+            "stepIndex": 6,
+            "stepType": "assert",
+            "description": "验证元素可见",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:58.373Z",
+            "finishedAt": "2026-04-17T06:49:58.373Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_LOGIN_005_登录成功___首页卡片展示_step_screenshot_1",
+            "stepIndex": 7,
+            "stepType": "screenshot",
+            "description": "用例执行后截图",
+            "status": "passed",
+            "startedAt": "2026-04-17T06:49:58.373Z",
+            "finishedAt": "2026-04-17T06:49:58.450Z",
+            "durationMs": 77
+          }
+        ],
+        "totalSteps": 8,
+        "passedSteps": 8,
+        "failedSteps": 0,
+        "screenshotPath": "D:\\TestTool\\screenshots\\admin\\run_1776408584380\\TC_LOGIN_005_登录成功___首页卡片展示_2026-04-17T06-49-58-450Z.png",
+        "finishedAt": "2026-04-17T06:49:58.538Z",
+        "durationMs": 3737
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": false,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://172.0.0.218:36007",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://172.0.0.218:36007",
+    "finishedAt": "2026-04-17T06:49:59.038Z",
+    "durationMs": 14658
+  },
+  {
     "id": "run_1776407666178",
     "runId": "run_1776407666178",
     "suiteName": "Playwright Test Suite",
