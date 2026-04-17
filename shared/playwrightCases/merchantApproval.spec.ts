@@ -66,10 +66,10 @@ async function performAssertion(page: Page, step: TestStep): Promise<void> {
       expect(actualText.trim()).not.toBe(expected);
       break;
     case 'startsWith':
-      expect(actualText.trim()).toStartWith(expected);
+      expect(actualText.trim().startsWith(expected)).toBeTruthy();
       break;
     case 'endsWith':
-      expect(actualText.trim()).toEndWith(expected);
+      expect(actualText.trim().endsWith(expected)).toBeTruthy();
       break;
     default:
       expect(actualText).toContain(expected);

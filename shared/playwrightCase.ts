@@ -12,7 +12,7 @@ export type PlaywrightStepType =
   | 'api'
   | 'extract';
 
-export type AssertionOperator = '==' | '!=' | 'contains' | 'startsWith' | 'endsWith' | '>' | '<' | '>=' | '<=';
+export type AssertionOperator = string;
 
 export type PlaywrightStepOptions = {
   timeout?: number;
@@ -115,6 +115,7 @@ export type CaseExecutionLog = {
   totalSteps: number;
   passedSteps: number;
   failedSteps: number;
+  screenshotPath?: string;
 };
 
 export type PlaywrightExecutionLog = {

@@ -1,7 +1,7 @@
 import { Router, type Request, type Response } from 'express';
 import fs from 'fs';
 import path from 'path';
-import type { PlaywrightConfig } from '../../shared/playwrightCase.js';
+import type { PlaywrightConfig } from '../../../shared/playwrightCase.ts';
 
 const router = Router();
 

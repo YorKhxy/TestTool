@@ -3,7 +3,7 @@ import { Play, Check, ArrowUp, ArrowDown } from 'lucide-react';
 import type { PlaywrightCase } from '../../shared/playwrightCase';
 import { cn } from '@/lib/utils';
 
-type ExecutionStatus = 'pending' | 'running' | 'passed' | 'failed' | 'skipped';
+type ExecutionStatus = 'pending' | 'running' | 'passed' | 'failed' | 'skipped' | 'canceled';
 
 interface PlaywrightCaseTableProps {
   cases: PlaywrightCase[];

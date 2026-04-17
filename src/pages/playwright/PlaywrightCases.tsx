@@ -17,6 +17,7 @@ export default function PlaywrightCases() {
     isExecuting,
     isPaused,
     executingCaseId,
+    caseStatuses,
     currentExecutionLog,
     fileName,
     error,
@@ -40,13 +41,12 @@ export default function PlaywrightCases() {
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isTerminalOpen, setIsTerminalOpen] = useState(true);
-  const [caseStatuses, setCaseStatuses] = useState<Record<string, 'pending' | 'running' | 'passed' | 'failed' | 'skipped'>>({});
 
   const activeCase = loadedCases.find((c) => c.id === activeCaseId) || null;
   const selectedCount = Object.values(selectedIds).filter(Boolean).length;
 
   const handleRunSingle = (id: string) => {
-    setCaseStatuses((prev) => ({ ...prev, [id]: 'running' }));
+    void runCases([id]);
   };
 
   const handleDelete = (id: string) => {

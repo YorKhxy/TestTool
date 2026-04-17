@@ -8,7 +8,7 @@ import type {
   PlaywrightExecutionLog,
   CaseExecutionLog,
   StepExecutionLog,
-} from '../../shared/playwrightCase.js';
+} from '../../../shared/playwrightCase.ts';
 
 const router = Router();
 
@@ -18,7 +18,7 @@ let isPaused = false;
 let currentRunId: string | null = null;
 
 type ProgressEvent = {
-  type: 'case_start' | 'case_end' | 'step_start' | 'step_end' | 'complete' | 'error';
+  type: 'case_start' | 'case_end' | 'step_start' | 'step_end' | 'complete' | 'error' | 'paused' | 'resumed';
   runId: string;
   caseId?: string;
   caseTitle?: string;
@@ -29,7 +29,7 @@ type ProgressEvent = {
   status?: 'passed' | 'failed' | 'running' | 'pending';
   error?: string;
   caseStatus?: 'passed' | 'failed' | 'running' | 'canceled' | 'skipped';
-  data?: Partial<CaseExecutionLog> | Partial<StepExecutionLog>;
+  data?: Partial<PlaywrightExecutionLog> | Partial<CaseExecutionLog> | Partial<StepExecutionLog>;
 };
 
 type SSEClient = {
@@ -97,7 +97,9 @@ async function executeStep(
   page: Page,
   step: PlaywrightCase['steps'][0],
   baseURL: string,
-  stepLog: StepExecutionLog
+  stepLog: StepExecutionLog,
+  caseId?: string,
+  runId?: string
 ): Promise<{ passed: boolean; error?: string }> {
   const startedAt = new Date().toISOString();
   stepLog.startedAt = startedAt;
@@ -172,7 +174,24 @@ async function executeStep(
         break;
 
       case 'screenshot':
-        await page.screenshot();
+        {
+          try {
+            const projectRoot = process.env.PROJECT_ROOT || 'D:\\TestTool';
+            const runFolder = (runId || `run_${Date.now()}`).replace(/[^a-zA-Z0-9\u4e00-\u9fff_-]/g, '_').substring(0, 50);
+            const screenshotDir = path.join(projectRoot, 'screenshots', 'admin', runFolder);
+            if (!fs.existsSync(screenshotDir)) {
+              fs.mkdirSync(screenshotDir, { recursive: true });
+            }
+            const safeCaseId = (caseId || 'unknown').replace(/[^a-zA-Z0-9\u4e00-\u9fff_-]/g, '_').substring(0, 50);
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            const screenshotName = `${safeCaseId}_${timestamp}.png`;
+            const screenshotPath = path.join(screenshotDir, screenshotName);
+            await page.screenshot({ path: screenshotPath, fullPage: true });
+            console.log(`[RUN] Screenshot saved: ${screenshotPath}`);
+          } catch (screenshotError) {
+            console.error(`[RUN] Screenshot failed: ${screenshotError.message}`);
+          }
+        }
         break;
 
       case 'waitfor':
@@ -209,7 +228,11 @@ async function executeStep(
       case 'assert':
       case 'expect':
         if (step.selector) {
-          const element = page.locator(step.selector);
+          let element = page.locator(step.selector);
+          // 处理多个匹配元素的情况，自动使用 first()
+          if (step.selector === '.ant-form-item-explain-error' || step.selector === '.ant-message') {
+            element = element.first();
+          }
           const isVisible = await element.isVisible();
           if (step.options?.expected) {
             if (step.options.operator === 'contains') {
@@ -268,7 +291,6 @@ router.post('/', async (req: Request, res: Response) => {
     const { cases, settings } = req.body;
 
     console.log('[RUN] Received request with', cases?.length, 'cases');
-    console.log('[RUN] Cases:', JSON.stringify(cases?.slice(0, 1), null, 2));
 
     if (!cases || !Array.isArray(cases)) {
       res.status(400).json({
@@ -412,7 +434,7 @@ router.post('/', async (req: Request, res: Response) => {
           status: 'running',
         });
 
-        const result = await executeStep(page, step, caseBaseURL, stepLog);
+        const result = await executeStep(page, step, caseBaseURL, stepLog, testCase.id, runId);
 
         if (result.passed) {
           caseLog.passedSteps++;
@@ -469,6 +491,7 @@ router.post('/', async (req: Request, res: Response) => {
       } else if (caseLog.failedSteps > 0) {
         caseLog.status = 'failed';
         executionLog.failedCases++;
+        console.log(`[RUN] Sending case_end: failed`);
         sendSSEEvent({
           type: 'case_end',
           runId,
@@ -479,6 +502,7 @@ router.post('/', async (req: Request, res: Response) => {
       } else {
         caseLog.status = 'skipped';
         executionLog.skippedCases++;
+        console.log(`[RUN] Sending case_end: skipped`);
         sendSSEEvent({
           type: 'case_end',
           runId,
@@ -487,9 +511,34 @@ router.post('/', async (req: Request, res: Response) => {
         });
       }
 
+      const caseFailed = caseLog.failedSteps > 0;
+      const shouldScreenshot = !config.screenshotOnFailure || caseFailed;
+
+      if (shouldScreenshot) {
+        try {
+          const projectRoot = process.env.PROJECT_ROOT || 'D:\\TestTool';
+          const runFolder = runId.replace(/[^a-zA-Z0-9\u4e00-\u9fff_-]/g, '_').substring(0, 50);
+          const screenshotDir = path.join(projectRoot, 'screenshots', 'admin', runFolder);
+          if (!fs.existsSync(screenshotDir)) {
+            fs.mkdirSync(screenshotDir, { recursive: true });
+          }
+          const safeCaseId = testCase.id.replace(/[^a-zA-Z0-9\u4e00-\u9fff_-]/g, '_').substring(0, 50);
+          const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+          const screenshotName = `${safeCaseId}_${timestamp}.png`;
+          const screenshotPath = path.join(screenshotDir, screenshotName);
+          await page.screenshot({ path: screenshotPath, fullPage: true });
+          console.log(`[RUN] Screenshot saved: ${screenshotPath}`);
+          caseLog.screenshotPath = screenshotPath;
+        } catch (screenshotError) {
+          console.error(`[RUN] Screenshot failed: ${screenshotError}`);
+        }
+      }
+
       caseLog.finishedAt = new Date().toISOString();
       caseLog.durationMs = new Date(caseLog.finishedAt).getTime() - new Date(caseStartedAt).getTime();
     }
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
 
     console.log('[RUN] All cases completed, closing browser...');
     await currentBrowser.close();
@@ -561,13 +610,17 @@ router.post('/cancel', (_req: Request, res: Response) => {
 
 router.post('/pause', (_req: Request, res: Response) => {
   isPaused = true;
-  sendSSEEvent({ type: 'paused' });
+  if (currentRunId) {
+    sendSSEEvent({ type: 'paused', runId: currentRunId });
+  }
   res.json({ success: true, message: '已暂停' });
 });
 
 router.post('/resume', (_req: Request, res: Response) => {
   isPaused = false;
-  sendSSEEvent({ type: 'resumed' });
+  if (currentRunId) {
+    sendSSEEvent({ type: 'resumed', runId: currentRunId });
+  }
   res.json({ success: true, message: '已恢复' });
 });
 

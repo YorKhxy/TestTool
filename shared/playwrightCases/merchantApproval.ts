@@ -1,4 +1,4 @@
-import type { PlaywrightCase, PlaywrightStep, PlaywrightSuite } from '../../shared/playwrightCase.js';
+import type { PlaywrightCase, PlaywrightStep, PlaywrightSuite } from '../../shared/playwrightCase.ts';
 
 export const merchantApprovalSuite: PlaywrightSuite = {
   id: 'suite_merchant_approval',
