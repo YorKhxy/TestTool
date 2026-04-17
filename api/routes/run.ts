@@ -249,50 +249,43 @@ async function runOneCase(c: CaseRequest, config: RunConfig, token: string | nul
     const finishedAt = nowIso();
     const durationMs = Date.now() - start;
 
-    let status: CaseResult['status'] = res.ok ? 'passed' : 'failed';
+    let json: unknown;
+    try {
+      json = JSON.parse(text);
+    } catch {
+      json = null;
+    }
+
+    let status: CaseResult['status'] = 'failed';
     if (res.ok) {
-      try {
-        const json = JSON.parse(text);
-        const byBody = shouldPassByBody(json);
-        if (byBody !== null) {
-          status = byBody ? 'passed' : 'failed';
-        } else if (c.expectedResult) {
-          const expected = parseExpectedResult(c.expectedResult);
-          if (expected.expectedStatus !== null && res.status !== expected.expectedStatus) {
-            status = 'failed';
-          } else if (expected.expectedContent.length > 0) {
-            const contentMatches = checkResponseMatchesExpected(json, expected);
-            status = contentMatches ? 'passed' : 'failed';
-          }
+      if (c.expectedResult) {
+        const expected = parseExpectedResult(c.expectedResult);
+        if (expected.expectedStatus !== null && res.status !== expected.expectedStatus) {
+          status = 'failed';
+        } else if (json && expected.expectedContent.length > 0) {
+          const contentMatches = checkResponseMatchesExpected(json, expected);
+          status = contentMatches ? 'passed' : 'failed';
+        } else {
+          status = 'passed';
         }
-      } catch {
-        void 0;
+      } else {
+        const byBody = shouldPassByBody(json);
+        status = byBody ? 'passed' : 'failed';
       }
     } else {
       if (c.expectedResult) {
         const expected = parseExpectedResult(c.expectedResult);
         if (expected.expectedStatus === res.status) {
           status = 'passed';
-        } else if (expected.expectedStatus === null && expected.expectedContent.length > 0) {
-          try {
-            const json = JSON.parse(text);
-            const contentMatches = checkResponseMatchesExpected(json, expected);
-            status = contentMatches ? 'passed' : 'failed';
-          } catch {
-            status = 'failed';
-          }
+        } else {
+          status = 'failed';
         }
       }
     }
 
     let extractedVariables: ExtractedVariables = {};
-    if (res.ok) {
-      try {
-        const json = JSON.parse(text);
-        extractedVariables = extractVariables(json, {}, c.variableExtractors);
-      } catch (e) {
-        void 0;
-      }
+    if (res.ok && json) {
+      extractedVariables = extractVariables(json, {}, c.variableExtractors);
     }
 
     return {

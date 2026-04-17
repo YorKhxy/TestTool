@@ -1,7 +1,7 @@
 import type { TestCase } from '../../shared/testPlan.js';
 import type { RunReport } from '../../shared/runTypes.js';
 import StatusBadge from '@/components/StatusBadge';
-import { Download } from 'lucide-react';
+import { Download, Play } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function CaseDetailPanel({
@@ -9,11 +9,15 @@ export default function CaseDetailPanel({
   override,
   onChange,
   report,
+  onRun,
+  disabled,
 }: {
   testCase: TestCase | null;
-  override: { requiresAuth?: boolean; headersText: string; queryText: string; bodyText: string } | null;
-  onChange: (patch: Partial<{ requiresAuth?: boolean; headersText: string; queryText: string; bodyText: string }>) => void;
+  override: { requiresAuth?: boolean; headersText: string; queryText: string; bodyText: string; expectedResult?: string; path?: string } | null;
+  onChange: (patch: Partial<{ requiresAuth?: boolean; headersText: string; queryText: string; bodyText: string; expectedResult?: string; path?: string }>) => void;
   report: RunReport | null;
+  onRun?: (id: string) => void;
+  disabled?: boolean;
 }) {
   if (!testCase) {
     return (
@@ -33,34 +37,45 @@ export default function CaseDetailPanel({
           <div>
             <div className="font-mono text-xs text-zinc-400">{testCase.id}</div>
             <div className="mt-1 text-sm font-semibold text-zinc-100">{testCase.title || '-'}</div>
-            <div className="mt-1 font-mono text-xs text-zinc-500">{testCase.method} {testCase.path}</div>
+            <div className="mt-1 text-xs text-zinc-500">{testCase.method}</div>
           </div>
-          <div className="mt-1">{r?.status ? <StatusBadge status={r.status} /> : null}</div>
+          <div className="mt-1 flex items-center gap-2">
+            {onRun && (
+              <button
+                className={cn(
+                  'inline-flex items-center gap-1 rounded-lg border border-emerald-600 bg-emerald-900/30 px-2 py-1 text-xs font-medium text-emerald-200 transition',
+                  disabled ? 'pointer-events-none opacity-50' : 'hover:bg-emerald-900/50'
+                )}
+                onClick={() => onRun(testCase.id)}
+              >
+                <Play className="h-3 w-3" />
+                运行
+              </button>
+            )}
+            {r?.status ? <StatusBadge status={r.status} /> : null}
+          </div>
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-zinc-400">
-          <label className="inline-flex items-center gap-2">
+          <label className={cn('inline-flex items-center gap-2', disabled && 'pointer-events-none opacity-60')}>
             <input
               type="checkbox"
               checked={typeof o?.requiresAuth === 'boolean' ? o.requiresAuth : testCase.requiresAuth !== false}
               onChange={(e) => onChange({ requiresAuth: e.target.checked })}
+              disabled={disabled}
             />
             需要认证
           </label>
           <span className="text-zinc-600">优先级 {testCase.priority || '-'}</span>
         </div>
-        {testCase.expectedResult ? (
-          <div className="mx-4 mt-3 rounded-lg border border-zinc-700/50 bg-zinc-800/20 p-3">
-            <div className="text-xs font-medium text-zinc-300">预期结果</div>
-            <div className="mt-1 text-xs text-zinc-400 whitespace-pre-wrap">{testCase.expectedResult}</div>
-          </div>
-        ) : null}
       </div>
 
       <div className="flex-1 overflow-auto p-4">
-        <div className="grid gap-3">
-          <Field label="headers（JSON对象）" value={o?.headersText ?? '{}'} onChange={(v) => onChange({ headersText: v })} rows={4} />
-          <Field label="query（JSON对象）" value={o?.queryText ?? '{}'} onChange={(v) => onChange({ queryText: v })} rows={3} />
-          <Field label="body（JSON，POST/PUT 用）" value={o?.bodyText ?? ''} onChange={(v) => onChange({ bodyText: v })} rows={6} />
+        <div className={cn('grid gap-3', disabled && 'pointer-events-none opacity-60')}>
+          <Field label="路径 (path)" value={o?.path ?? testCase.path} onChange={(v) => onChange({ path: v })} rows={1} disabled={disabled} />
+          <Field label="预期结果 (expectedResult)" value={o?.expectedResult ?? testCase.expectedResult ?? ''} onChange={(v) => onChange({ expectedResult: v })} rows={2} disabled={disabled} />
+          <Field label="headers（JSON对象）" value={o?.headersText ?? '{}'} onChange={(v) => onChange({ headersText: v })} rows={4} disabled={disabled} />
+          <Field label="query（JSON对象）" value={o?.queryText ?? '{}'} onChange={(v) => onChange({ queryText: v })} rows={3} disabled={disabled} />
+          <Field label="body（JSON，POST/PUT 用）" value={o?.bodyText ?? ''} onChange={(v) => onChange({ bodyText: v })} rows={6} disabled={disabled} />
 
           <div className={cn('rounded-lg border border-zinc-800 bg-zinc-950/40 p-3', !r && 'opacity-60')}>
             <div className="flex items-center justify-between">
@@ -95,14 +110,16 @@ function Field({
   value,
   onChange,
   rows,
+  disabled,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   rows: number;
+  disabled?: boolean;
 }) {
   return (
-    <label className="grid gap-1">
+    <label className={cn('grid gap-1', disabled && 'pointer-events-none opacity-60')}>
       <div className="text-xs font-medium text-zinc-300">{label}</div>
       <textarea
         rows={rows}
@@ -110,6 +127,7 @@ function Field({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={label}
+        disabled={disabled}
       />
     </label>
   );

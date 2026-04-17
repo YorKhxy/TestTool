@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
-import { FileUp, Play, Trash2, GripVertical, Wand2, Save, Package } from 'lucide-react';
+import { FileUp, Play, Trash2, GripVertical, Wand2, Save, Package, Download } from 'lucide-react';
 import CaseDetailPanel from '@/components/CaseDetailPanel';
 import CaseTable from '@/components/CaseTable';
 import VariablesPanel from '@/components/VariablesPanel';
@@ -14,8 +14,8 @@ export default function Home() {
   const [leftWidth, setLeftWidth] = useState(65);
   const [isDragging, setIsDragging] = useState(false);
   const [showWidthIndicator, setShowWidthIndicator] = useState(false);
-  const [showSaveInput, setShowSaveInput] = useState(false);
-  const [saveFilePath, setSaveFilePath] = useState('');
+  const [showExportDropdown, setShowExportDropdown] = useState(false);
+  const [exportFormat, setExportFormat] = useState<'markdown' | 'excel'>('markdown');
   const containerRef = useRef<HTMLDivElement>(null);
   const dragStateRef = useRef({ isDragging: false });
 
@@ -39,7 +39,6 @@ export default function Home() {
     importSwagger,
     generateFromSwagger,
     supplementCases,
-    saveMarkdown,
     uploadDocumentsZip,
     setActiveCase,
     toggleSelect,
@@ -48,6 +47,7 @@ export default function Home() {
     updateOverride,
     runSelected,
     runSingle,
+    exportCases,
   } = useRunnerStore();
 
   useEffect(() => {
@@ -102,6 +102,8 @@ export default function Home() {
       headersText: activeCase.headersRaw ?? '{}',
       queryText: activeCase.queryRaw ?? '{}',
       bodyText: activeCase.bodyRaw ?? '',
+      path: activeCase.path,
+      expectedResult: activeCase.expectedResult ?? '',
     };
   }, [activeCase, overrides]);
 
@@ -249,58 +251,42 @@ export default function Home() {
             />
           </div>
           <div className="flex items-center gap-2">
-            {showSaveInput ? (
-              <>
-                <input
-                  className="rounded-lg border border-zinc-600 bg-zinc-800 px-2 py-1 text-sm text-zinc-100 outline-none placeholder:text-zinc-500"
-                  placeholder="输入保存路径，如 D:\TestTool\cases.md"
-                  value={saveFilePath}
-                  onChange={(e) => setSaveFilePath(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && saveFilePath.trim()) {
-                      void saveMarkdown(saveFilePath.trim());
-                      setShowSaveInput(false);
-                      setSaveFilePath('');
-                    } else if (e.key === 'Escape') {
-                      setShowSaveInput(false);
-                      setSaveFilePath('');
-                    }
-                  }}
-                  autoFocus
-                />
+            {showExportDropdown ? (
+              <div onClick={(e) => e.stopPropagation()}>
+                <select
+                  className="rounded-lg border border-zinc-600 bg-zinc-800 px-2 py-1 text-sm text-zinc-100 outline-none"
+                  value={exportFormat}
+                  onChange={(e) => setExportFormat(e.target.value as 'markdown' | 'excel')}
+                >
+                  <option value="markdown">.md</option>
+                  <option value="excel">.xlsx</option>
+                </select>
                 <button
                   className="rounded-lg border border-emerald-600 bg-emerald-900/30 px-2 py-1 text-sm text-emerald-200 transition hover:bg-emerald-900/50"
                   onClick={() => {
-                    if (saveFilePath.trim()) {
-                      void saveMarkdown(saveFilePath.trim());
-                      setShowSaveInput(false);
-                      setSaveFilePath('');
-                    }
+                    void exportCases(exportFormat);
+                    setShowExportDropdown(false);
                   }}
                 >
-                  确认
+                  确认导出
                 </button>
                 <button
                   className="rounded-lg border border-zinc-600 bg-zinc-800 px-2 py-1 text-sm text-zinc-200 transition hover:bg-zinc-700"
-                  onClick={() => {
-                    setShowSaveInput(false);
-                    setSaveFilePath('');
-                  }}
+                  onClick={() => setShowExportDropdown(false)}
                 >
                   取消
                 </button>
-              </>
+              </div>
             ) : (
-              <button
-                className={cn(
-                  'inline-flex items-center gap-2 rounded-lg border border-emerald-600 bg-emerald-900/30 px-3 py-2 text-sm font-medium text-emerald-200 transition hover:bg-emerald-900/50',
-                  (!parsed || parsed.cases.length === 0) && 'pointer-events-none opacity-50',
-                )}
-                onClick={() => setShowSaveInput(true)}
-              >
-                <Save className="h-4 w-4" />
-                保存用例
-              </button>
+              Object.keys(overrides).length > 0 && (
+                <button
+                  className="inline-flex items-center gap-2 rounded-lg border border-indigo-600 bg-indigo-900/30 px-3 py-2 text-sm font-medium text-indigo-200 transition hover:bg-indigo-900/50"
+                  onClick={() => setShowExportDropdown(true)}
+                >
+                  <Download className="h-4 w-4" />
+                  导出用例
+                </button>
+              )
             )}
           </div>
         </div>
@@ -330,6 +316,7 @@ export default function Home() {
               isRunning={isRunning}
               report={lastReport}
               filterText={filter}
+              overrides={overrides}
             />
           ) : (
             <div className="rounded-xl border-2 border-zinc-600 bg-zinc-900 p-6 text-sm text-zinc-400">
@@ -371,6 +358,8 @@ export default function Home() {
                   updateOverride(activeCase.id, patch);
                 }}
                 report={lastReport}
+                onRun={(id) => void runSingle(id)}
+                disabled={isRunning}
               />
             </div>
             <div className="shrink-0">

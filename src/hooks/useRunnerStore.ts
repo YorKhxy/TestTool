@@ -8,6 +8,8 @@ type CaseOverride = {
   headersText: string;
   queryText: string;
   bodyText: string;
+  expectedResult?: string;
+  path?: string;
 };
 
 function parseBodyText(text: string): string {
@@ -121,6 +123,7 @@ type RunnerState = {
   generateFromSwagger: () => Promise<void>;
   supplementCases: () => Promise<void>;
   saveMarkdown: (filePath: string) => Promise<void>;
+  exportCases: (format: 'markdown' | 'excel') => Promise<void>;
   setActiveCase: (id: string | null) => void;
   toggleSelect: (id: string) => void;
   setSelectMany: (ids: string[], selected: boolean) => void;
@@ -228,6 +231,8 @@ function buildCaseRequests(
 
     out.push({
       ...c,
+      path: o?.path ?? c.path,
+      expectedResult: o?.expectedResult ?? c.expectedResult,
       requiresAuth: typeof o?.requiresAuth === 'boolean' ? o.requiresAuth : c.requiresAuth,
       headers: finalHeaders,
       query: finalQuery,
@@ -449,16 +454,16 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
     }
   },
 
-  saveMarkdown: async (filePath: string) => {
-    const { markdownContent } = get();
-    if (!markdownContent) {
+  saveMarkdown: async (filePath: string, format: 'markdown' | 'excel' = 'markdown') => {
+    const { parsed, overrides } = get();
+    if (!parsed || parsed.cases.length === 0) {
       set({ error: '没有可保存的用例内容，请先生成用例' });
       return;
     }
     try {
       const r = await apiJson<{ success: boolean; path?: string; error?: string }>('/api/testplan/save', {
         method: 'POST',
-        body: JSON.stringify({ filePath, markdown: markdownContent }),
+        body: JSON.stringify({ filePath, format, cases: parsed.cases, overrides }),
       });
       if (!r.success) {
         set({ error: r.error || '保存失败' });
@@ -466,6 +471,53 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
     } catch (e: unknown) {
       console.error('Save error:', e);
       set({ error: e instanceof Error ? e.message : '保存失败' });
+    }
+  },
+
+  exportCases: async (format: 'markdown' | 'excel') => {
+    const { parsed, overrides } = get();
+    console.log('exportCases called', { format, parsedCases: parsed?.cases.length, overridesCount: Object.keys(overrides).length });
+    if (!parsed || parsed.cases.length === 0) {
+      const msg = '没有可导出的用例';
+      set({ error: msg });
+      alert(msg);
+      return;
+    }
+    try {
+      console.log('Sending export request...');
+      const response = await fetch('/api/testplan/export', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          format,
+          cases: parsed.cases,
+          overrides,
+          meta: parsed.meta,
+          rawMarkdown: parsed.rawMarkdown ?? undefined,
+        }),
+      });
+      console.log('Export response status:', response.status);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Export failed:', errorText);
+        set({ error: '导出失败: ' + errorText });
+        alert('导出失败: ' + errorText);
+        return;
+      }
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `testcases_export_${Date.now()}.${format === 'markdown' ? 'md' : 'xlsx'}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (e: unknown) {
+      console.error('Export error:', e);
+      const errorMsg = e instanceof Error ? e.message : '导出失败';
+      set({ error: errorMsg });
+      alert('导出失败: ' + errorMsg);
     }
   },
 
