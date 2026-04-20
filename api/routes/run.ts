@@ -159,7 +159,13 @@ function shouldPassByBody(responseJson: unknown): boolean | null {
 
 function extractValueByPath(obj: unknown, pathStr: string): unknown {
   if (!isRecord(obj) && !Array.isArray(obj)) return undefined;
-  const parts = pathStr.split('.');
+  const parts = pathStr.split('.').flatMap((part) => {
+    const match = part.match(/^(\w+)\[(\d+)\]$/);
+    if (match) {
+      return [match[1], match[2]];
+    }
+    return [part];
+  });
   let current: unknown = obj;
   for (const part of parts) {
     if (current === null || current === undefined) return undefined;

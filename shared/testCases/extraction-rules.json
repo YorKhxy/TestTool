@@ -1,0 +1,17 @@
+[
+  {
+    "name": "data_token",
+    "path": "data.token",
+    "source": "body"
+  },
+  {
+    "name": "data_id",
+    "path": "data.id",
+    "source": "body"
+  },
+  {
+    "name": "data_list_1_id",
+    "path": "data.list[1].id",
+    "source": "body"
+  }
+]

@@ -1,7 +1,7 @@
 import { Play, Square, Check } from 'lucide-react';
 import type { TestCase } from '../../shared/testPlan.js';
 import type { RunReport } from '../../shared/runTypes.js';
-import type { CaseOverride } from '../hooks/useRunnerStore.js';
+import type { CaseOverride, CaseExtractionResult } from '../hooks/useRunnerStore.js';
 import StatusBadge from '@/components/StatusBadge';
 import { cn } from '@/lib/utils';
 
@@ -18,6 +18,7 @@ export default function CaseTable({
   report,
   filterText,
   overrides,
+  caseExtractionResults,
 }: {
   cases: TestCase[];
   selectedIds: Record<string, boolean>;
@@ -31,6 +32,7 @@ export default function CaseTable({
   report: RunReport | null;
   filterText: string;
   overrides?: Record<string, CaseOverride>;
+  caseExtractionResults?: Record<string, CaseExtractionResult>;
 }) {
   const lowered = filterText.trim().toLowerCase();
   const filtered = lowered
@@ -89,6 +91,7 @@ export default function CaseTable({
               <th className="w-20 px-2 py-2">方法</th>
               <th className="px-2 py-2">路径</th>
               <th className="w-20 px-2 py-2">状态</th>
+              <th className="w-24 px-2 py-2">提取</th>
               <th className="w-48 px-2 py-2">预期结果</th>
               <th className="w-20 px-2 py-2">操作</th>
             </tr>
@@ -161,6 +164,9 @@ export default function CaseTable({
                     )}
                   </td>
                   <td className="px-2 py-2">
+                    <ExtractionStatus caseId={c.id} caseExtractors={c.variableExtractors} overridesExtractors={overrides?.[c.id]?.variableExtractors} extractionResult={caseExtractionResults?.[c.id]} />
+                  </td>
+                  <td className="px-2 py-2">
                     <div className="max-w-48 truncate text-xs text-zinc-400" title={overrides?.[c.id]?.expectedResult ?? c.expectedResult ?? '-'}>
                       {overrides?.[c.id]?.expectedResult ?? c.expectedResult ?? '-'}
                     </div>
@@ -196,6 +202,54 @@ export default function CaseTable({
           </tbody>
         </table>
       </div>
+    </div>
+  );
+}
+
+function ExtractionStatus({ caseId, caseExtractors, overridesExtractors, extractionResult }: {
+  caseId: string;
+  caseExtractors?: Array<{ id: string; name: string; source: string; path: string }>;
+  overridesExtractors?: Array<{ id: string; name: string; source: string; path: string }>;
+  extractionResult?: CaseExtractionResult;
+}) {
+  const appliedExtractors = overridesExtractors ?? caseExtractors ?? [];
+  const results = extractionResult?.extractionResults ?? [];
+  const successCount = results.filter((r) => r.success).length;
+  const failCount = results.filter((r) => !r.success).length;
+
+  if (appliedExtractors.length === 0) {
+    return <span className="text-xs text-zinc-600">-</span>;
+  }
+
+  if (extractionResult && results.length > 0) {
+    if (failCount === 0) {
+      return (
+        <div className="flex items-center gap-1" title={`${successCount}/${appliedExtractors.length} 提取成功`}>
+          <span className="text-xs text-emerald-400">✅</span>
+          <span className="text-xs text-emerald-400">{successCount}/{appliedExtractors.length}</span>
+        </div>
+      );
+    } else if (successCount === 0) {
+      return (
+        <div className="flex items-center gap-1" title={`${failCount}/${appliedExtractors.length} 提取失败`}>
+          <span className="text-xs text-rose-400">❌</span>
+          <span className="text-xs text-rose-400">{failCount}/{appliedExtractors.length}</span>
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex items-center gap-1" title={`${successCount} 成功, ${failCount} 失败`}>
+          <span className="text-xs text-amber-400">⚠️</span>
+          <span className="text-xs text-amber-400">{successCount}/{appliedExtractors.length}</span>
+        </div>
+      );
+    }
+  }
+
+  return (
+    <div className="flex items-center gap-1" title={`已配置 ${appliedExtractors.length} 条提取规则，等待执行`}>
+      <span className="text-xs text-zinc-500">⏳</span>
+      <span className="text-xs text-zinc-500">{appliedExtractors.length}</span>
     </div>
   );
 }

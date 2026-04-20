@@ -262,6 +262,11 @@ export function ResponseJsonPanel({
 
   const handleConfirmExtract = useCallback(() => {
     if (extractModal && extractName.trim() && onAddExtractor) {
+      const existsByName = variableExtractors.some((v) => v.name === extractName.trim());
+      if (existsByName) {
+        alert('该变量名已存在，请使用其他名称');
+        return;
+      }
       const newExtractor: ExtractedVariable = {
         id: `extract_${Date.now()}`,
         name: extractName.trim(),
@@ -272,7 +277,7 @@ export function ResponseJsonPanel({
       setExtractModal(null);
       setExtractName('');
     }
-  }, [extractModal, extractName, onAddExtractor]);
+  }, [extractModal, extractName, onAddExtractor, variableExtractors]);
 
   return (
     <div className="space-y-3">
@@ -343,10 +348,10 @@ export function ResponseJsonPanel({
               <div className="text-xs text-zinc-400">字段路径</div>
               <div className="font-mono text-sm text-cyan-400">{extractModal.path}</div>
               <div className="mt-1 text-xs text-zinc-400">值</div>
-              <div className="font-mono text-sm text-lime-300">
+              <div className="font-mono text-sm text-lime-300 break-all whitespace-pre-wrap max-h-32 overflow-auto">
                 {typeof extractModal.value === 'string'
-                  ? `"${extractModal.value.substring(0, 50)}${extractModal.value.length > 50 ? '...' : ''}"`
-                  : String(extractModal.value).substring(0, 100)}
+                  ? `"${extractModal.value}"`
+                  : JSON.stringify(extractModal.value)}
               </div>
             </div>
             <div className="mb-4">

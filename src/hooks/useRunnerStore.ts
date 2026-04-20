@@ -11,6 +11,34 @@ export type ExtractionRule = {
   description?: string;
 };
 
+export type ExtractionResult = {
+  ruleId: string;
+  ruleName: string;
+  path: string;
+  variableName: string;
+  success: boolean;
+  value?: unknown;
+  error?: string;
+  extractedAt?: string;
+};
+
+export type CaseExtractionResult = {
+  appliedRules: Array<{
+    ruleId: string;
+    ruleName: string;
+    path: string;
+    source: 'body' | 'header';
+  }>;
+  extractionResults: ExtractionResult[];
+  lastRunAt: string;
+};
+
+export type VariableUsage = {
+  caseId: string;
+  caseName: string;
+  field: 'path' | 'headers' | 'query' | 'body' | 'expectedResult';
+};
+
 export type CaseOverride = {
   requiresAuth?: boolean;
   headersText: string;
@@ -123,6 +151,8 @@ type RunnerState = {
   uploadedZipName: string | null;
   extractedVariables: Record<string, string | number | boolean | object>;
   extractionRules: ExtractionRule[];
+  caseExtractionResults: Record<string, CaseExtractionResult>;
+  variableUsage: Record<string, VariableUsage[]>;
 
   loadSettings: () => Promise<void>;
   saveSettings: (s: SettingsState) => Promise<void>;
@@ -146,6 +176,10 @@ type RunnerState = {
   removeExtractionRule: (id: string) => void;
   updateExtractionRule: (id: string, patch: Partial<Omit<ExtractionRule, 'id'>>) => void;
   clearExtractionRules: () => void;
+  updateCaseExtractionResult: (caseId: string, result: CaseExtractionResult) => void;
+  clearCaseExtractionResults: (caseId?: string) => void;
+  updateVariableUsage: (usage: Record<string, VariableUsage[]>) => void;
+  clearVariableUsage: () => void;
   runSelected: () => Promise<void>;
   runSingle: (id: string) => Promise<void>;
 };
@@ -293,6 +327,8 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
   uploadedZipName: null,
   extractedVariables: {},
   extractionRules: [],
+  caseExtractionResults: {},
+  variableUsage: {},
 
   loadSettings: async () => {
     try {
@@ -599,10 +635,13 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
         queryText: markdownDefaults?.queryRaw ?? '{}',
         bodyText: markdownDefaults?.bodyRaw ?? '',
       };
+      const currentExtractors = base.variableExtractors ?? [];
+      const existingIds = new Set(currentExtractors.map((e) => e.id));
+      const newExtractors = extractors.filter((e) => !existingIds.has(e.id));
       return {
         overrides: {
           ...s.overrides,
-          [id]: { ...base, variableExtractors: extractors },
+          [id]: { ...base, variableExtractors: [...currentExtractors, ...newExtractors] },
         },
       };
     }),
@@ -616,8 +655,9 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
 
   addExtractionRule: (rule) =>
     set((s) => {
-      const exists = s.extractionRules.some((r) => r.id === rule.id);
-      if (exists) return s;
+      const existsById = rule.id ? s.extractionRules.some((r) => r.id === rule.id) : false;
+      const existsByName = s.extractionRules.some((r) => r.name === rule.name);
+      if (existsById || existsByName) return s;
       return { extractionRules: [...s.extractionRules, rule] };
     }),
 
@@ -634,6 +674,30 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
     })),
 
   clearExtractionRules: () => set({ extractionRules: [] }),
+
+  updateCaseExtractionResult: (caseId, result) =>
+    set((s) => ({
+      caseExtractionResults: {
+        ...s.caseExtractionResults,
+        [caseId]: result,
+      },
+    })),
+
+  clearCaseExtractionResults: (caseId) =>
+    set((s) => {
+      if (caseId) {
+        const { [caseId]: _, ...rest } = s.caseExtractionResults;
+        return { caseExtractionResults: rest };
+      }
+      return { caseExtractionResults: {} };
+    }),
+
+  updateVariableUsage: (usage) =>
+    set((s) => ({
+      variableUsage: { ...s.variableUsage, ...usage },
+    })),
+
+  clearVariableUsage: () => set({ variableUsage: {} }),
 
   runSelected: async () => {
     const parsed = get().parsed;
@@ -670,15 +734,45 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
         body: JSON.stringify({ config: configWithVars, cases: caseReqs }),
       });
       const allVars: Record<string, string | number | boolean | object> = {};
+      const newCaseExtractionResults: Record<string, CaseExtractionResult> = {};
       for (const result of r.data.results) {
         if (result.extractedVariables) {
           Object.assign(allVars, result.extractedVariables);
         }
+        const caseId = result.caseId;
+        const rawRules = caseReqs.find((c) => c.id === caseId)?.variableExtractors ?? [];
+        const appliedRules = rawRules.map((r) => ({
+          ruleId: r.id,
+          ruleName: r.name,
+          path: r.path,
+          source: r.source,
+        }));
+        const extractionResults: ExtractionResult[] = [];
+        for (const rule of appliedRules) {
+          const varName = rule.ruleName;
+          const extractedValue = result.extractedVariables?.[varName];
+          extractionResults.push({
+            ruleId: rule.ruleId,
+            ruleName: varName,
+            path: rule.path,
+            variableName: varName,
+            success: extractedValue !== undefined,
+            value: extractedValue,
+            error: extractedValue === undefined ? '未提取到值' : undefined,
+            extractedAt: new Date().toISOString(),
+          });
+        }
+        newCaseExtractionResults[caseId] = {
+          appliedRules,
+          extractionResults,
+          lastRunAt: new Date().toISOString(),
+        };
       }
       set((prev) => ({
         lastReport: r.data,
         isRunning: false,
         extractedVariables: { ...prev.extractedVariables, ...allVars },
+        caseExtractionResults: { ...prev.caseExtractionResults, ...newCaseExtractionResults },
       }));
     } catch (e: unknown) {
       set({ isRunning: false, error: e instanceof Error ? e.message : '执行失败' });
@@ -713,15 +807,45 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
         body: JSON.stringify({ config: configWithVars, cases: caseReqs }),
       });
       const allVars: Record<string, string | number | boolean | object> = {};
+      const newCaseExtractionResults: Record<string, CaseExtractionResult> = {};
       for (const result of r.data.results) {
         if (result.extractedVariables) {
           Object.assign(allVars, result.extractedVariables);
         }
+        const caseId = result.caseId;
+        const rawRules = caseReqs.find((c) => c.id === caseId)?.variableExtractors ?? [];
+        const appliedRules = rawRules.map((r) => ({
+          ruleId: r.id,
+          ruleName: r.name,
+          path: r.path,
+          source: r.source,
+        }));
+        const extractionResults: ExtractionResult[] = [];
+        for (const rule of appliedRules) {
+          const varName = rule.ruleName;
+          const extractedValue = result.extractedVariables?.[varName];
+          extractionResults.push({
+            ruleId: rule.ruleId,
+            ruleName: varName,
+            path: rule.path,
+            variableName: varName,
+            success: extractedValue !== undefined,
+            value: extractedValue,
+            error: extractedValue === undefined ? '未提取到值' : undefined,
+            extractedAt: new Date().toISOString(),
+          });
+        }
+        newCaseExtractionResults[caseId] = {
+          appliedRules,
+          extractionResults,
+          lastRunAt: new Date().toISOString(),
+        };
       }
       set((prev) => ({
         lastReport: r.data,
         isRunning: false,
         extractedVariables: { ...prev.extractedVariables, ...allVars },
+        caseExtractionResults: { ...prev.caseExtractionResults, ...newCaseExtractionResults },
       }));
     } catch (e: unknown) {
       set({ isRunning: false, error: e instanceof Error ? e.message : '执行失败' });

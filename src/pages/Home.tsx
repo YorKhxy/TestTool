@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { FileUp, Play, Trash2, GripVertical, Wand2, Save, Package, Download } from 'lucide-react';
 import CaseDetailPanel from '@/components/CaseDetailPanel';
 import CaseTable from '@/components/CaseTable';
-import VariablesPanel from '@/components/VariablesPanel';
+import GlobalVariablesTracker from '@/components/GlobalVariablesTracker';
 import { useRunnerStore } from '@/hooks/useRunnerStore';
 import { cn } from '@/lib/utils';
 
@@ -50,6 +50,12 @@ export default function Home() {
     runSingle,
     exportCases,
     addExtractionRule,
+    removeExtractionRule,
+    updateExtractionRule,
+    extractionRules,
+    caseExtractionResults,
+    extractedVariables,
+    clearExtractedVariables,
   } = useRunnerStore();
 
   useEffect(() => {
@@ -319,6 +325,7 @@ export default function Home() {
               report={lastReport}
               filterText={filter}
               overrides={overrides}
+              caseExtractionResults={caseExtractionResults}
             />
           ) : (
             <div className="rounded-xl border-2 border-zinc-600 bg-zinc-900 p-6 text-sm text-zinc-400">
@@ -369,10 +376,86 @@ export default function Home() {
                   updateCaseExtractors(caseId, currentExtractors.filter((e) => e.id !== extractorId));
                 }}
                 disabled={isRunning}
+                extractionResult={activeCaseId ? caseExtractionResults[activeCaseId] : undefined}
               />
             </div>
             <div className="shrink-0">
-              <VariablesPanel />
+              <GlobalVariablesTracker
+                extractedVariables={extractedVariables}
+                caseExtractionResults={caseExtractionResults}
+                caseNames={useMemo(() => {
+                  const map: Record<string, string> = {};
+                  if (parsed) {
+                    for (const c of parsed.cases) {
+                      map[c.id] = c.title || c.id;
+                    }
+                  }
+                  return map;
+                }, [parsed])}
+                overrides={overrides}
+                extractionRules={extractionRules}
+                activeCaseId={activeCaseId}
+                onClearAll={clearExtractedVariables}
+                onRemoveRule={removeExtractionRule}
+                onUpdateRule={updateExtractionRule}
+                onApplyRule={(caseId, rule) => {
+                  const currentExtractors = overrides[caseId]?.variableExtractors ?? parsed?.cases.find((c) => c.id === caseId)?.variableExtractors ?? [];
+                  if (currentExtractors.some((e) => e.id === rule.id)) {
+                    alert('该规则已应用到当前用例');
+                    return;
+                  }
+                  updateCaseExtractors(caseId, [...currentExtractors, { id: rule.id, name: rule.name, source: rule.source, path: rule.path }]);
+                }}
+                onImportRules={() => {
+                  const input = document.createElement('input');
+                  input.type = 'file';
+                  input.accept = '.json,.md';
+                  input.onchange = async () => {
+                    const f = input.files?.[0];
+                    if (!f) return;
+                    try {
+                      const text = await f.text();
+                      let rules: Array<{ id: string; name: string; path: string; source: 'body' | 'header' }> = [];
+                      if (f.name.endsWith('.json')) {
+                        const parsed = JSON.parse(text);
+                        rules = Array.isArray(parsed) ? parsed : parsed.rules || [];
+                      } else {
+                        const lines = text.split('\n');
+                        for (const line of lines) {
+                          const trimmed = line.trim();
+                          if (!trimmed || !trimmed.startsWith('|') || trimmed.startsWith('|#')) continue;
+                          const parts = trimmed.split('|').filter((p) => p.trim());
+                          if (parts.length >= 3) {
+                            const name = parts[1]?.trim().replace(/`/g, '') || '';
+                            const path = parts[2]?.trim().replace(/`/g, '') || '';
+                            const source = parts[3]?.trim() === 'header' ? 'header' : 'body';
+                            if (name && path) {
+                              rules.push({ id: `import_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, name, path, source });
+                            }
+                          }
+                        }
+                      }
+                      rules.forEach((r) => {
+                        if (r.name && r.path) {
+                          addExtractionRule({ id: r.id, name: r.name, path: r.path, source: r.source || 'body' });
+                        }
+                      });
+                      alert(`成功导入 ${rules.length} 条规则`);
+                    } catch { alert('导入失败'); }
+                  };
+                  input.click();
+                }}
+                onExportRules={() => {
+                  const data = extractionRules.map((r) => ({ name: r.name, path: r.path, source: r.source }));
+                  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'extraction-rules.json';
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+              />
             </div>
           </div>
         </div>

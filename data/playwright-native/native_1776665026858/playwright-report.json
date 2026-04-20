@@ -1,0 +1,309 @@
+{
+  "config": {
+    "configFile": "G:\\apitester\\data\\playwright-native\\native_1776665026858\\playwright.config.cjs",
+    "rootDir": "G:/apitester/data/playwright-native/native_1776665026858",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "G:/apitester/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "G:/apitester/data/playwright-native/native_1776665026858",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.js",
+          "**/*.spec.ts",
+          "**/*.js",
+          "**/*.ts",
+          "**/*.cjs",
+          "**/*.mjs"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "line"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "01_login.spec.ts",
+      "file": "01_login.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "管理端 - 登录认证模块",
+          "file": "01_login.spec.ts",
+          "line": 33,
+          "column": 6,
+          "specs": [
+            {
+              "title": "LOGIN-001 登录页面 - 页面元素完整性验证",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1057,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Screenshot saved: G:\\apitester\\data\\playwright-native\\native_1776665026858\\screenshots\\punk-open-platform-admin\\LOGIN_001_登录页面___页面元素完整性验证_2026-04-20T06-03-49-474Z.png\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-20T06:03:48.258Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1f8735009fdf28512bfe-5ece3da8830d4358e1ae",
+              "file": "01_login.spec.ts",
+              "line": 38,
+              "column": 3
+            },
+            {
+              "title": "LOGIN-002 登录 - 空手机号和验证码提示",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1483,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Screenshot saved: G:\\apitester\\data\\playwright-native\\native_1776665026858\\screenshots\\punk-open-platform-admin\\LOGIN_002_登录___空手机号和验证码提示_2026-04-20T06-03-50-991Z.png\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-20T06:03:49.590Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1f8735009fdf28512bfe-09b04f7fc1fdefc42708",
+              "file": "01_login.spec.ts",
+              "line": 50,
+              "column": 3
+            },
+            {
+              "title": "LOGIN-003 登录 - 错误验证码提示",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2016,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Screenshot saved: G:\\apitester\\data\\playwright-native\\native_1776665026858\\screenshots\\punk-open-platform-admin\\LOGIN_003_登录___错误验证码提示_2026-04-20T06-03-53-009Z.png\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-20T06:03:51.084Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1f8735009fdf28512bfe-efef840ab77a385b7ce6",
+              "file": "01_login.spec.ts",
+              "line": 62,
+              "column": 3
+            },
+            {
+              "title": "LOGIN-004 登录成功 - 跳转首页",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3010,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Screenshot saved: G:\\apitester\\data\\playwright-native\\native_1776665026858\\screenshots\\punk-open-platform-admin\\LOGIN_004_登录成功___跳转首页_2026-04-20T06-03-56-043Z.png\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-20T06:03:53.109Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1f8735009fdf28512bfe-39055b68aab7eff5c215",
+              "file": "01_login.spec.ts",
+              "line": 75,
+              "column": 3
+            },
+            {
+              "title": "LOGIN-005 登录成功 - 首页卡片展示",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 8017,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.ant-card').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ant-card').first()\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.ant-card').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ant-card').first()\u001b[22m\n\n    at G:\\apitester\\data\\playwright-native\\native_1776665026858\\01_login.spec.ts:87:24",
+                        "location": {
+                          "file": "G:\\apitester\\data\\playwright-native\\native_1776665026858\\01_login.spec.ts",
+                          "column": 24,
+                          "line": 87
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 85 |\u001b[39m\n \u001b[90m 86 |\u001b[39m     \u001b[36mconst\u001b[39m card \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.ant-card'\u001b[39m)\u001b[33m.\u001b[39mfirst()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 87 |\u001b[39m     \u001b[36mawait\u001b[39m expect(card)\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m5000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 88 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 89 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 90 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "G:\\apitester\\data\\playwright-native\\native_1776665026858\\01_login.spec.ts",
+                            "column": 24,
+                            "line": 87
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.ant-card').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ant-card').first()\u001b[22m\n\n\n\u001b[0m \u001b[90m 85 |\u001b[39m\n \u001b[90m 86 |\u001b[39m     \u001b[36mconst\u001b[39m card \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.ant-card'\u001b[39m)\u001b[33m.\u001b[39mfirst()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 87 |\u001b[39m     \u001b[36mawait\u001b[39m expect(card)\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m5000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 88 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 89 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 90 |\u001b[39m\u001b[0m\n\u001b[2m    at G:\\apitester\\data\\playwright-native\\native_1776665026858\\01_login.spec.ts:87:24\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "Screenshot saved: G:\\apitester\\data\\playwright-native\\native_1776665026858\\screenshots\\punk-open-platform-admin\\LOGIN_005_登录成功___首页卡片展示_2026-04-20T06-04-04-070Z.png\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-20T06:03:56.130Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "G:\\apitester\\test-results\\01_login-管理端---登录认证模块-LOGIN-005-登录成功---首页卡片展示-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "G:\\apitester\\data\\playwright-native\\native_1776665026858\\01_login.spec.ts",
+                        "column": 24,
+                        "line": 87
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "1f8735009fdf28512bfe-b0f379f55ac9625e8ee8",
+              "file": "01_login.spec.ts",
+              "line": 83,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-04-20T06:03:47.549Z",
+    "duration": 16814.861,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}
