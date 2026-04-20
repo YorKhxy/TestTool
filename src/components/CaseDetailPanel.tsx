@@ -4,6 +4,7 @@ import StatusBadge from '@/components/StatusBadge';
 import { Download, Play } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ResponseJsonPanel } from './ResponseJsonTree';
+import { useVariableAutocomplete, VariablePopup } from './VariableAutocomplete';
 
 type VariableExtractor = {
   id: string;
@@ -19,6 +20,7 @@ export default function CaseDetailPanel({
   report,
   onRun,
   onAddExtractor,
+  onRemoveExtractor,
   disabled,
 }: {
   testCase: TestCase | null;
@@ -27,6 +29,7 @@ export default function CaseDetailPanel({
   report: RunReport | null;
   onRun?: (id: string) => void;
   onAddExtractor?: (caseId: string, extractor: VariableExtractor) => void;
+  onRemoveExtractor?: (caseId: string, extractorId: string) => void;
   disabled?: boolean;
 }) {
   if (!testCase) {
@@ -119,6 +122,7 @@ export default function CaseDetailPanel({
               responseBodyPreview={r?.responseBodyPreview}
               variableExtractors={variableExtractors}
               onAddExtractor={onAddExtractor ? (extractor) => onAddExtractor(testCase.id, extractor) : undefined}
+              onRemoveExtractor={onRemoveExtractor ? (extractorId) => onRemoveExtractor(testCase.id, extractorId) : undefined}
             />
           </div>
         </div>
@@ -140,17 +144,23 @@ function Field({
   rows: number;
   disabled?: boolean;
 }) {
+  const { textareaProps, popupProps } = useVariableAutocomplete({ value, onChange });
+
   return (
     <label className={cn('grid gap-1', disabled && 'pointer-events-none opacity-60')}>
       <div className="text-xs font-medium text-zinc-300">{label}</div>
-      <textarea
-        rows={rows}
-        className="w-full rounded-lg border border-zinc-800 bg-zinc-950/40 p-2 font-mono text-[12px] text-zinc-100 outline-none ring-0 placeholder:text-zinc-600 focus:border-zinc-700"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={label}
-        disabled={disabled}
-      />
+      <div className="relative">
+        <textarea
+          rows={rows}
+          className="w-full rounded-lg border border-zinc-800 bg-zinc-950/40 p-2 font-mono text-[12px] text-zinc-100 outline-none ring-0 placeholder:text-zinc-600 focus:border-zinc-700"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={label}
+          disabled={disabled}
+          {...textareaProps}
+        />
+        <VariablePopup {...popupProps} />
+      </div>
     </label>
   );
 }

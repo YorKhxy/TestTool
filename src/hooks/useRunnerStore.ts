@@ -3,6 +3,14 @@ import type { ParsedTestPlan, TestCase } from '../../shared/testPlan.js';
 import type { CaseRequest, RunConfig, RunReport } from '../../shared/runTypes.js';
 import { apiJson, safeParseJsonAny } from '@/utils/http';
 
+export type ExtractionRule = {
+  id: string;
+  name: string;
+  path: string;
+  source: 'body' | 'header';
+  description?: string;
+};
+
 export type CaseOverride = {
   requiresAuth?: boolean;
   headersText: string;
@@ -114,6 +122,7 @@ type RunnerState = {
   uploadedDocuments: { name: string; path: string; content: string }[];
   uploadedZipName: string | null;
   extractedVariables: Record<string, string | number | boolean | object>;
+  extractionRules: ExtractionRule[];
 
   loadSettings: () => Promise<void>;
   saveSettings: (s: SettingsState) => Promise<void>;
@@ -133,6 +142,10 @@ type RunnerState = {
   updateCaseExtractors: (id: string, extractors: { id: string; name: string; source: 'body' | 'header'; path: string }[]) => void;
   setExtractedVariables: (vars: Record<string, string | number | boolean | object>) => void;
   clearExtractedVariables: () => void;
+  addExtractionRule: (rule: ExtractionRule) => void;
+  removeExtractionRule: (id: string) => void;
+  updateExtractionRule: (id: string, patch: Partial<Omit<ExtractionRule, 'id'>>) => void;
+  clearExtractionRules: () => void;
   runSelected: () => Promise<void>;
   runSingle: (id: string) => Promise<void>;
 };
@@ -237,8 +250,8 @@ function buildCaseRequests(
 
     out.push({
       ...c,
-      path: o?.path ?? c.path,
-      expectedResult: o?.expectedResult ?? c.expectedResult,
+      path: applyExtractedVariables(o?.path ?? c.path ?? '', extractedVars),
+      expectedResult: applyExtractedVariables(o?.expectedResult ?? c.expectedResult ?? '', extractedVars),
       requiresAuth: typeof o?.requiresAuth === 'boolean' ? o?.requiresAuth : c.requiresAuth,
       headers: finalHeaders,
       query: finalQuery,
@@ -279,6 +292,7 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
   uploadedDocuments: [],
   uploadedZipName: null,
   extractedVariables: {},
+  extractionRules: [],
 
   loadSettings: async () => {
     try {
@@ -342,6 +356,22 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
       const parsed = r.data;
       const inferred = inferSettingsFromMeta(parsed.meta);
 
+      const allRules: ExtractionRule[] = [];
+      for (const c of parsed.cases) {
+        if (c.variableExtractors && c.variableExtractors.length > 0) {
+          for (const ex of c.variableExtractors) {
+            if (!allRules.some((r) => r.id === ex.id)) {
+              allRules.push({
+                id: ex.id,
+                name: ex.name,
+                path: ex.path,
+                source: ex.source,
+              });
+            }
+          }
+        }
+      }
+
       set((s) => ({
         fileName,
         parsed,
@@ -357,6 +387,7 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
           authEmail: s.settings.authEmail || inferred.authEmail || '',
           authPassword: s.settings.authPassword || inferred.authPassword || '',
         }),
+        extractionRules: allRules,
       }));
     } catch (e: unknown) {
       set({ error: e instanceof Error ? e.message : '导入失败' });
@@ -582,6 +613,27 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
     })),
 
   clearExtractedVariables: () => set({ extractedVariables: {} }),
+
+  addExtractionRule: (rule) =>
+    set((s) => {
+      const exists = s.extractionRules.some((r) => r.id === rule.id);
+      if (exists) return s;
+      return { extractionRules: [...s.extractionRules, rule] };
+    }),
+
+  removeExtractionRule: (id) =>
+    set((s) => ({
+      extractionRules: s.extractionRules.filter((r) => r.id !== id),
+    })),
+
+  updateExtractionRule: (id, patch) =>
+    set((s) => ({
+      extractionRules: s.extractionRules.map((r) =>
+        r.id === id ? { ...r, ...patch } : r
+      ),
+    })),
+
+  clearExtractionRules: () => set({ extractionRules: [] }),
 
   runSelected: async () => {
     const parsed = get().parsed;

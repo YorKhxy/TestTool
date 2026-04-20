@@ -49,6 +49,7 @@ export default function Home() {
     runSelected,
     runSingle,
     exportCases,
+    addExtractionRule,
   } = useRunnerStore();
 
   useEffect(() => {
@@ -361,11 +362,11 @@ export default function Home() {
                 report={lastReport}
                 onRun={(id) => void runSingle(id)}
                 onAddExtractor={(caseId, extractor) => {
+                  addExtractionRule(extractor);
+                }}
+                onRemoveExtractor={(caseId, extractorId) => {
                   const currentExtractors = activeOverride?.variableExtractors ?? activeCase?.variableExtractors ?? [];
-                  const exists = currentExtractors.some((e) => e.id === extractor.id);
-                  if (!exists) {
-                    updateCaseExtractors(caseId, [...currentExtractors, extractor]);
-                  }
+                  updateCaseExtractors(caseId, currentExtractors.filter((e) => e.id !== extractorId));
                 }}
                 disabled={isRunning}
               />

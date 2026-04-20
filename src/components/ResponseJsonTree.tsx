@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { ChevronRight, ChevronDown, Copy, Check, Plus } from 'lucide-react';
+import { ChevronRight, ChevronDown, Copy, Check, Plus, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface JsonTreeProps {
@@ -8,6 +8,7 @@ interface JsonTreeProps {
   extractedPaths?: Set<string>;
   maxDepth?: number;
   currentDepth?: number;
+  parentPath?: string;
 }
 
 export default function JsonTree({
@@ -16,6 +17,7 @@ export default function JsonTree({
   extractedPaths = new Set(),
   maxDepth = 5,
   currentDepth = 0,
+  parentPath = '',
 }: JsonTreeProps) {
   if (currentDepth >= maxDepth) {
     return <span className="text-zinc-500">[...]</span>;
@@ -52,6 +54,7 @@ export default function JsonTree({
         extractedPaths={extractedPaths}
         maxDepth={maxDepth}
         currentDepth={currentDepth}
+        parentPath={parentPath}
       />
     );
   }
@@ -67,6 +70,7 @@ export default function JsonTree({
         extractedPaths={extractedPaths}
         maxDepth={maxDepth}
         currentDepth={currentDepth}
+        parentPath={parentPath}
       />
     );
   }
@@ -80,12 +84,14 @@ function ObjectNode({
   extractedPaths,
   maxDepth,
   currentDepth,
+  parentPath,
 }: {
   data: object;
   onExtract?: (path: string, value: unknown) => void;
   extractedPaths?: Set<string>;
   maxDepth?: number;
   currentDepth?: number;
+  parentPath?: string;
 }) {
   const [expanded, setExpanded] = useState(currentDepth < 2);
 
@@ -102,8 +108,7 @@ function ObjectNode({
       {expanded && (
         <>
           {entries.map(([key, value], index) => {
-            const path = `${key}`;
-            const fullPath = path;
+            const fullPath = parentPath ? `${parentPath}.${key}` : key;
             const isExtracted = extractedPaths?.has(fullPath);
             const isLast = index === entries.length - 1;
 
@@ -118,6 +123,7 @@ function ObjectNode({
                     extractedPaths={extractedPaths}
                     maxDepth={maxDepth}
                     currentDepth={currentDepth + 1}
+                    parentPath={fullPath}
                   />
                   {onExtract && (
                     <button
@@ -152,12 +158,14 @@ function ArrayNode({
   extractedPaths,
   maxDepth,
   currentDepth,
+  parentPath,
 }: {
   data: unknown[];
   onExtract?: (path: string, value: unknown) => void;
   extractedPaths?: Set<string>;
   maxDepth?: number;
   currentDepth?: number;
+  parentPath?: string;
 }) {
   const [expanded, setExpanded] = useState(currentDepth < 2);
 
@@ -173,7 +181,7 @@ function ArrayNode({
       {expanded && (
         <>
           {data.map((item, index) => {
-            const path = `[${index}]`;
+            const fullPath = parentPath ? `${parentPath}[${index}]` : `[${index}]`;
             return (
               <div key={index} className="flex items-center gap-1 group pl-4">
                 <span className="text-zinc-600 text-[10px] mr-1">{index}</span>
@@ -183,6 +191,7 @@ function ArrayNode({
                   extractedPaths={extractedPaths}
                   maxDepth={maxDepth}
                   currentDepth={currentDepth + 1}
+                  parentPath={fullPath}
                 />
                 <span className="text-zinc-600">,</span>
               </div>
@@ -212,6 +221,7 @@ interface ResponseJsonPanelProps {
   responseBodyPreview?: string;
   variableExtractors?: ExtractedVariable[];
   onAddExtractor?: (extractor: ExtractedVariable) => void;
+  onRemoveExtractor?: (extractorId: string) => void;
 }
 
 export function ResponseJsonPanel({
@@ -219,6 +229,7 @@ export function ResponseJsonPanel({
   responseBodyPreview,
   variableExtractors = [],
   onAddExtractor,
+  onRemoveExtractor,
 }: ResponseJsonPanelProps) {
   const [copied, setCopied] = useState(false);
   const [extractModal, setExtractModal] = useState<ExtractConfig | null>(null);
@@ -265,35 +276,21 @@ export function ResponseJsonPanel({
 
   return (
     <div className="space-y-3">
-      {variableExtractors.length > 0 && (
-        <div className="rounded-lg border border-emerald-600/30 bg-emerald-950/20 p-3">
-          <div className="text-xs font-medium text-emerald-400 mb-2">已配置的提取变量</div>
-          <div className="space-y-1">
-            {variableExtractors.map((v) => (
-              <div key={v.id} className="flex items-center gap-2 text-xs">
-                <span className="text-emerald-300">✓ {v.name}</span>
-                <span className="text-zinc-500">← {v.path}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       <div className="rounded-lg border border-zinc-800 bg-zinc-950/40 p-3">
         <div className="flex items-center justify-between mb-2">
-          <div className="text-xs font-medium text-zinc-300">响应内容 (JSON)</div>
           <div className="flex items-center gap-2">
+            <div className="text-xs font-medium text-zinc-300">响应内容</div>
             {parsedJson && onAddExtractor && (
-              <span className="text-[10px] text-zinc-500">点击字段可提取</span>
+              <span className="text-[10px] text-cyan-500 bg-cyan-950/50 px-1.5 py-0.5 rounded">点击字段可提取</span>
             )}
-            <button
-              onClick={handleCopy}
-              className="inline-flex items-center gap-1 rounded border border-zinc-700 bg-zinc-800/40 px-2 py-1 text-xs text-zinc-300 transition hover:bg-zinc-700/60"
-            >
-              {copied ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
-              {copied ? '已复制' : '复制'}
-            </button>
           </div>
+          <button
+            onClick={handleCopy}
+            className="inline-flex items-center gap-1 rounded border border-zinc-700 bg-zinc-800/40 px-2 py-1 text-xs text-zinc-300 transition hover:bg-zinc-700/60"
+          >
+            {copied ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
+            {copied ? '已复制' : '复制'}
+          </button>
         </div>
 
         <div className="max-h-80 overflow-auto rounded-md border border-zinc-800 bg-zinc-950/60 p-2 font-mono text-[11px]">
@@ -308,6 +305,35 @@ export function ResponseJsonPanel({
           )}
         </div>
       </div>
+
+      {variableExtractors.length > 0 && (
+        <div className="rounded-lg border border-zinc-800 bg-zinc-950/40 p-3">
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-xs font-medium text-zinc-300">已配置的提取规则</div>
+            <span className="text-[10px] text-emerald-400 bg-emerald-950/50 px-1.5 py-0.5 rounded">{variableExtractors.length} 条</span>
+          </div>
+          <div className="space-y-1">
+            {variableExtractors.map((extractor) => (
+              <div key={extractor.id} className="flex items-center justify-between rounded border border-zinc-800 bg-zinc-900/60 px-2 py-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs text-cyan-400">{extractor.name}</span>
+                  <span className="text-zinc-600 text-xs">=</span>
+                  <span className="font-mono text-xs text-zinc-500">{extractor.path}</span>
+                </div>
+                {onRemoveExtractor && (
+                  <button
+                    onClick={() => onRemoveExtractor(extractor.id)}
+                    className="rounded p-1 text-zinc-500 hover:bg-zinc-800 hover:text-rose-400 transition"
+                    title="删除提取规则"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {extractModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
