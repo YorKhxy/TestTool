@@ -180,7 +180,6 @@ export default function VariablesPanel() {
           <div className="space-y-1">
             {vars.map(([key, value]) => {
               const strValue = formatValue(value);
-              const displayValue = truncateValue(strValue);
               const isCopied = copiedKey === key;
 
               return (
@@ -193,8 +192,8 @@ export default function VariablesPanel() {
                       <span className="font-mono text-xs font-medium text-cyan-400">{key}</span>
                       <span className="text-zinc-600">=</span>
                     </div>
-                    <div className="mt-1 font-mono text-xs text-zinc-400 break-all">
-                      {displayValue}
+                    <div className="mt-1 font-mono text-xs text-zinc-400 break-all whitespace-pre-wrap">
+                      {strValue}
                     </div>
                   </div>
                   <button
@@ -282,10 +281,10 @@ export default function VariablesPanel() {
                 ) : (
                   <>
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                         <span className="font-mono text-xs font-medium text-cyan-400">{rule.name}</span>
                         <span className="text-zinc-600">=</span>
-                        <span className="font-mono text-xs text-zinc-500">{rule.path}</span>
+                        <span className="font-mono text-xs text-zinc-500 break-all">{rule.path}</span>
                       </div>
                       {rule.description && (
                         <div className="mt-0.5 text-[10px] text-zinc-500">{rule.description}</div>
