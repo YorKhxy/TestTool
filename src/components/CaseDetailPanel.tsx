@@ -1,10 +1,12 @@
 import type { TestCase } from '../../shared/testPlan.js';
 import type { RunReport } from '../../shared/runTypes.js';
+import type { CaseExtractionResult } from '../hooks/useRunnerStore.js';
 import StatusBadge from '@/components/StatusBadge';
-import { Download, Play } from 'lucide-react';
+import { Download, Play, CheckCircle, XCircle, AlertCircle, ChevronDown, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ResponseJsonPanel } from './ResponseJsonTree';
 import { useVariableAutocomplete, VariablePopup } from './VariableAutocomplete';
+import { useState } from 'react';
 
 type VariableExtractor = {
   id: string;
@@ -22,6 +24,7 @@ export default function CaseDetailPanel({
   onAddExtractor,
   onRemoveExtractor,
   disabled,
+  extractionResult,
 }: {
   testCase: TestCase | null;
   override: { requiresAuth?: boolean; headersText: string; queryText: string; bodyText: string; expectedResult?: string; path?: string; variableExtractors?: VariableExtractor[] } | null;
@@ -31,6 +34,7 @@ export default function CaseDetailPanel({
   onAddExtractor?: (caseId: string, extractor: VariableExtractor) => void;
   onRemoveExtractor?: (caseId: string, extractorId: string) => void;
   disabled?: boolean;
+  extractionResult?: CaseExtractionResult | null;
 }) {
   if (!testCase) {
     return (
@@ -90,6 +94,8 @@ export default function CaseDetailPanel({
           <Field label="headers（JSON对象）" value={o?.headersText ?? '{}'} onChange={(v) => onChange({ headersText: v })} rows={4} disabled={disabled} />
           <Field label="query（JSON对象）" value={o?.queryText ?? '{}'} onChange={(v) => onChange({ queryText: v })} rows={3} disabled={disabled} />
           <Field label="body（JSON，POST/PUT 用）" value={o?.bodyText ?? ''} onChange={(v) => onChange({ bodyText: v })} rows={6} disabled={disabled} />
+
+          <ExtractionInfoPanel variableExtractors={variableExtractors} extractionResult={extractionResult} />
 
           <div className={cn('rounded-lg border border-zinc-800 bg-zinc-950/40 p-3', !r && 'opacity-60')}>
             <div className="flex items-center justify-between mb-3">
@@ -162,5 +168,80 @@ function Field({
         <VariablePopup {...popupProps} />
       </div>
     </label>
+  );
+}
+
+function ExtractionInfoPanel({ variableExtractors, extractionResult }: {
+  variableExtractors: Array<{ id: string; name: string; source: string; path: string }>;
+  extractionResult?: CaseExtractionResult | null;
+}) {
+  const [expanded, setExpanded] = useState(true);
+  const appliedRules = extractionResult?.appliedRules ?? variableExtractors;
+  const results = extractionResult?.extractionResults ?? [];
+
+  if (appliedRules.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="rounded-lg border border-zinc-800 bg-zinc-950/40">
+      <button
+        className="flex w-full items-center gap-2 px-3 py-2 text-xs font-medium text-zinc-300 hover:bg-zinc-800/30 transition"
+        onClick={() => setExpanded(!expanded)}
+      >
+        {expanded ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
+        <span>提取信息</span>
+        <span className="ml-auto text-zinc-500">{appliedRules.length} 条规则</span>
+        {extractionResult && (
+          <span className={cn(
+            'ml-2 rounded px-1.5 py-0.5 text-[10px]',
+            results.filter(r => r.success).length === appliedRules.length
+              ? 'bg-emerald-900/50 text-emerald-300'
+              : results.filter(r => r.success).length === 0
+                ? 'bg-rose-900/50 text-rose-300'
+                : 'bg-amber-900/50 text-amber-300'
+          )}>
+            {results.filter(r => r.success).length}/{appliedRules.length} 成功
+          </span>
+        )}
+      </button>
+
+      {expanded && (
+        <div className="border-t border-zinc-800 px-3 py-2 space-y-2">
+          <div className="text-[10px] text-zinc-500 uppercase tracking-wide">应用规则</div>
+          {appliedRules.map((rule) => {
+            const result = results.find((r) => r.ruleId === rule.id);
+            return (
+              <div key={rule.id} className="flex items-start gap-2 rounded bg-zinc-900/60 px-2 py-1.5">
+                <div className="mt-0.5">
+                  {result?.success === true ? (
+                    <CheckCircle className="h-3.5 w-3.5 text-emerald-400" />
+                  ) : result?.success === false ? (
+                    <XCircle className="h-3.5 w-3.5 text-rose-400" />
+                  ) : (
+                    <AlertCircle className="h-3.5 w-3.5 text-zinc-500" />
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-mono text-xs text-cyan-400">${rule.name}</span>
+                    <span className="text-zinc-600 text-xs">=</span>
+                    <span className="font-mono text-xs text-zinc-500 truncate">{rule.path}</span>
+                  </div>
+                  {result?.success && result.value !== undefined && (
+                    <div className="mt-0.5 font-mono text-[10px] text-zinc-400 truncate">
+                      {typeof result.value === 'string' ? `"${result.value}"` : JSON.stringify(result.value)}
+                    </div>
+                  )}
+                  {result?.success === false && result.error && (
+                    <div className="mt-0.5 text-[10px] text-rose-400">{result.error}</div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
 }
