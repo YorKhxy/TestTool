@@ -262,6 +262,11 @@ export function ResponseJsonPanel({
 
   const handleConfirmExtract = useCallback(() => {
     if (extractModal && extractName.trim() && onAddExtractor) {
+      const existsByName = variableExtractors.some((v) => v.name === extractName.trim());
+      if (existsByName) {
+        alert('该变量名已存在，请使用其他名称');
+        return;
+      }
       const newExtractor: ExtractedVariable = {
         id: `extract_${Date.now()}`,
         name: extractName.trim(),
@@ -272,7 +277,7 @@ export function ResponseJsonPanel({
       setExtractModal(null);
       setExtractName('');
     }
-  }, [extractModal, extractName, onAddExtractor]);
+  }, [extractModal, extractName, onAddExtractor, variableExtractors]);
 
   return (
     <div className="space-y-3">

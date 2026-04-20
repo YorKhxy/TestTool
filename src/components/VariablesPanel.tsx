@@ -296,14 +296,16 @@ export default function VariablesPanel() {
                           if (!activeCaseId) return;
                           const currentExtractors = activeOverride?.variableExtractors ?? activeCase?.variableExtractors ?? [];
                           const alreadyApplied = currentExtractors.some((e) => e.id === rule.id);
-                          if (!alreadyApplied) {
-                            updateCaseExtractors(activeCaseId, [...currentExtractors, {
-                              id: rule.id,
-                              name: rule.name,
-                              source: rule.source,
-                              path: rule.path,
-                            }]);
+                          if (alreadyApplied) {
+                            alert('该规则已应用到当前用例');
+                            return;
                           }
+                          updateCaseExtractors(activeCaseId, [...currentExtractors, {
+                            id: rule.id,
+                            name: rule.name,
+                            source: rule.source,
+                            path: rule.path,
+                          }]);
                         }}
                         className="rounded bg-emerald-600/30 px-2 py-0.5 text-[10px] text-emerald-400 hover:bg-emerald-600/50 opacity-0 group-hover:opacity-100 transition"
                         title="应用到当前用例"

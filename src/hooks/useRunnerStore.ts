@@ -599,10 +599,13 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
         queryText: markdownDefaults?.queryRaw ?? '{}',
         bodyText: markdownDefaults?.bodyRaw ?? '',
       };
+      const currentExtractors = base.variableExtractors ?? [];
+      const existingIds = new Set(currentExtractors.map((e) => e.id));
+      const newExtractors = extractors.filter((e) => !existingIds.has(e.id));
       return {
         overrides: {
           ...s.overrides,
-          [id]: { ...base, variableExtractors: extractors },
+          [id]: { ...base, variableExtractors: [...currentExtractors, ...newExtractors] },
         },
       };
     }),
@@ -616,8 +619,9 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
 
   addExtractionRule: (rule) =>
     set((s) => {
-      const exists = s.extractionRules.some((r) => r.id === rule.id);
-      if (exists) return s;
+      const existsById = s.extractionRules.some((r) => r.id === rule.id);
+      const existsByName = s.extractionRules.some((r) => r.name === rule.name);
+      if (existsById || existsByName) return s;
       return { extractionRules: [...s.extractionRules, rule] };
     }),
 
