@@ -3,7 +3,7 @@ import type { ParsedTestPlan, TestCase } from '../../shared/testPlan.js';
 import type { CaseRequest, RunConfig, RunReport } from '../../shared/runTypes.js';
 import { apiJson, safeParseJsonAny } from '@/utils/http';
 
-type CaseOverride = {
+export type CaseOverride = {
   requiresAuth?: boolean;
   headersText: string;
   queryText: string;
