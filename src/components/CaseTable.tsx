@@ -1,7 +1,7 @@
 import { Play, Square, Check } from 'lucide-react';
 import type { TestCase } from '../../shared/testPlan.js';
 import type { RunReport } from '../../shared/runTypes.js';
-import type { CaseOverride } from '@/hooks/useRunnerStore';
+import type { CaseOverride } from '../../hooks/useRunnerStore.js';
 import StatusBadge from '@/components/StatusBadge';
 import { cn } from '@/lib/utils';
 
