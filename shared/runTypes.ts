@@ -41,6 +41,7 @@ export type CaseResult = {
   durationMs: number;
   httpStatus?: number;
   responseBodyPreview?: string;
+  responseBody?: string;
   errorMessage?: string;
   expectedResult?: string;
   extractedVariables?: Record<string, string | number | boolean | object>;

@@ -192,6 +192,19 @@ export const usePlaywrightStore = create<PlaywrightState>((set, get) => ({
         suiteName: suite?.name ?? fileName,
         isLoading: false,
         error: errors && errors.length > 0 ? errors.join('；') : null,
+        caseStatuses: {},
+        executionLogs: [],
+        currentExecutionLog: null,
+        progressState: {
+          runId: null,
+          currentCaseId: null,
+          currentCaseTitle: null,
+          currentStepIndex: null,
+          currentStepType: null,
+          currentStepDescription: null,
+          caseStatuses: {},
+          stepStatuses: {},
+        },
       });
     } catch (e) {
       set({ isLoading: false, error: e instanceof Error ? e.message : '导入失败' });

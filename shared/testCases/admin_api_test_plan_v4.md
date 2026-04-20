@@ -74,7 +74,7 @@
 | TC-AUTH-001 | 发送短信验证码-正常 | POST | /api/admin/auth/sendCode | Content-Type: application/json | - | `{"phone": "13800000000"}` | P0 | HTTP 200; code:200; message:success | - |
 | TC-AUTH-002 | 发送短信验证码-手机号为空 | POST | /api/admin/auth/sendCode | Content-Type: application/json | - | `{"phone": ""}` | P1 | HTTP 200; code:10001; message:请求参数错误 | - |
 | TC-AUTH-003 | 发送短信验证码-手机号格式错误 | POST | /api/admin/auth/sendCode | Content-Type: application/json | - | `{"phone": "12345"}` | P1 | HTTP 200; code:10001; message:请求参数错误 | - |
-| TC-AUTH-004 | 登录-正常 | POST | /api/admin/auth/login | Content-Type: application/json | - | `{"phone": "13800000000", "code": "123456"}` | P0 | HTTP 200; code:200; message:success | admin_token: data.token |
+| TC-AUTH-004 | 登录-正常 | POST | /api/admin/auth/login | Content-Type: application/json | - | `{"phone": "13800000000", "code": "123456"}` | P0 | HTTP 200; code:200; message:success | - |
 | TC-AUTH-005 | 登录-手机号为空 | POST | /api/admin/auth/login | Content-Type: application/json | - | `{"phone": "", "code": "123456"}` | P1 | HTTP 200; code:10001; message:请求参数错误 | - |
 | TC-AUTH-006 | 登录-验证码为空 | POST | /api/admin/auth/login | Content-Type: application/json | - | `{"phone": "13800000000", "code": ""}` | P1 | HTTP 200; code:10001; message:请求参数错误 | - |
 | TC-AUTH-007 | 登录-验证码错误 | POST | /api/admin/auth/login | Content-Type: application/json | - | `{"phone": "13800000000", "code": "000000"}` | P1 | HTTP 200; code:10002; message:验证码错误 | - |
@@ -136,7 +136,7 @@
 
 | 用例ID | 用例描述 | 方法 | 路径 | Headers | Query Params | Request Body | 优先级 | 预期结果 | 提取变量 |
 |-------|---------|------|------|---------|--------------|--------------|-------|---------|---------|
-| TC-MCH-041 | 获取商户基本信息-正常 | GET | /api/admin/merchant/1 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | merchant_id: data.id |
+| TC-MCH-041 | 获取商户基本信息-正常 | GET | /api/admin/merchant/1 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
 | TC-MCH-042 | 获取商户基本信息-商户不存在 | GET | /api/admin/merchant/999999 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10014; message:商户不存在 | - |
 | TC-MCH-043 | 获取商户本月百分比数据-默认当月 | GET | /api/admin/merchant/1/monthly-distribution | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-MCH-044 | 获取商户本月百分比数据-指定月份 | GET | /api/admin/merchant/1/monthly-distribution | Authorization: Bearer ${admin_token} | month=2026-03 | - | P1 | HTTP 200; code:200; message:success | - |
@@ -187,7 +187,7 @@
 | TC-APP-031 | 获取应用待上架列表-正常 | GET | /api/admin/app/pending-publish/list | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
 | TC-APP-032 | 获取应用待上架列表-关键词搜索 | GET | /api/admin/app/pending-publish/list | Authorization: Bearer ${admin_token} | keyword=测试 | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-APP-033 | 获取应用待上架列表-无Token | GET | /api/admin/app/pending-publish/list | - | - | - | P0 | HTTP 200; code:10006; message:无效的 token | - |
-| TC-APP-034 | 应用上架-正常 | POST | /api/admin/app/publish/1 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | app_id: 1 |
+| TC-APP-034 | 应用上架-正常 | POST | /api/admin/app/publish/1 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
 | TC-APP-035 | 应用上架-应用不存在 | POST | /api/admin/app/publish/999999 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10015; message:应用不存在 | - |
 | TC-APP-036 | 应用上架-无Token | POST | /api/admin/app/publish/1 | - | - | - | P0 | HTTP 200; code:10006; message:无效的 token | - |
 
@@ -243,7 +243,7 @@
 | TC-USER-005 | 获取用户列表-角色筛选 | GET | /api/admin/user/list | Authorization: Bearer ${admin_token} | roleId=1 | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-USER-006 | 获取用户列表-带分页 | GET | /api/admin/user/list | Authorization: Bearer ${admin_token} | pageNum=1&pageSize=10 | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-USER-007 | 获取用户列表-无Token | GET | /api/admin/user/list | - | - | - | P0 | HTTP 200; code:10006; message:无效的 token | - |
-| TC-USER-008 | 新增用户-正常 | POST | /api/admin/user | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"username": "testuser", "email": "test@example.com", "phone": "13800000001", "roleId": 1, "status": "NORMAL"}` | P0 | HTTP 200; code:200; message:success | new_user_id: data.id |
+| TC-USER-008 | 新增用户-正常 | POST | /api/admin/user | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"username": "testuser", "email": "test@example.com", "phone": "13800000001", "roleId": 1, "status": "NORMAL"}` | P0 | HTTP 200; code:200; message:success | - |
 | TC-USER-009 | 新增用户-用户名缺失 | POST | /api/admin/user | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"email": "test@example.com", "phone": "13800000001", "roleId": 1}` | P1 | HTTP 200; code:10001; message:请求参数错误 | - |
 | TC-USER-010 | 新增用户-手机号缺失 | POST | /api/admin/user | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"username": "testuser", "email": "test@example.com", "roleId": 1}` | P1 | HTTP 200; code:10001; message:请求参数错误 | - |
 | TC-USER-011 | 新增用户-角色ID缺失 | POST | /api/admin/user | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"username": "testuser", "email": "test@example.com", "phone": "13800000001"}` | P1 | HTTP 200; code:10001; message:请求参数错误 | - |
@@ -255,7 +255,7 @@
 | TC-USER-017 | 编辑用户-无Token | PUT | /api/admin/user/2 | Content-Type: application/json | - | `{"email": "newemail@example.com"}` | P0 | HTTP 200; code:10006; message:无效的 token | - |
 | TC-USER-018 | 删除用户-正常 | DELETE | /api/admin/user/2 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
 | TC-USER-019 | 删除用户-用户不存在 | DELETE | /api/admin/user/999999 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10013; message:用户不存在 | - |
-| TC-USER-020 | 删除用户-无法删除自己 | DELETE | /api/admin/user/1 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10001; message:请求参数错误 | - |
+| TC-USER-020 | 删除用户-无法删除自己 | DELETE | /api/admin/user/${current_user_id} | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10001; message:请求参数错误 | - |
 | TC-USER-021 | 删除用户-无Token | DELETE | /api/admin/user/2 | - | - | - | P0 | HTTP 200; code:10006; message:无效的 token | - |
 
 ---
@@ -274,7 +274,7 @@
 | TC-ROLE-006 | 获取角色详情-正常 | GET | /api/admin/role/1 | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
 | TC-ROLE-007 | 获取角色详情-角色不存在 | GET | /api/admin/role/999999 | Authorization: Bearer ${admin_token} | - | - | P1 | HTTP 200; code:10016; message:角色不存在 | - |
 | TC-ROLE-008 | 获取角色详情-无Token | GET | /api/admin/role/1 | - | - | - | P0 | HTTP 200; code:10006; message:无效的 token | - |
-| TC-ROLE-009 | 新增角色-正常 | POST | /api/admin/role | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"roleName": "测试角色", "roleKey": "test_role", "sort": 1, "menuIds": [1, 2, 3], "status": "NORMAL", "remark": "测试备注"}` | P0 | HTTP 200; code:200; message:success | new_role_id: data.id |
+| TC-ROLE-009 | 新增角色-正常 | POST | /api/admin/role | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"roleName": "测试角色", "roleKey": "test_role", "sort": 1, "menuIds": [1, 2, 3], "status": "NORMAL", "remark": "测试备注"}` | P0 | HTTP 200; code:200; message:success | - |
 | TC-ROLE-010 | 新增角色-角色名缺失 | POST | /api/admin/role | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"roleKey": "test_role", "sort": 1}` | P1 | HTTP 200; code:10001; message:请求参数错误 | - |
 | TC-ROLE-011 | 新增角色-权限字符缺失 | POST | /api/admin/role | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"roleName": "测试角色", "sort": 1}` | P1 | HTTP 200; code:10001; message:请求参数错误 | - |
 | TC-ROLE-012 | 新增角色-排序缺失 | POST | /api/admin/role | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"roleName": "测试角色", "roleKey": "test_role"}` | P1 | HTTP 200; code:10001; message:请求参数错误 | - |
@@ -301,7 +301,7 @@
 | TC-MENU-001 | 获取菜单树-正常 | GET | /api/admin/menu/tree | Authorization: Bearer ${admin_token} | - | - | P0 | HTTP 200; code:200; message:success | - |
 | TC-MENU-002 | 获取菜单树-关键词搜索 | GET | /api/admin/menu/tree | Authorization: Bearer ${admin_token} | keyword=用户 | - | P1 | HTTP 200; code:200; message:success | - |
 | TC-MENU-003 | 获取菜单树-无Token | GET | /api/admin/menu/tree | - | - | - | P0 | HTTP 200; code:10006; message:无效的 token | - |
-| TC-MENU-004 | 新增菜单-目录类型 | POST | /api/admin/menu | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"parentId": 0, "menuType": "DIR", "menuName": "测试目录", "sort": 1, "visible": true, "refresh": false}` | P0 | HTTP 200; code:200; message:success | new_menu_id: data.id |
+| TC-MENU-004 | 新增菜单-目录类型 | POST | /api/admin/menu | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"parentId": 0, "menuType": "DIR", "menuName": "测试目录", "sort": 1, "visible": true, "refresh": false}` | P0 | HTTP 200; code:200; message:success | - |
 | TC-MENU-005 | 新增菜单-菜单类型 | POST | /api/admin/menu | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"parentId": 1, "menuType": "MENU", "menuName": "测试菜单", "sort": 1, "path": "/test", "permission": "test:menu", "visible": true, "refresh": false}` | P0 | HTTP 200; code:200; message:success | - |
 | TC-MENU-006 | 新增菜单-按钮类型 | POST | /api/admin/menu | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"parentId": 2, "menuType": "BUTTON", "menuName": "测试按钮", "sort": 1, "permission": "test:button"}` | P1 | HTTP 200; code:200; message:success | - |
 | TC-MENU-007 | 新增菜单-上级菜单ID缺失 | POST | /api/admin/menu | Authorization: Bearer ${admin_token}; Content-Type: application/json | - | `{"menuType": "MENU", "menuName": "测试菜单", "sort": 1}` | P1 | HTTP 200; code:10001; message:请求参数错误 | - |

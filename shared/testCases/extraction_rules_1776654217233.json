@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "rules": [
+    {
+      "id": "extract_1776654110945",
+      "name": "data_token",
+      "source": "body",
+      "path": "data.token"
+    },
+    {
+      "id": "extract_1776654165015",
+      "name": "data_id",
+      "source": "body",
+      "path": "data.id"
+    }
+  ]
+}
