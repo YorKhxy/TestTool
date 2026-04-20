@@ -247,6 +247,72 @@ export function parseSpecToCases(content: string, fileName: string): ImportResul
       return args;
     }
 
+    function unwrapQuotedValue(value: string): string {
+      const trimmed = value.trim();
+      if (
+        (trimmed.startsWith('\'') && trimmed.endsWith('\'')) ||
+        (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+        (trimmed.startsWith('`') && trimmed.endsWith('`'))
+      ) {
+        return trimmed.slice(1, -1);
+      }
+      return trimmed;
+    }
+
+    function extractLocatorVariable(line: string): { name: string; selector: string } | null {
+      const locatorPrefixMatch = line.match(/^const\s+(\w+)\s*=\s*page\.locator\s*\(/);
+      if (!locatorPrefixMatch) {
+        return null;
+      }
+
+      const name = locatorPrefixMatch[1];
+      const locatorStart = line.indexOf('page.locator(');
+      const argsStart = locatorStart + 'page.locator('.length;
+      let depth = 1;
+      let quote: string | null = null;
+      let argsEnd = -1;
+
+      for (let i = argsStart; i < line.length; i++) {
+        const char = line[i];
+        const prev = i > 0 ? line[i - 1] : '';
+
+        if (quote) {
+          if (char === quote && prev !== '\\') {
+            quote = null;
+          }
+          continue;
+        }
+
+        if (char === '"' || char === '\'' || char === '`') {
+          quote = char;
+          continue;
+        }
+
+        if (char === '(') depth++;
+        if (char === ')') depth--;
+
+        if (depth === 0) {
+          argsEnd = i;
+          break;
+        }
+      }
+
+      if (argsEnd === -1) {
+        return null;
+      }
+
+      const argsText = line.slice(argsStart, argsEnd);
+      const [selectorArg] = splitArguments(argsText);
+      if (!selectorArg) {
+        return null;
+      }
+
+      return {
+        name,
+        selector: unwrapQuotedValue(selectorArg),
+      };
+    }
+
     function normalizeParamPart(part: string): HelperParam {
       const trimmedPart = part.trim();
       if (!trimmedPart) {
@@ -453,6 +519,13 @@ export function parseSpecToCases(content: string, fileName: string): ImportResul
         const trimmedLine = line.trim();
         if (!trimmedLine) continue;
 
+        const locatorVariable = extractLocatorVariable(trimmedLine);
+        if (locatorVariable) {
+          variables[locatorVariable.name] = locatorVariable.selector;
+          console.log(`[DEBUG] extractSteps: defined variable ${locatorVariable.name} = ${locatorVariable.selector}`);
+          continue;
+        }
+
         // 处理变量定义
         const varMatch = trimmedLine.match(/const\s+(\w+)\s*=\s*page\.locator\s*\(\s*['"]([^'"]+)['"]\s*\)/);
         if (varMatch) {
@@ -545,6 +618,9 @@ export function parseSpecToCases(content: string, fileName: string): ImportResul
               type: pattern.type,
               description: pattern.getDesc ? pattern.getDesc(selector, value) : `Step ${stepIndex}`,
             };
+              if (step.type === 'fill' && selector && value) {
+                step.description = `\u586b\u5199 ${selector}: ${value}`;
+              }
               if (selector) step.selector = selector;
               if (value) step.value = value;
               if (pattern.getOptions) {
@@ -776,12 +852,12 @@ export function parseSpecToCases(content: string, fileName: string): ImportResul
     }
 
     if (cases.length === 0) {
-      errors.push('未能从 .spec.ts 文件中解析出任何测试用例');
+      errors.push('未能从 Playwright spec 文件中解析出任何测试用例');
     }
 
     const suite: PlaywrightSuite = {
       id: `suite_${Date.now()}`,
-      name: fileName.replace(/\.(spec\.)?ts$/i, ''),
+      name: fileName.replace(/\.(spec\.)?(ts|js)$/i, ''),
       cases,
     };
 

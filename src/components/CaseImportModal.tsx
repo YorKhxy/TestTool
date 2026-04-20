@@ -41,9 +41,8 @@ export default function CaseImportModal({ isOpen, onClose, onImport, isLoading }
     const files = e.dataTransfer.files;
     if (files && files.length > 0) {
       const file = files[0];
-      const ext = file.name.split('.').pop()?.toLowerCase();
-      if (!['ts', 'spec.ts', 'md', 'markdown'].includes(ext || '')) {
-        setError('仅支持 .spec.ts, .ts, .md, .markdown 格式的文件');
+      if (!/\.(spec\.(ts|js)|ts|js|md|markdown)$/i.test(file.name)) {
+        setError('仅支持 .spec.ts, .spec.js, .ts, .js, .md, .markdown 格式的文件');
         return;
       }
       setSelectedFile(file);
@@ -119,7 +118,7 @@ export default function CaseImportModal({ isOpen, onClose, onImport, isLoading }
             <input
               ref={fileInputRef}
               type="file"
-              accept=".spec.ts,.ts,.md,.markdown"
+              accept=".spec.ts,.spec.js,.ts,.js,.md,.markdown"
               className="hidden"
               onChange={handleFileSelect}
             />
@@ -151,7 +150,7 @@ export default function CaseImportModal({ isOpen, onClose, onImport, isLoading }
                   </button>
                 </div>
                 <div className="mt-2 text-xs text-zinc-500">
-                  支持 .spec.ts, .ts, .md, .markdown 格式
+                  支持 .spec.ts, .spec.js, .ts, .js, .md, .markdown 格式
                 </div>
               </>
             )}

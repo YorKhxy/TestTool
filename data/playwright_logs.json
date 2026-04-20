@@ -1,5 +1,1155 @@
 [
   {
+    "id": "run_1776416130231",
+    "runId": "run_1776416130231",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-17T08:55:30.231Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_1__Test_Merchant_Management_mo",
+        "caseTitle": "1. Test Merchant Management module",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-17T08:55:30.584Z",
+        "stepLogs": [
+          {
+            "stepId": "beforeEach_1776416099207_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:55:30.584Z",
+            "finishedAt": "2026-04-17T08:55:31.388Z",
+            "durationMs": 804
+          },
+          {
+            "stepId": "beforeEach_1776416099207_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待 3000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:55:31.388Z",
+            "finishedAt": "2026-04-17T08:55:34.388Z",
+            "durationMs": 3000
+          },
+          {
+            "stepId": "beforeEach_1776416099207_step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 input[type=\"tel\"], input[placeholder*=\"手机\"], input[name*=\"phone\"], input[name*=\"mobile\"], input[type=\"text\"]: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:55:34.388Z",
+            "finishedAt": "2026-04-17T08:55:34.616Z",
+            "durationMs": 228
+          },
+          {
+            "stepId": "beforeEach_1776416099207_step_4",
+            "stepIndex": 3,
+            "stepType": "wait",
+            "description": "等待 1000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:55:34.616Z",
+            "finishedAt": "2026-04-17T08:55:35.617Z",
+            "durationMs": 1001
+          },
+          {
+            "stepId": "beforeEach_1776416099207_step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 input[type=\"text\"][placeholder*=\"验证\"], input[name*=\"code\"], input[name*=\"verify\"]: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:55:35.617Z",
+            "finishedAt": "2026-04-17T08:55:35.837Z",
+            "durationMs": 220
+          },
+          {
+            "stepId": "beforeEach_1776416099207_step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 1000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:55:35.837Z",
+            "finishedAt": "2026-04-17T08:55:36.837Z",
+            "durationMs": 1000
+          },
+          {
+            "stepId": "beforeEach_1776416099207_step_7",
+            "stepIndex": 6,
+            "stepType": "wait",
+            "description": "等待 5000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:55:36.838Z",
+            "finishedAt": "2026-04-17T08:55:41.839Z",
+            "durationMs": 5001
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_1",
+            "stepIndex": 7,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/merchant/approval/index",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:55:41.839Z",
+            "finishedAt": "2026-04-17T08:55:42.435Z",
+            "durationMs": 596
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_2",
+            "stepIndex": 8,
+            "stepType": "wait",
+            "description": "等待 5000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:55:42.436Z",
+            "finishedAt": "2026-04-17T08:55:47.438Z",
+            "durationMs": 5002
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_3",
+            "stepIndex": 9,
+            "stepType": "assert",
+            "description": "验证值包含: /merchant/approval/index",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:55:47.439Z",
+            "finishedAt": "2026-04-17T08:55:47.439Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_4",
+            "stepIndex": 10,
+            "stepType": "assert",
+            "description": "获取元素数量",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:55:47.439Z",
+            "finishedAt": "2026-04-17T08:55:47.439Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_5",
+            "stepIndex": 11,
+            "stepType": "fill",
+            "description": "填写 input[placeholder*=\"搜索\"], input[name*=\"search\"], input[class*=\"search\"]: 测试",
+            "status": "failed",
+            "startedAt": "2026-04-17T08:55:47.439Z",
+            "error": "page.fill: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('input[placeholder*=\"搜索\"], input[name*=\"search\"], input[class*=\"search\"]')\u001b[22m\n",
+            "finishedAt": "2026-04-17T08:56:15.335Z",
+            "durationMs": 27896
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_6",
+            "stepIndex": 12,
+            "stepType": "wait",
+            "description": "等待 2000ms",
+            "status": "failed",
+            "startedAt": "2026-04-17T08:56:15.335Z",
+            "error": "page.waitForTimeout: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-17T08:56:15.336Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_7",
+            "stepIndex": 13,
+            "stepType": "click",
+            "description": "按键 Enter 于 input[placeholder*=\"搜索\"], input[name*=\"search\"], input[class*=\"search\"]",
+            "status": "failed",
+            "startedAt": "2026-04-17T08:56:15.336Z",
+            "error": "page.click: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-17T08:56:15.337Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_8",
+            "stepIndex": 14,
+            "stepType": "wait",
+            "description": "等待 3000ms",
+            "status": "failed",
+            "startedAt": "2026-04-17T08:56:15.337Z",
+            "error": "page.waitForTimeout: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-17T08:56:15.337Z",
+            "durationMs": 0
+          }
+        ],
+        "totalSteps": 15,
+        "passedSteps": 11,
+        "failedSteps": 4,
+        "finishedAt": "2026-04-17T08:56:15.339Z",
+        "durationMs": 44755
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": false,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://172.0.0.218:36007",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://172.0.0.218:36007",
+    "finishedAt": "2026-04-17T08:56:15.711Z",
+    "durationMs": 45480
+  },
+  {
+    "id": "run_1776415514282",
+    "runId": "run_1776415514282",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-17T08:45:14.282Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_1__Test_Merchant_Management_mo",
+        "caseTitle": "1. Test Merchant Management module",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-17T08:45:14.575Z",
+        "stepLogs": [
+          {
+            "stepId": "beforeEach_1776415433971_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:45:14.575Z",
+            "finishedAt": "2026-04-17T08:45:15.299Z",
+            "durationMs": 724
+          },
+          {
+            "stepId": "beforeEach_1776415433971_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待 3000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:45:15.299Z",
+            "finishedAt": "2026-04-17T08:45:18.301Z",
+            "durationMs": 3002
+          },
+          {
+            "stepId": "beforeEach_1776415433971_step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 'input[type=\"tel\"], input[placeholder*=\"手机\"], input[name*=\"phone\"], input[name*=\"mobile\"], input[type=\"text\"]': 13800000000",
+            "status": "failed",
+            "startedAt": "2026-04-17T08:45:18.301Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=\\'input[type=\"tel\"], input[placeholder*=\"手机\"], input[name*=\"phone\"], input[name*=\"mobile\"], input[type=\"text\"]\\'')\u001b[22m\n",
+            "finishedAt": "2026-04-17T08:45:48.302Z",
+            "durationMs": 30001
+          },
+          {
+            "stepId": "beforeEach_1776415433971_step_4",
+            "stepIndex": 3,
+            "stepType": "wait",
+            "description": "等待 1000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:45:48.302Z",
+            "finishedAt": "2026-04-17T08:45:49.302Z",
+            "durationMs": 1000
+          },
+          {
+            "stepId": "beforeEach_1776415433971_step_5",
+            "stepIndex": 4,
+            "stepType": "fill",
+            "description": "填写 'input[type=\"text\"][placeholder*=\"验证\"], input[name*=\"code\"], input[name*=\"verify\"]': 123456",
+            "status": "failed",
+            "startedAt": "2026-04-17T08:45:49.302Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=\\'input[type=\"text\"][placeholder*=\"验证\"], input[name*=\"code\"], input[name*=\"verify\"]\\'')\u001b[22m\n",
+            "finishedAt": "2026-04-17T08:46:19.304Z",
+            "durationMs": 30002
+          },
+          {
+            "stepId": "beforeEach_1776415433971_step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 1000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:46:19.304Z",
+            "finishedAt": "2026-04-17T08:46:20.305Z",
+            "durationMs": 1001
+          },
+          {
+            "stepId": "beforeEach_1776415433971_step_7",
+            "stepIndex": 6,
+            "stepType": "wait",
+            "description": "等待 5000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:46:20.306Z",
+            "finishedAt": "2026-04-17T08:46:25.307Z",
+            "durationMs": 5001
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_1",
+            "stepIndex": 7,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/merchant/approval/index",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:46:25.307Z",
+            "finishedAt": "2026-04-17T08:46:25.888Z",
+            "durationMs": 581
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_2",
+            "stepIndex": 8,
+            "stepType": "wait",
+            "description": "等待 5000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:46:25.889Z",
+            "finishedAt": "2026-04-17T08:46:30.895Z",
+            "durationMs": 5006
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_3",
+            "stepIndex": 9,
+            "stepType": "assert",
+            "description": "验证值包含: /merchant/approval/index",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:46:30.895Z",
+            "finishedAt": "2026-04-17T08:46:30.895Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_4",
+            "stepIndex": 10,
+            "stepType": "assert",
+            "description": "获取元素数量",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:46:30.895Z",
+            "finishedAt": "2026-04-17T08:46:30.895Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_5",
+            "stepIndex": 11,
+            "stepType": "fill",
+            "description": "填写 'input[placeholder*=\"搜索\"], input[name*=\"search\"], input[class*=\"search\"]': 测试",
+            "status": "failed",
+            "startedAt": "2026-04-17T08:46:30.895Z",
+            "error": "page.fill: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('text=\\'input[placeholder*=\"搜索\"], input[name*=\"search\"], input[class*=\"search\"]\\'')\u001b[22m\n",
+            "finishedAt": "2026-04-17T08:46:51.448Z",
+            "durationMs": 20553
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_6",
+            "stepIndex": 12,
+            "stepType": "wait",
+            "description": "等待 2000ms",
+            "status": "failed",
+            "startedAt": "2026-04-17T08:46:51.448Z",
+            "error": "page.waitForTimeout: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-17T08:46:51.448Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_7",
+            "stepIndex": 13,
+            "stepType": "click",
+            "description": "按键 Enter 于 'input[placeholder*=\"搜索\"], input[name*=\"search\"], input[class*=\"search\"]'",
+            "status": "failed",
+            "startedAt": "2026-04-17T08:46:51.449Z",
+            "error": "page.click: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-17T08:46:51.449Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_1__Test_Merchant_Management_mo_step_8",
+            "stepIndex": 14,
+            "stepType": "wait",
+            "description": "等待 3000ms",
+            "status": "failed",
+            "startedAt": "2026-04-17T08:46:51.449Z",
+            "error": "page.waitForTimeout: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-17T08:46:51.450Z",
+            "durationMs": 1
+          }
+        ],
+        "totalSteps": 15,
+        "passedSteps": 9,
+        "failedSteps": 6,
+        "finishedAt": "2026-04-17T08:46:51.451Z",
+        "durationMs": 96876
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": false,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://172.0.0.218:36007",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://172.0.0.218:36007",
+    "finishedAt": "2026-04-17T08:46:51.708Z",
+    "durationMs": 97426
+  },
+  {
+    "id": "run_1776414325867",
+    "runId": "run_1776414325867",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-17T08:25:25.867Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_MCH_APPROVAL_002_商户审批___搜索功能",
+        "caseTitle": "MCH-APPROVAL-002 商户审批 - 搜索功能",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-17T08:25:26.243Z",
+        "stepLogs": [
+          {
+            "stepId": "beforeEach_1776410294959_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:26.243Z",
+            "finishedAt": "2026-04-17T08:25:27.048Z",
+            "durationMs": 805
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:27.048Z",
+            "finishedAt": "2026-04-17T08:25:27.049Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 form input >> nth=0: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:27.049Z",
+            "finishedAt": "2026-04-17T08:25:27.286Z",
+            "durationMs": 237
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 form input >> nth=1: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:27.286Z",
+            "finishedAt": "2026-04-17T08:25:27.501Z",
+            "durationMs": 215
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:27.502Z",
+            "finishedAt": "2026-04-17T08:25:28.061Z",
+            "durationMs": 559
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 2000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:28.061Z",
+            "finishedAt": "2026-04-17T08:25:30.061Z",
+            "durationMs": 2000
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_7",
+            "stepIndex": 6,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/merchant/approval/index",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:30.061Z",
+            "finishedAt": "2026-04-17T08:25:30.907Z",
+            "durationMs": 846
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:30.907Z",
+            "finishedAt": "2026-04-17T08:25:30.907Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_9",
+            "stepIndex": 8,
+            "stepType": "wait",
+            "description": "等待 1000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:30.907Z",
+            "finishedAt": "2026-04-17T08:25:31.908Z",
+            "durationMs": 1001
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_1",
+            "stepIndex": 9,
+            "stepType": "assert",
+            "description": "验证元素存在",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:31.908Z",
+            "finishedAt": "2026-04-17T08:25:31.908Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_2",
+            "stepIndex": 10,
+            "stepType": "fill",
+            "description": "填写 '.ant-pro-table-search input, input[placeholder*=\"搜索\"], input[placeholder*=\"公司\"], input[placeholder*=\"应用\"]': test",
+            "status": "failed",
+            "startedAt": "2026-04-17T08:25:31.908Z",
+            "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=\\'.ant-pro-table-search input, input[placeholder*=\"搜索\"], input[placeholder*=\"公司\"], input[placeholder*=\"应用\"]\\'')\u001b[22m\n",
+            "finishedAt": "2026-04-17T08:26:01.912Z",
+            "durationMs": 30004
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_3",
+            "stepIndex": 11,
+            "stepType": "wait",
+            "description": "等待 300ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:26:01.912Z",
+            "finishedAt": "2026-04-17T08:26:02.212Z",
+            "durationMs": 300
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_4",
+            "stepIndex": 12,
+            "stepType": "assert",
+            "description": "验证元素存在",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:26:02.212Z",
+            "finishedAt": "2026-04-17T08:26:02.212Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_5",
+            "stepIndex": 13,
+            "stepType": "click",
+            "description": "点击元素 '.ant-pro-table-search button, button:has-text(\"查询\"",
+            "status": "failed",
+            "startedAt": "2026-04-17T08:26:02.212Z",
+            "error": "page.click: Error while parsing css selector \"'.ant-pro-table-search button, button:has-text(\"查询\"\". Did you mean to CSS.escape it?\nCall log:\n\u001b[2m  - waiting for '.ant-pro-table-search button, button:has-text(\"查询\"\u001b[22m\n",
+            "finishedAt": "2026-04-17T08:26:02.215Z",
+            "durationMs": 3
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_6",
+            "stepIndex": 14,
+            "stepType": "wait",
+            "description": "等待 1000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:26:02.215Z",
+            "finishedAt": "2026-04-17T08:26:03.217Z",
+            "durationMs": 1002
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_7",
+            "stepIndex": 15,
+            "stepType": "assert",
+            "description": "验证元素可见: .ant-table, table",
+            "status": "failed",
+            "startedAt": "2026-04-17T08:26:03.217Z",
+            "error": "locator.isVisible: Error: strict mode violation: locator('.ant-table, table') resolved to 2 elements:\n    1) <div class=\"ant-table ant-table-middle ant-table-empty css-1odpy5d\">…</div> aka locator('div').filter({ hasText: /^企业名称联系电话审批状态申请时间操作暂无数据暂无数据$/ }).nth(3)\n    2) <table>…</table> aka getByText('企业名称联系电话审批状态申请时间操作暂无数据暂无数据')\n\nCall log:\n\u001b[2m    - checking visibility of locator('.ant-table, table')\u001b[22m\n",
+            "finishedAt": "2026-04-17T08:26:03.226Z",
+            "durationMs": 9
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_screenshot_1",
+            "stepIndex": 16,
+            "stepType": "screenshot",
+            "description": "用例执行后截图",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:26:03.226Z",
+            "finishedAt": "2026-04-17T08:26:03.396Z",
+            "durationMs": 170
+          }
+        ],
+        "totalSteps": 17,
+        "passedSteps": 14,
+        "failedSteps": 3,
+        "finishedAt": "2026-04-17T08:26:03.396Z",
+        "durationMs": 37153
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": false,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://172.0.0.218:36007",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://172.0.0.218:36007",
+    "finishedAt": "2026-04-17T08:26:03.629Z",
+    "durationMs": 37762
+  },
+  {
+    "id": "run_1776414311673",
+    "runId": "run_1776414311673",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-17T08:25:11.673Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_MCH_APPROVAL_001_商户审批___列表加载",
+        "caseTitle": "MCH-APPROVAL-001 商户审批 - 列表加载",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-17T08:25:12.045Z",
+        "stepLogs": [
+          {
+            "stepId": "beforeEach_1776410294959_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:12.045Z",
+            "finishedAt": "2026-04-17T08:25:12.824Z",
+            "durationMs": 779
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:12.824Z",
+            "finishedAt": "2026-04-17T08:25:12.824Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 form input >> nth=0: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:12.824Z",
+            "finishedAt": "2026-04-17T08:25:13.061Z",
+            "durationMs": 237
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 form input >> nth=1: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:13.061Z",
+            "finishedAt": "2026-04-17T08:25:13.276Z",
+            "durationMs": 215
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:13.277Z",
+            "finishedAt": "2026-04-17T08:25:13.834Z",
+            "durationMs": 557
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 2000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:13.834Z",
+            "finishedAt": "2026-04-17T08:25:15.834Z",
+            "durationMs": 2000
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_7",
+            "stepIndex": 6,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/merchant/approval/index",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:15.834Z",
+            "finishedAt": "2026-04-17T08:25:16.661Z",
+            "durationMs": 827
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:16.661Z",
+            "finishedAt": "2026-04-17T08:25:16.661Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_9",
+            "stepIndex": 8,
+            "stepType": "wait",
+            "description": "等待 1000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:16.661Z",
+            "finishedAt": "2026-04-17T08:25:17.663Z",
+            "durationMs": 1002
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_001_商户审批___列表加载_step_1",
+            "stepIndex": 9,
+            "stepType": "assert",
+            "description": "验证元素可见: .ant-table, table",
+            "status": "failed",
+            "startedAt": "2026-04-17T08:25:17.663Z",
+            "error": "locator.isVisible: Error: strict mode violation: locator('.ant-table, table') resolved to 2 elements:\n    1) <div class=\"ant-table ant-table-middle ant-table-empty css-1odpy5d\">…</div> aka locator('div').filter({ hasText: /^企业名称联系电话审批状态申请时间操作暂无数据暂无数据$/ }).nth(3)\n    2) <table>…</table> aka getByText('企业名称联系电话审批状态申请时间操作暂无数据暂无数据')\n\nCall log:\n\u001b[2m    - checking visibility of locator('.ant-table, table')\u001b[22m\n",
+            "finishedAt": "2026-04-17T08:25:17.682Z",
+            "durationMs": 19
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_001_商户审批___列表加载_step_screenshot_1",
+            "stepIndex": 10,
+            "stepType": "screenshot",
+            "description": "用例执行后截图",
+            "status": "passed",
+            "startedAt": "2026-04-17T08:25:17.682Z",
+            "finishedAt": "2026-04-17T08:25:17.853Z",
+            "durationMs": 171
+          }
+        ],
+        "totalSteps": 11,
+        "passedSteps": 10,
+        "failedSteps": 1,
+        "finishedAt": "2026-04-17T08:25:17.853Z",
+        "durationMs": 5808
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": false,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://172.0.0.218:36007",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://172.0.0.218:36007",
+    "finishedAt": "2026-04-17T08:25:18.086Z",
+    "durationMs": 6413
+  },
+  {
+    "id": "run_1776410514717",
+    "runId": "run_1776410514717",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-17T07:21:54.717Z",
+    "totalCases": 1,
+    "passedCases": 0,
+    "failedCases": 1,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_MCH_APPROVAL_002_商户审批___搜索功能",
+        "caseTitle": "MCH-APPROVAL-002 商户审批 - 搜索功能",
+        "priority": "P1",
+        "status": "failed",
+        "startedAt": "2026-04-17T07:21:55.026Z",
+        "stepLogs": [
+          {
+            "stepId": "beforeEach_1776410294959_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:21:55.026Z",
+            "finishedAt": "2026-04-17T07:21:55.767Z",
+            "durationMs": 741
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:21:55.767Z",
+            "finishedAt": "2026-04-17T07:21:55.768Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "填写 form input >> nth=0: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:21:55.768Z",
+            "finishedAt": "2026-04-17T07:21:56.001Z",
+            "durationMs": 233
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "填写 form input >> nth=1: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:21:56.001Z",
+            "finishedAt": "2026-04-17T07:21:56.227Z",
+            "durationMs": 226
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:21:56.228Z",
+            "finishedAt": "2026-04-17T07:21:56.793Z",
+            "durationMs": 565
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 2000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:21:56.794Z",
+            "finishedAt": "2026-04-17T07:21:58.796Z",
+            "durationMs": 2002
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_7",
+            "stepIndex": 6,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/merchant/approval/index",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:21:58.796Z",
+            "finishedAt": "2026-04-17T07:21:59.498Z",
+            "durationMs": 702
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:21:59.499Z",
+            "finishedAt": "2026-04-17T07:21:59.504Z",
+            "durationMs": 5
+          },
+          {
+            "stepId": "beforeEach_1776410294959_step_9",
+            "stepIndex": 8,
+            "stepType": "wait",
+            "description": "等待 1000ms",
+            "status": "failed",
+            "startedAt": "2026-04-17T07:21:59.504Z",
+            "error": "page.waitForTimeout: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-17T07:22:00.321Z",
+            "durationMs": 817
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_1",
+            "stepIndex": 9,
+            "stepType": "assert",
+            "description": "验证元素存在",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:22:00.321Z",
+            "finishedAt": "2026-04-17T07:22:00.321Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_2",
+            "stepIndex": 10,
+            "stepType": "fill",
+            "description": "填写 '.ant-pro-table-search input, input[placeholder*=\"搜索\"], input[placeholder*=\"公司\"], input[placeholder*=\"应用\"]': test",
+            "status": "failed",
+            "startedAt": "2026-04-17T07:22:00.321Z",
+            "error": "page.fill: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-17T07:22:00.322Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_3",
+            "stepIndex": 11,
+            "stepType": "wait",
+            "description": "等待 300ms",
+            "status": "failed",
+            "startedAt": "2026-04-17T07:22:00.322Z",
+            "error": "page.waitForTimeout: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-17T07:22:00.323Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_4",
+            "stepIndex": 12,
+            "stepType": "assert",
+            "description": "验证元素存在",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:22:00.323Z",
+            "finishedAt": "2026-04-17T07:22:00.323Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_5",
+            "stepIndex": 13,
+            "stepType": "click",
+            "description": "点击元素 '.ant-pro-table-search button, button:has-text(\"查询\"",
+            "status": "failed",
+            "startedAt": "2026-04-17T07:22:00.324Z",
+            "error": "page.click: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-17T07:22:00.324Z",
+            "durationMs": 0
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_6",
+            "stepIndex": 14,
+            "stepType": "wait",
+            "description": "等待 1000ms",
+            "status": "failed",
+            "startedAt": "2026-04-17T07:22:00.324Z",
+            "error": "page.waitForTimeout: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-17T07:22:00.325Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_7",
+            "stepIndex": 15,
+            "stepType": "assert",
+            "description": "验证元素可见: .ant-table, table",
+            "status": "failed",
+            "startedAt": "2026-04-17T07:22:00.325Z",
+            "error": "locator.isVisible: Target page, context or browser has been closed",
+            "finishedAt": "2026-04-17T07:22:00.327Z",
+            "durationMs": 2
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_002_商户审批___搜索功能_step_screenshot_1",
+            "stepIndex": 16,
+            "stepType": "screenshot",
+            "description": "用例执行后截图",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:22:00.327Z",
+            "finishedAt": "2026-04-17T07:22:00.329Z",
+            "durationMs": 2
+          }
+        ],
+        "totalSteps": 17,
+        "passedSteps": 11,
+        "failedSteps": 6,
+        "finishedAt": "2026-04-17T07:22:00.330Z",
+        "durationMs": 5304
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://172.0.0.218:36007",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://172.0.0.218:36007",
+    "finishedAt": "2026-04-17T07:22:00.528Z",
+    "durationMs": 5811
+  },
+  {
+    "id": "run_1776409835081",
+    "runId": "run_1776409835081",
+    "suiteName": "Playwright Test Suite",
+    "startedAt": "2026-04-17T07:10:35.081Z",
+    "totalCases": 1,
+    "passedCases": 1,
+    "failedCases": 0,
+    "skippedCases": 0,
+    "canceledCases": 0,
+    "caseLogs": [
+      {
+        "caseId": "TC_MCH_APPROVAL_001_商户审批___列表加载",
+        "caseTitle": "MCH-APPROVAL-001 商户审批 - 列表加载",
+        "priority": "P1",
+        "status": "passed",
+        "startedAt": "2026-04-17T07:10:35.550Z",
+        "stepLogs": [
+          {
+            "stepId": "beforeEach_1776409083404_step_1",
+            "stepIndex": 0,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/login",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:10:35.551Z",
+            "finishedAt": "2026-04-17T07:10:36.374Z",
+            "durationMs": 823
+          },
+          {
+            "stepId": "beforeEach_1776409083404_step_2",
+            "stepIndex": 1,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:10:36.374Z",
+            "finishedAt": "2026-04-17T07:10:36.375Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "beforeEach_1776409083404_step_3",
+            "stepIndex": 2,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=0: 13800000000",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:10:36.375Z",
+            "finishedAt": "2026-04-17T07:10:36.611Z",
+            "durationMs": 236
+          },
+          {
+            "stepId": "beforeEach_1776409083404_step_4",
+            "stepIndex": 3,
+            "stepType": "fill",
+            "description": "濉啓 form input >> nth=1: 123456",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:10:36.611Z",
+            "finishedAt": "2026-04-17T07:10:36.825Z",
+            "durationMs": 214
+          },
+          {
+            "stepId": "beforeEach_1776409083404_step_5",
+            "stepIndex": 4,
+            "stepType": "click",
+            "description": "点击 button[type=\"submit\"]",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:10:36.825Z",
+            "finishedAt": "2026-04-17T07:10:37.388Z",
+            "durationMs": 563
+          },
+          {
+            "stepId": "beforeEach_1776409083404_step_6",
+            "stepIndex": 5,
+            "stepType": "wait",
+            "description": "等待 2000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:10:37.389Z",
+            "finishedAt": "2026-04-17T07:10:39.390Z",
+            "durationMs": 2001
+          },
+          {
+            "stepId": "beforeEach_1776409083404_step_7",
+            "stepIndex": 6,
+            "stepType": "navigate",
+            "description": "导航到 http://172.0.0.218:36007/merchant/approval/index",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:10:39.390Z",
+            "finishedAt": "2026-04-17T07:10:40.063Z",
+            "durationMs": 673
+          },
+          {
+            "stepId": "beforeEach_1776409083404_step_8",
+            "stepIndex": 7,
+            "stepType": "wait",
+            "description": "等待加载状态: networkidle",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:10:40.063Z",
+            "finishedAt": "2026-04-17T07:10:40.064Z",
+            "durationMs": 1
+          },
+          {
+            "stepId": "beforeEach_1776409083404_step_9",
+            "stepIndex": 8,
+            "stepType": "wait",
+            "description": "等待 1000ms",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:10:40.064Z",
+            "finishedAt": "2026-04-17T07:10:41.065Z",
+            "durationMs": 1001
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_001_商户审批___列表加载_step_1",
+            "stepIndex": 9,
+            "stepType": "assert",
+            "description": "验证元素可见: .ant-table, table",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:10:41.065Z",
+            "finishedAt": "2026-04-17T07:10:41.074Z",
+            "durationMs": 9
+          },
+          {
+            "stepId": "TC_MCH_APPROVAL_001_商户审批___列表加载_step_screenshot_1",
+            "stepIndex": 10,
+            "stepType": "screenshot",
+            "description": "用例执行后截图",
+            "status": "passed",
+            "startedAt": "2026-04-17T07:10:41.074Z",
+            "finishedAt": "2026-04-17T07:10:41.175Z",
+            "durationMs": 101
+          }
+        ],
+        "totalSteps": 11,
+        "passedSteps": 11,
+        "failedSteps": 0,
+        "finishedAt": "2026-04-17T07:10:41.175Z",
+        "durationMs": 5625
+      }
+    ],
+    "config": {
+      "browser": "chromium",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "slowMo": 0,
+      "timeout": 30000,
+      "screenshotOnFailure": true,
+      "recordVideo": false,
+      "headless": false,
+      "baseURL": "http://172.0.0.218:36007",
+      "baseURLEnabled": true,
+      "useCaseUrl": false
+    },
+    "baseURL": "http://172.0.0.218:36007",
+    "finishedAt": "2026-04-17T07:10:41.779Z",
+    "durationMs": 6698
+  },
+  {
     "id": "run_1776409171590",
     "runId": "run_1776409171590",
     "suiteName": "Playwright Test Suite",
